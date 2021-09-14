@@ -1,0 +1,357 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{1_BasicRealAnalysis_I}
+\externaldocument{3_ProbabilitySpaces}
+\externaldocument{4_Random_Variables}
+\externaldocument{5_Convergence_and_Independence}
+\externaldocument{6_Borel_Cantelli_Lemmas}
+\externaldocument{8_Glivenko-Cantelli_and_0-1_Laws}
+
+
+\begin{document}
+
+\handout{9}{Weak Convergence}
+
+\section{Weak Convergence}
+Let $\left(\Omega, d\right)$ be a metric space with probability measure $\P: \calB \mapsto \left[0, 1\right]$, where $\calB$ is the Borel $\sigma$-algebra. Since $\calB$ defines $\P$, one may want to define the convergence of a sequence of probability distributions $\P_n \to \P$ as $\P_n(B)\to\P(B)$ for all $B\in\calB$. However, this definition is too strong as can be seen from this example: Let $\delta_x$ be the probability measure with $\delta_x(\{x\})=1$. Then we desire that $\delta_{1/n} \to \delta_0$ but $\delta_{1/n}((0,1))=1$ and $\delta_0((0,1))=0$.
+ 
+Let $C_b(\Omega)$ be the set of continuous and bounded functions $f: \Omega \mapsto \Real$. 
+\begin{Lemma}
+$\P$ on $\left(\Omega, \calB\right)$ is uniquely determined by $\int_{\Omega} f \ud\P, \ f\in C_b(\Omega)$.
+\end{Lemma}
+\begin{proof}
+We show that $\int_{\Omega} f \ud\P_1 = \int_{\Omega} f \ud\P_2$, $\forall f\in C_b(\Omega)$ $\implies \P_1 = \P_2$. For any open set $U \subset \Omega$, we have
+\begin{align*}
+d(\omega, U^c) = 
+\begin{cases} 
+0, & \text{if} \ \omega \in U^c, \\ 
+> 0, & \text{if}\ \omega \in U. 
+\end{cases}
+\end{align*}
+Let 
+$f_m(\omega) = \min \big\{1, m d(\omega, U^c)\big\}\in C_b(\Omega)$. We have 
+\begin{align*}
+\lim_{m \to \infty} f_m(\omega) = \indicatore{U}(\omega).
+\end{align*}
+From MCT, we obtain
+\begin{align*}
+&\lim_{m \to \infty} \int_{\Omega} f_m \ud\P_1
+= \int_{\Omega} \lim_{m \to \infty} f_m \ud\P_1
+= \int_{\Omega} \indicatore{U}(\omega) \ud\P_1(\omega)
+= \P_1(U).
+\end{align*}
+Since
+\begin{align*}
+\int_{\Omega} f_m \ud\P_1 = \int_{\Omega} f_m \ud\P_2,
+\end{align*}
+$\P_1(U) = \P_2(U)$ for all open $U$. Since the open sets generate $\calB$ and $\{B\in\calB : \P_1(B)=\P_2(B)\}$ is a $\lambda$-system, the $\pi-\lambda$ theorem completes the proof.
+\end{proof}
+%
+\begin{Definition}[Weak convergence or Convergence in distribution]\label{wk9:def:weak convergence}
+We say that $\P_n \convd \P$ if 
+\begin{align*}
+\int_{\Omega} f \ud\P_n \to \int_{\Omega} f \ud\P,\ \forall f \in C_b(\Omega).
+\end{align*}
+Similarly, we say that $X_n \convd X$ if $\P_{X_n} \convd \P_X$, i.e., 
+\begin{align*}
+\E f(X_n) = \int_{\Omega} f \ud\P_{X_n} 
+\to 
+\int_{\Omega} f \ud\P_X = \E f(X), \ \forall f \in C_b(\Omega).
+\end{align*}
+\end{Definition}
+
+In the sequel, we restrict $\Omega = \bbR$. All results can be extended to $\bbR^k$ with trivial modifications. We denote $F(t) = \P({\left(\infty, t\right]})$ as the cdf of $\P$ and $F_n(t)$ as the cdf of $\P_n$.
+%
+\begin{Theorem} \label{wk9:thm:convd_iff_conv_in_cdf}
+$\P_n \convd \P \iff F_n(t) \to F(t)$ for all continuity points $t$ of $F(\cdot)$.
+\end{Theorem}
+%
+\begin{proof}
+Let $\Phi$ be the set of continuity points of $F(t)$.
+
+'$\Rightarrow$':  Fix $\epsilon > 0$ and $t\in\Phi$. Let $\varphi_1(x)$ and $\varphi_2(x)$ be the continuous bounded functions shown in \cref{wk9:fig:varphi}, i.e., 
+\begin{align*}
+\varphi_i(x) =
+\begin{cases}
+1, &\ \text{if $x \leq t-\epsilon$},\\
+\text{linear}, &\ \text{if $t-\epsilon < x \leq t$},\\
+0, &\ \text{if $x>t$}.
+\end{cases}
+\end{align*}
+The function $\varphi_2$ is defined similarly.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=.3\textwidth]{approx_phi} 
+\caption{Approximation of $\indicatore{\left(-\infty, t\right]}(x)$.}\label{wk9:fig:varphi} 
+\end{figure}
+
+Then we can approximate $\indicatore{\left(-\infty, t\right]}(x)$ as
+\begin{align*}
+\indicatore{\left(-\infty, t - \epsilon\right]}(x)
+\leq \varphi_1(x)
+\leq \indicatore{\left(-\infty, t\right]}(x)
+\leq \varphi_2(x)
+\leq \indicatore{\left(-\infty, t + \epsilon\right]}(x).
+\end{align*}
+By taking the expectation of the above inequality, we obtain
+\begin{align*}
+F(t - \epsilon)
+& \leq \int \varphi_1 \ud\P \\
+&= \lim_{n \to \infty} \int \varphi_1 \ud\P_n \\
+& \leq \liminf_{n \to \infty} F_n(t) \\
+& \leq \limsup_{n \to \infty} F_n(t) \\
+& \leq \lim_{n \to \infty} \int \varphi_2 \ud\P_n \\
+& = \int \varphi_2 \ud\P \\
+& \leq F(t + \epsilon).
+\end{align*}
+By taking $\epsilon \to 0$, since $t\in\Phi$, we have
+\begin{align*}
+\lim_{n \to \infty} F_n(t) = F(t).
+\end{align*}
+%
+\begin{Remark}
+Similar proof steps as above hold if $C_b(\bbR)$ is replaced with $C_b^k(\bbR)$, the set of $k$-differentiable bounded functions for $k\geq1$.
+\end{Remark}
+
+'$\Leftarrow$': We first show that $\bbR \setminus \Phi$ (the set of discontinuity points) is countable. Suppose $x \in \bbR \setminus \Phi$. Let 
+\begin{align*}
+a(x) &= \sup \{F(y) : y < x \}, \\
+b(x) &= \inf \{F(y) : y > x \}.
+\end{align*}
+Because the set of rational numbers $\bbQ$ is dense in $\bbR$, $\exists r_x \in (a(x), b(x)), \ \st r_x \in \bbQ$. Since the intervals $(a(x),b(x))$ are disjoint for all $x\in\Real\setminus\Phi$, the mapping $x \mapsto r_x$ is one-to-one. Therefore, $\Real\setminus\Phi$ is countable and the claim is proved. This implies that $\Phi$ is dense.
+
+Note that $\P({\left(-a, a\right]^c}) = F(-a) + 1 - F(a)$. We then have $\forall \epsilon > 0$,
+\begin{align*}
+\exists \pm M(\epsilon)\in \Phi, \ \st\ \P({\left(-M(\epsilon), M(\epsilon)\right]^c}) \leq \epsilon.
+\end{align*}
+Furthermore, we have
+\begin{align*}
+F_n(M(\epsilon)) &\to F(M(\epsilon)), \\
+F_n(-M(\epsilon)) &\to F(-M(\epsilon)).
+\end{align*}
+Therefore, $\forall n$ sufficiently large, $\P_n \left({\left(-M(\epsilon), M(\epsilon)\right]^c}\right) \leq 2 \epsilon$. Choose $-M(\epsilon) = x_1^k \leq x_2^k \leq \ldots \leq x_k^k = M(\epsilon), \ x_i^k \in \Phi$ such that $\lim_{k \to \infty} \max|x_{i+1}^k - x_i^k| = 0$. For $f\in C_b(\Real)$, let
+\begin{align*}
+f_k(x) 
+= \sum_{1 < i \leq k} f(x_i^k) \indicatore{\left( x_{i-1}^k, x_i^k\right]}(x) \in C_b(\Real).
+\end{align*}
+Taking the expectation over $\P_n$, we obtain
+\begin{align}
+\int f_k \ud\P_n 
+&= \sum_{1 < i \leq k} f(x_i^k) \left(F_n(x_i^k) - F_n(x_{i-1}^k)\right) \nn
+\xrightarrow{n\to\infty}& \sum_{1 < i \leq k} f(x_i^k) \left(F(x_i^k) - F(x_{i-1}^k)\right) \nn
+&= \int f_k \ud\P. \label{wk9:convd_if_conv_in_cdf_1}
+\end{align}
+Let
+\begin{align*}
+\eta_k(M(\epsilon)) = \sup_{|x| \leq M(\epsilon)} \left| f_k(x) - f(x) \right|.
+\end{align*}
+Since $f \in C_b(\bbR)$ is continuous, it is uniformly continuous on $[-M(\epsilon),M(\epsilon)]$ and we have $\lim_{k \to \infty} \eta_k(M(\epsilon)) = 0$. We have
+\begin{align}
+\left| \int f \ud\P - \int f_k \ud\P\right|
+&\leq 2\norm{f}_{\infty} \P \left({\left(-M(\epsilon), M(\epsilon)\right]^c}\right) + \eta_k(M(\epsilon))\nn
+&\leq 2\norm{f}_{\infty} \epsilon + \eta_k(M(\epsilon)), \label{wk9:convd_if_conv_in_cdf_2}
+\end{align}
+and for $n$ large,
+\begin{align}
+\left| \int f \ud\P_n - \int f_k \ud\P_n\right|
+&\leq 2\norm{f}_{\infty} \P_n \left({\left(-M(\epsilon), M(\epsilon)\right]^c}\right) + \eta_k(M(\epsilon))\nn
+&\leq 2 \norm{f}_{\infty} \epsilon + \eta_k(M(\epsilon)). \label{wk9:convd_if_conv_in_cdf_3}
+\end{align}
+From \cref{wk9:convd_if_conv_in_cdf_1,wk9:convd_if_conv_in_cdf_2,wk9:convd_if_conv_in_cdf_3}, we therefore obtain
+\begin{align*}
+     & \left| \int f \ud\P_n - \int f \ud\P \right| \\
+\leq & \left| \int f \ud\P_n - \int f_k \ud\P_n \right| +
+\left| \int f_k \ud\P_n - \int f_k \ud\P \right| +
+\left| \int f_k \ud\P - \int f \ud\P \right| \to 0,
+\end{align*}
+as $n\to\infty$, then $k\to\infty$ and finally $\epsilon\to0$.
+\end{proof}
+%
+\begin{Lemma}
+If $\P_n \convd \P$, g is a continuous mapping, then
+\begin{align*}
+& \P_n \circ g^{-1} \convd \P_n \circ g^{-1}, 
+\end{align*}
+or in other words,
+\begin{align*}
+& X_n \convd X \implies g(X_n) \convd g(X).
+\end{align*}
+\end{Lemma}
+\begin{proof}
+Since $f \in C_b(\bbR) \implies f \circ g \in C_b(\bbR)$, the result follows.
+\end{proof}
+
+\begin{Lemma}
+If $\P_n \convd \P$, then $\exists$ r.v.s $Y_n \sim$ cdf $F_n$, $Y \sim$ cdf $F$, $\st\ Y_n \to Y$ a.s.
+\end{Lemma}
+%
+\begin{proof}
+From \cref{wk8:lemma:inverse_function_2}, we know that, for the probability space $\left( (0, 1), \calB (0, 1), \lambda \right)$, where $\lambda$ is Lebesgue measure, we have r.v.s 
+\begin{align*}
+F_n^{-1}(\omega) &= \inf \big\{y: F_n(y) \geq \omega\big\} \sim \text{cdf}\ F_n, \\
+F^{-1}(\omega) &= \inf \big\{y: F(y) \geq \omega\big\} \sim \text{cdf}\ F.
+\end{align*}
+Let $\Omega_0$ be the set of continuity points of $F^{-1}$. A similar argument as that in the proof of \cref{wk9:thm:convd_iff_conv_in_cdf} shows that $\Omega_0^c$ is countable, hence $\lambda(\Omega_0)=1$. In the following, we show that $F_n^{-1}(\omega) \to F^{-1}(\omega)$ for all $\omega\in\Omega_0$.
+
+For any continuity point $y$ of $F$ such that $y < F^{-1}(\omega)$, we have $F(y) < \omega$ (cf.\ Week 8), hence for all $n$ sufficiently large, $F_n(y) < \omega$ since $F_n(y)\to F(y)$ from \cref{wk9:thm:convd_iff_conv_in_cdf}. Thus, $F_n^{-1}(\omega) \geq y$ and $\liminf_{n\to\infty}F_n^{-1}(\omega) \geq F^{-1}(\omega)$ by taking $y\to F^{-1}(\omega)$ (note that set of continuity points of $F$ is dense).
+ 
+For any continuity point $y$ of $F$ such that $y > F^{-1}(\omega)$, $F(y) > \omega$ since $\omega\in\Omega_0$ (cf.\ Week 8), hence for all $n$ sufficiently large, $F_n(y) > \omega$. Thus, $F_n^{-1}(\omega) \leq y$ and $\limsup_{n\to\infty}F_n^{-1}(\omega) \leq F^{-1}(\omega)$.
+\end{proof}
+%
+\begin{Lemma} \label{wk9:lemma:subseq_convd_implies_seq_convd}
+If for any subsequence $\left(n(k)\right)_{k \geq 1}$, \ $\exists$ subsubsequence $\left(n(k(r))\right)_{r \geq 1}\ \st\ \P_{n(k(r))} \convd \P$, then
+\begin{align*}
+\P_n \convd \P.
+\end{align*}
+\end{Lemma}
+\begin{proof}
+Suppose otherwise. Then $\exists f \in C_b(\bbR), \epsilon > 0,$ sequence $\left(n(k)\right)_{k \geq 1}$, such that
+\begin{align*}
+\left| \int f \ud \P_{n(k)} - \int f \ud \P \right| > \epsilon,
+\end{align*}
+for all $k\geq1$. Then, any subsequence of distributions indexed by $(n(k(r)))_{r\geq 1}$ cannot converge, a contradiction.
+\end{proof}
+
+\begin{Lemma}\label{wk9:lem:convpd}
+$X_n \convp X \implies X_n \convd X$.
+\end{Lemma}
+\begin{proof}
+From \cref{wk6:cor:convp_implies_conv_as}, for any sequence $\left(n(k)\right)_{k \geq 1}$, $\exists$ subsequence $\left(n(k(r))\right)_{r \geq 1}, \st\ X_{n(k(r))} \to X \ \text{a.s}$. Let $f \in C_b(\bbR)$. By DCT, we obtain
+\begin{align*}
+&\lim_{r \to \infty} \E[f(X_{n(k(r))})] 
+= \E[\lim_{r \to \infty} f(X_{n(k(r))})] 
+= \E[f(X)],
+\end{align*}
+Therefore, $X_{n(k(r))} \convd X$. From \cref{wk9:lemma:subseq_convd_implies_seq_convd}, we have $X_n \convd X$.
+\end{proof}
+
+
+In general, we can prove $\P_n \convd \P$ in two steps:
+\begin{enumerate}[(i)]
+\item Show that for all sequences $\left(n(k)\right)_{k \geq 1}$, \ $\exists \left(n(k(r))\right)_{r \geq 1}$, \ $\st\ \P_{n(k(r))}$ converges. This is done using the concept of uniform tightness, which we discuss below.
+\item Show that all subsequential distribution limits above are the same $\P$. This is done through the use of characteristic functions, which we discuss next week.
+\end{enumerate}
+
+\section{Uniform Tightness}
+
+\begin{Definition}[Uniform tightness]
+$(\P_n)_{n \geq 1}$ is uniformly tight if $\forall \epsilon > 0$, $\exists \text{compact}\ K \subset\ \bbR$ such that
+\begin{align*}
+\P_n(K) \geq 1 - \epsilon, \ \forall n \geq 1.
+\end{align*}
+\end{Definition}
+%
+\begin{Theorem}[Helly's selection theorem]\label{wk9:thm:Helly}
+If $(\P)_{n \geq 1}$ is uniformly tight, then $\exists \left(n(k)\right)_{k \geq 1}$ such that
+\begin{align*}
+\P_{n(k)} \convd \P, \ \text{for some}\ \P.
+\end{align*}
+\end{Theorem}
+
+\begin{Lemma}[Cantor's Diagonalization] \label{wk9:lemma:Cantor_diag}
+Suppose $A$ is a countable set, and $f_n:A \mapsto \bbR$. Then, $\exists \left(n(k)\right)_{k \geq 1}$, $\st\ f_{n(k)}(a)$ converges (or goes to $\pm \infty$), $\forall a \in A$.
+\end{Lemma}
+\begin{proof}
+Let $A = \{a_1, a_2, \ldots\}$. From \cref{lem:mono_sub}, we have
+\begin{align*}
+& \exists \left(n_1(k)\right)_{k \geq 1}, \ \st\ f_{n_1(k)}(a_1)\ \text{converges}, \\
+& \exists \left(n_2(k)\right)_{k \geq 1} \subset \left(n_1(k)\right)_{k \geq 1}, \ \st\ f_{n_2(k)}(a_2)\ \text{converges}, \\
+& \ldots
+\end{align*}
+Therefore, for the diagonal sequence $\left(n_k(k)\right)_{k \geq 1}$, $f_{n_{k}(k)}(a_{l})$ converges $\forall l$.
+\end{proof}
+
+\begin{proof}[Proof of \cref{wk9:thm:Helly}]
+Since $\bbQ$ is a dense subset of $\bbR$ and countable, by \cref{wk9:lemma:Cantor_diag}, $\exists \left(n(k)\right)_{k \geq 1}$,
+\begin{align*}
+\st\ F_{n(k)}(q) \to F(q), \forall q \in \bbQ.
+\end{align*}
+Now we extend the definition of $F$ on $\bbQ$ to $\bbR$ by defining $F(x) = \inf \big\{F(q): x < q, q \in \bbQ\big\}$. We prove that $F(x)$ is a cdf.
+\begin{itemize}
+	\item It is obvious $F(x)$ is a non-decreasing function. 
+	\item It is right-continuous because
+\begin{align*}
+\lim_{x_n \downarrow x} F(x_n) 
+&= \lim_{n \to \infty} \inf\left\{F(q) : x_n < q \in \bbQ\right\} \\
+&= \inf_{n \geq 1} \inf\left\{F(q) : x_n < q \in \bbQ\right\} \\
+&= \inf \left\{F(q) : x < q \in \bbQ\right\} \\
+&= F(x),
+\end{align*}
+where the second equality follows because $\inf\left\{F(q) : x_n < q \in \bbQ\right\}$ is a decreasing sequence for $x_n\downarrow x$. 
+\item Since $(\P_n)_{n \geq 1}$ is uniformly tight, $\forall \epsilon > 0, \ \exists [-M, M]$,
+\begin{align*}
+\st\ 1 - F_n(M) + F_n(-M) \leq \epsilon, \ \forall n.
+\end{align*}
+Choose $r < -M < M < s$, $r, s \in \bbQ$. We have
+\begin{align*}
+&1 - F(s) + F(r) 
+= \lim_{k \to \infty} \left(1 - F_{n(k)}(s) + F_{n(k)}(r)\right)
+\leq \epsilon,
+\end{align*}
+which implies
+\begin{align*}
+&\lim_{x \to -\infty}F(x) = 0, \\
+&\lim_{x \to \infty}F(x) = 1.
+\end{align*}
+\end{itemize}
+Therefore, $F(x)$ is a cdf.
+
+Let $x$ be a continuity point of $F$ and $a, b \in \bbQ, \ \st a < x < b$. We have
+\begin{align*}
+F(a) 
+= \lim_{k \to \infty} F_{n(k)}(a) 
+\leq \liminf_{k \to \infty} F_{n(k)}(x)
+\leq \limsup_{k \to \infty} F_{n(k)}(x)
+\leq \lim_{k \to \infty} F_{n(k)}(b)
+= F(b).
+\end{align*}
+Taking $a\uparrow x$ and $b\downarrow x$, we obtain
+\begin{align*}
+&\lim_{k \to \infty} F_{n(k)}(x) = F(x).
+\end{align*}
+From \cref{wk9:thm:convd_iff_conv_in_cdf}, we have
+\begin{align*}
+\P_{n(k)} \convd \P.
+\end{align*}
+\end{proof}
+%
+\begin{Lemma}\label{wk9:lem:convd_implies_uniform_tightness}
+If $\P_n \convd \P$, then $(\P_n)_{n \geq 1}$ is uniformly tight.
+\end{Lemma}
+%
+\begin{proof}
+Let $\epsilon > 0$. Choose $M > 0, \ \st\ \P({[-M, M]^c}) \leq \epsilon$.
+Let
+\begin{align*}
+f(x) = 
+\begin{cases}
+    0, & \text{if}\ |x| \leq M, \\
+    \text{linear}, & \text{if}\ M < x < 2M, \text{or} -2M < x < -M, \\
+    1, & \text{if}\ |x| \geq 2M.
+\end{cases}
+\end{align*}
+Note that $f \in C_b(\bbR)$. We have
+\begin{align*}
+\limsup_{n \to \infty} \P_n(\left[ -2M, 2M \right]^c)
+\leq \limsup_{n \to \infty} \int f(x) \ud\P_n(x)
+= \int f(x) \ud\P(x) 
+\leq \P(\left[ -M, M \right]^c) 
+\leq \epsilon.
+\end{align*}
+Therefore, $\exists n_0, \ \st \forall n \geq n_0, \P_n(\left[ -2M, 2M \right]^c) \leq 2\epsilon$.
+For each $n < n_0$, we choose $M_n$ such that
+\begin{align*}
+\P_n(\left[ -M_n, M_n \right]^c) \leq 2\epsilon.
+\end{align*}
+Let $M^* = \max \{M_1, M_2, \ldots, M_{n-1}, 2M\}$. We then have $\P_n(\left[ -M^*, M^* \right]^c) \leq 2\epsilon, \forall n \geq 1$.
+\end{proof}
+
+
+%
+%
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}

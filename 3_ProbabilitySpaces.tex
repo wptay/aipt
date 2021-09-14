@@ -1,0 +1,339 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{1_BasicRealAnalysis_I}
+\externaldocument{2_BasicRealAnalysis_II}
+
+\begin{document}
+
+\handout{3}{Probability Spaces}
+
+
+\section{Introduction}
+
+Recommended reference: ``Probability: Theory and Examples'' by Rick Durrett.
+
+Let $\Omega$ be a sample space. An event is a subset of $\Omega$. We are interested to define a ``likelihood'' or ``chance'' for each event to happen in the future. We call this the probability of the event.
+ 
+\begin{Example}\label{wk3:example1}
+Let $\Omega = [0,1]$, the probability of the event $(a, b]$, where $0\leq a \leq b < 1$ can be defined by
+\begin{align*}
+\P({(a, b]}) = F(b) - F(a),
+\end{align*}
+where $F$ is a non-decreasing and right-continuous (we will see later why this is needed) function  with
+\begin{align*}
+&\lim_{x \to 0} F(x) = 0, \\
+&\lim_{x \to 1} F(x) = 1.
+\end{align*}
+However, there are many other events like $\bigcup\limits_{i=1}^{\infty} (a_i,b_i]$ whose probabilities we are interested in. In particular, $\P$ should have the following properties:
+\begin{enumerate}[(i)]
+	\item\label{prop3} $\P(\Omega)=1$.
+	\item\label{prop1} If $A_1, A_2, \ldots$ are disjoint sets, then
+		\begin{align*}
+		\P(\bigcup_{i\geq1} A_i) = \sum_{i\geq1} \P(A_i).
+		\end{align*}
+	\item\label{prop2} If $A$ is congruent to $B$ (i.e., $A$ is $B$ transformed by translation, rotation or reflection), then $\P(A)=\P(B)$.
+\end{enumerate}
+Unfortunately, for these conditions to hold for \emph{all} events would lead to inconsistency. To see why, define an equivalence $x \sim y$ iff $x - y$ is rational. Then $\Omega$ can be partitioned into equivalence classes. Let $N \subset \Omega$ be a subset that contains exactly one member of each equivalence class (we need the axiom of choice here). For each rational number $r \in \bbQ\cap [0,1)$, let
+\begin{align*}
+N_r = \set*{x+r \given x \in N\cap [0,1-r)} \cup \set*{x+r-1 \given x \in N\cap [1-r,1]},
+\end{align*}
+i.e., $N_r$ is $N$ translated to the right by $r$ with the part after $[0,1)$ shifted to the front (wrapped around) so that $N_r \subset \Omega=[0,1]$. From properties~\ref{prop1} and \ref{prop2}, we have for any rational $r \in\bbQ\cap [0,1)$,
+\begin{align}\label{eq:N_r}
+\P(N) = \P(N\cap [0,1-r)) + \P(N\cap [1-r,1)) = \P(N_r).
+\end{align}
+
+We also have the following:
+\begin{enumerate}
+	\item Every $x\in\Omega$ belongs to a $N_r$ because if $y\in N$ is an element of the equivalence class of $x$, then $x \in N_r$ where $r = x-y$ if $x\geq y$ or $r=x-y+1$ if $x<y$. 
+	\item Every $x\in\Omega$ belongs to exactly one $N_r$ because if $x\in N_r\cap N_s$ for $r\ne s$, then $x-r$ or $x-r+1$ and $x-s$ or $x-s+1$ would be distinct elements of $N$ belonging to the same equivalence class, contradicting how we chose $N$. 
+\end{enumerate}
+Therefore, $\Omega$ is the disjoint union of $N_r$ over all rational $r\in \bbQ\cap [0,1)$. From properties~\ref{prop3} and \ref{prop1}, we also have $1 = \P(\Omega) = \sum_r \P(N_r)$. But $\P(N_r)=\P(N)$ from \cref{eq:N_r}, so the sum is either $0$ if $\P(N)=0$ or $\infty$ if $\P(N)>0$, a contradiction. 
+
+This example shows that it is impossible to define a suitable $\P$ for all possible events, some of which are very weird objects (Banach and Tarski (1924) showed that in $\Real^n$ where $n\geq3$, even stranger subsets can be constructed!). The solution that mathematicians have come up with is to restrict to a collection of subsets \emph{and} a $\P$ with ``nice'' properties, i.e., a $\sigma$-algebra and measure, respectively. 
+\end{Example}
+
+\section{\txp{$\sigma$}{Sigma}-algebras and Measures}
+Let $\calA$ be a collection of events (collection of subsets of $\Omega$). 
+
+\begin{Definition}
+$\calA$ is an algebra if
+\begin{enumerate}[(i)]
+\item $\Omega \in \calA$.
+\item $A \in \calA \implies A^c = \Omega \setminus A \in \calA$.
+\item $A_1, A_2 \in \calA \implies A_1 \cup A_2 \in \calA$. By induction, $A_i \in \calA, \forall i = 1, \ldots, n, \implies \bigcup\limits_{i=1}^{n} A_i \in \calA$.
+\end{enumerate}
+\end{Definition}
+
+\begin{Definition}
+$\calA$ is a $\sigma$-algebra or $\sigma$-field if
+\begin{enumerate}[(i)]
+\item $\Omega \in \calA$.
+\item $A \in \calA \implies A^c = \Omega \setminus A \in \calA$.
+\item $A_i \in \calA, \forall i = 1, 2, \ldots \implies \bigcup\limits_{i=1}^{\infty} A_i \in \calA$.
+\end{enumerate}
+\end{Definition}
+
+$\left(\Omega, \calA\right)$ is called a measurable space if $\calA$ is a $\sigma$-algebra. A set $A \in \calA$ is said to be measurable.
+
+\begin{Definition}
+For a measurable space $(\Omega,\calA)$, a function $\P: \calA \mapsto \left[0, 1\right]$ is a probability measure if
+\begin{enumerate}[(i)]
+\item $\P(\Omega) = 1$.
+\item $A_1, A_2, \ldots \in \calA$ with $A_i \cap A_j = \emptyset$, $\forall i \neq j$ $\implies \P(\bigcup\limits_{i=1}^{\infty}A_i) = \sum\limits_{i=1}^{\infty}\P(A_i)$ (countably additive).
+\end{enumerate}
+\end{Definition}
+
+Let $\calA$ be a $\sigma$-algebra.
+
+\begin{Lemma} \label{wk3:lem:increasing_seq}
+Suppose $B_i \in \calA, B_i \subset B_{i+1}, \forall i\geq 1$, then
+\begin{align*}
+\P(\bigcup\limits_{i=1}^{\infty} B_i) = \lim_{i \to \infty}\P(B_i)
+\end{align*}
+\end{Lemma}
+\begin{proof}
+Let $C_1 = B_1, C_i = B_i \cap B_{i-1}^c, \forall i \geq 2$, then the $C_i$'s are disjoint, and we have
+\begin{align*}
+B_n &= \bigcup\limits_{i=1}^{n} C_i, \\
+\bigcup\limits_{i=1}^{\infty} B_i &= \bigcup\limits_{i=1}^{\infty} C_i.
+\end{align*}
+Then we obtain
+\begin{align*}
+& \P(\bigcup\limits_{i=1}^{\infty} B_i) 
+= \P(\bigcup\limits_{i=1}^{\infty} C_i) 
+= \sum\limits_{i=1}^{\infty} \P(C_i) 
+= \lim_{n \to \infty} \sum\limits_{i=1}^{n} \P(C_i)
+= \lim_{n \to \infty} \P(\bigcup\limits_{i=1}^{n} C_i) 
+= \lim_{n \to \infty} \P(B_n).
+\end{align*}
+\end{proof}
+
+\begin{Corollary}
+For $A_i \in \calA, \forall\ i=1, 2, \ldots$, we have
+\begin{align*}
+\lim_{n \to \infty} \P(\bigcup\limits_{i=1}^{n} A_i) = \P(\bigcup\limits_{i=1}^{\infty} A_i).
+\end{align*}
+\end{Corollary}
+\begin{proof}
+Let $B_n = \bigcup\limits_{i=1}^n A_i$, which is an increasing sequence. We have $\P(\bigcup\limits_{i=1}^{\infty} A_i) = \P(\bigcup\limits_{n=1}^{\infty} B_n)$. From \cref{wk3:lem:increasing_seq}, we obtain $\P(\bigcup\limits_{n=1}^{\infty} B_n) = \lim\limits_{n \to \infty}\P(B_n) = \lim\limits_{n \to \infty} \P(\bigcup\limits_{i=1}^{n} A_i)$.
+\end{proof}
+
+\begin{Corollary}\label{wk3:cor:dec_seq}
+For a decreasing sequence $B_i \supset B_{i+1}, \forall\ i\geq1$, we have
+\begin{align*}
+\P(\bigcap\limits_{i=1}^{\infty} B_i) = \lim_{i \to \infty} \P(B_i).
+\end{align*}
+\end{Corollary}
+%
+\begin{proof}
+Similar to the proof of \cref{wk3:lem:increasing_seq}.
+\end{proof}
+
+\begin{Lemma}
+For $A, B \in \calA, A \subset B$, we have $\P(A) \leq \P(B)$.
+\end{Lemma}
+\begin{proof}
+$B = A \cup (B \setminus A) \implies \P(B) = \P(A) + \P(B \setminus A) \geq \P(A)$.
+\end{proof}
+
+\begin{Lemma}[Union bound]\label{wk3:lem:union_bound}
+For $A_1, A_2, \ldots \in \calA$, we have 
+\begin{align*}
+\P(\bigcup_{i\geq1} A_i) \leq \sum_{i\geq1} \P(A_i).
+\end{align*}
+\end{Lemma}
+\begin{proof}
+Let $B_i = A_i \backslash \bigcup_{j<i} A_j$ for $i\geq 1$. Then the $B_i$'s are disjoint, $B_i \subset A_i$, $\bigcup_{i\geq1} A_i =  \bigcup_{i\geq1} B_i$ and
+\begin{align*}
+\P(\bigcup_{i\geq1} A_i) 
+&= \P(\bigcup_{i\geq1} B_i)\\ 
+&= \sum_{i\geq1} \P(B_i)\\
+&\leq \sum_{i\geq1} \P(A_i).
+\end{align*}
+\end{proof}
+
+
+In \cref{wk3:example1}, let 
+\begin{align*}
+\calA' = \set*{\bigcup\limits_{i=1}^{n} \left(a_i, b_i\right] \given n \geq 1, \left(a_i, b_i\right] \subset (0, 1], \left(a_i, b_i\right] \cap \left(a_j, b_j\right] = \emptyset, \forall\ i \neq j}. 
+\end{align*}
+Check that $\calA'$ is an algebra. For each element of $\calA'$, we define
+\begin{align*}
+\P(\bigcup\limits_{i=1}^{n} {(a_i, b_i]}) &= \sum_{i=1}^n \P({(a_i, b_i]})
+\end{align*}
+for each $n\geq1$. One can show that with this definition, $\P$ is countably additive on $\calA'$, i.e., whenever $A_i \in \calA'$, $i\geq 1$ and $\bigcup_{i\geq 1} A_i \in \calA$ are finite unions of disjoint intervals, we have
+\begin{align*}
+\P(\bigcup\limits_{i\geq 1} {(a_i, b_i]}) &= \sum_{i\geq 1} \P({(a_i, b_i]}).
+\end{align*}
+We also have
+\begin{align*}
+\P({(a, b]}) 
+&= \P(\bigcap\limits_{n=1}^{\infty} {(a, b + 1/n ]}) \\
+&= \lim_{n \to \infty} \P({(a, b + 1/n]}) \\
+&= \lim_{n \to \infty} \left(F(b+1/n) - F(a) \right) \\
+&= F(b) - F(a),
+\end{align*}
+where the second equality follows from \cref{wk3:cor:dec_seq} and the last equality requires the right-continuity of $F$. 
+
+Let $\calA = \sigma(\calA')$ be the $\sigma$-algebra generated by $\calA'$, i.e., the intersection of all $\sigma$-algebras that contain $\calA'$. Note that this is well-defined as a trivial $\sigma$-algebra containing $\calA'$ is the power set of $\Omega$. It is easy to show that $\calA$ is the smallest $\sigma$-algebra containing $\calA'$.
+
+\begin{Theorem}\label{Caratheodory Theorem}
+Carath{\'e}odory's Extension Theorem. If $\calA'$ is an algebra, $\P : \calA' \mapsto [0, 1]$ is countably additive on $\calA'$ and $\P(\emptyset)=0$, then $\P$ has a unique extension to $\calA = \sigma(\calA')$.
+\end{Theorem}
+%
+
+The proof of the existence of such an extension $\P: \calA \mapsto [0,1]$ can be found in the book by Durrett. We focus on the proof of uniqueness here. We make use of the very useful Dynkin's $\pi$-$\lambda$ Theorem.
+
+\begin{Definition}
+$\calP$ is a $\pi$-system if $A, B \in \calP \implies A \cap B \in \calP$.
+\end{Definition}
+\begin{Definition}
+$\calL$ is a $\lambda$-system if 
+\begin{enumerate}[(i)]
+\item $\Omega \in \calL$.
+\item $A \in \calL \implies A^c = \Omega \setminus A \in \calL$.
+\item $A_i \in \calL, \forall\ i\geq1,\ A_i \cap A_j = \emptyset, \forall\ i \neq j \implies \bigcup\limits_{i=1}^{\infty} A_i \in \calL$.
+\end{enumerate}
+\end{Definition}
+\begin{Remark}
+If $\calA$ is both a $\pi$-system and $\lambda$-system, then $\calA$ is $\sigma$-algebra.
+\end{Remark}
+%
+\begin{Theorem}[Dynkin's $\pi$-$\lambda$ Theorem] \label{Thm:Dynkin_pi_lambda_thm}
+If $\calP$ is a $\pi$-system and $\calL$ is a $\lambda$-system with $\calP \subset \calL$, then $\sigma(\calP) \subset \calL$.
+\end{Theorem}
+\begin{proof}
+Let $\ell(\calP)$ be the smallest $\lambda$-system that contains $\calP$. If $\ell(\calP)$ is a $\pi$-system, $\ell(\calP)$ is a $\sigma$-algebra. Then we have
+\begin{align*}
+\sigma(\calP) \subset \ell(\calP) \subset \calL.
+\end{align*}
+Therefore, it suffices to prove that $\ell(\calP)$ is a $\pi$-system. We prove that $\ell(\calP)$ is a $\pi$-system in the following three steps. For any $A \subset \Omega$, let $\calG_A = \{B \subset \Omega : B \cap A \in \ell(\calP) \}$.
+
+Step 1:  We show that if $A \in \ell(\calP)$, then $\calG_A$ is $\lambda$-system. This is done by checking the following conditions:
+\begin{enumerate}[(i)]
+\item $\Omega \cap A = A \in \ell(\calP) \implies \Omega \in \calG_A$.
+\item Suppose $B \in \calG_A$. We have $B^c \cap A = \left( \left(B \cap A \right) \cup {A^c} \right)^c$. Then we have
+\begin{align*}
+B \cap A,\ A^c \in  \ell(\calP) \implies \left(B \cap A \right) \cup {A^c} \in \ell(\calP) \implies \left( \left(B \cap A \right) \cup {A^c} \right)^c \in \ell(\calP),
+\end{align*}
+which implies that $B^c \in \calG_A$.
+\item Let $B_i \in \calG_A, \forall\ i = 1, 2, \ldots$ with $B_i \cap B_j = \emptyset, \forall\ i \neq j$. Therefore, $B_i \cap A \in \ell(\calP), \forall\ i = 1, 2, \ldots$ are also disjoint. Then we have
+\begin{align*}
+\left(\bigcup\limits_{i=1}^{\infty} B_i\right) \cap A = \bigcup\limits_{i=1}^{\infty} (B_i \cap A ) \in \ell(\calP) \implies \bigcup\limits_{i=1}^{\infty} B_i \in \calG_A.
+\end{align*}
+\end{enumerate}
+
+Step 2: We show that if $B \in \calP \subset \ell(\calP)$, then $\ell(\calP) \subset \calG_B$. Since $\calP$ is a $\pi$-system, we have
+\begin{align*}
+\forall\ C \in \calP, C \cap B \in \calP \subset \ell(\calP),
+\end{align*}
+which means that 
+\begin{align*}
+\calP \subset \calG_B,
+\end{align*}
+where $\calG_B$ is a $\lambda$-system from Step 1 since $B \in \ell(\calP)$. Therefore, 
+\begin{align} \label{Thm:interm_result2}
+\ell(\calP) \subset \calG_B. 
+\end{align}
+
+Step 3: Consider any $B \in \calP$ and an $A \in \ell(\calP)$. From Step 2, we have $A \in \calG_B$. Therefore, $A \cap B \in \ell(\calP)$ and 
+\begin{align*}
+\calP \subset \calG_A,
+\end{align*}
+where $\calG_A$ is a $\lambda$-system from Step 1. Thus $\ell(\calP) \subset \calG_A$. This means that for any $C \in \ell(\calP)$, we have
+\begin{align*}
+C \in \calG_A \implies C \cap A \in \ell(\calP).
+\end{align*}
+Since $A, C \in \ell(\calP)$, the above result immediately shows that $\ell(\calP)$ is a $\pi$-system.
+\end{proof}
+
+We now return to the uniqueness proof of \cref{Caratheodory Theorem}. Suppose $\P_1$ and $\P_2$ are extensions of $\P$ with $\P_1(A) = \P_2(A), \forall\ A \in \calA'$. Let
+\begin{align*}
+\calL = \{A \in \calA: \P_1(A) = \P_2(A) \}.
+\end{align*}
+It is easy to see that $\calL$ is a $\lambda$-system due to the properties of probability measures. $\calA'$ is a $\pi$-system since it is an algebra, and $\calA' \subset \calL$ by definition. According to \cref{Thm:Dynkin_pi_lambda_thm}, $\calA = \sigma(\calA') \subset \calL$. Thus, $\P_1 = \P_2$ on $\calA$, meaning the extension is unique on $\calA$.
+
+\section{Regularity}
+
+\begin{Definition} \label{Defns:Borel_sigma_algebra}
+Let $(\Omega, d)$ be a metric space. The Borel $\sigma$-algebra is a $\sigma$-algebra generated by the open sets of $\Omega$ (or equivalently, by the closed sets).
+\end{Definition}
+%
+\begin{Lemma}\label{wk3:lem:closed_approx}
+Let $\calB$ be the Borel $\sigma$-algebra. Then, $\forall A \in \calB$,
+\begin{align} \label{closed_approx}
+\P(A) = \sup \set*{ \P(F) \given F \subset A,\, F\ \text{is closed}}.
+\end{align}
+\end{Lemma}
+\begin{proof}
+Let
+\begin{align*}
+\calL = \set*{A \in \calB \given \text{both $A$ and $A^c$ satisfy \cref{closed_approx}}}.
+\end{align*} 
+It can be checked that $\calL$ is a $\lambda$-system (exercise). Let $F$ be closed. It is obvious that $F$ satisfies \cref{closed_approx}. Let $U = F^c$. We show that $U$ also satisfies \cref{closed_approx}. To do this, since $\sup \P(C) \leq \P(U)$ for all closed $C\subset U$, it suffices to show that there is a sequence of closed subsets $F_n\subset U$ such that $\P(U)=\sup_n \P(F_n)$. To this end, for $n\geq 1$, let
+\begin{align*}
+F_n = \left\{\omega \in \Omega: \min\limits_{x \in F}d(\omega, x) \geq 1/n \right\}.
+\end{align*}
+Then we have $F_n \subset F_{n+1}$ and $U = \bigcup\limits_{n=1}^{\infty} F_n$. From \cref{wk3:lem:increasing_seq}, we obtain
+\begin{align*}
+\P(U) = \lim_{n \to \infty} \P(F_n) = \sup\limits_{n \geq 1} \P(F_n).
+\end{align*}
+Therefore, $U$ satisfies \cref{closed_approx}. As a consequence, $F \in \calL$ for any closed $F$. Since $\calB$ is generated by the closed sets, we have $\calB \in \calL$ and the proof is complete.
+\end{proof}
+
+A metric space is separable if it has a countable dense subset, i.e., $\exists \{x_n\}_{n=1}^{\infty}$ such that $\forall \text{open}\ U \subset \Omega$, $x_i \in U$ for some $x_i$. Exercise: show that totally bounded implies separable. The converse is not true (e.g., consider the discrete metric space in \cref{ex:discrete_X}). 
+
+\begin{Definition}\label{wk3:def:regular}
+We say that a probability measure $\P$ for $(\Omega,\calB)$ is regular if
+\begin{align*}
+\P(A) = \sup\left\{\P(K): K \subset A, K\ \text{is compact}\right\}
+\end{align*}
+for all $A\in\calB$.
+\end{Definition}
+
+\begin{Theorem}[Ulam]\label{wk3:thm:Ulam}
+If $(\Omega, d)$ is a complete separable space with Borel $\sigma$-algebra $\calB$ and probability measure $\P$, then $\P$ is regular.
+\end{Theorem}
+\begin{proof}
+Fix $\epsilon >0$ and let $\{x_i\}_{i\geq 1}$ be a dense subset of $\Omega$. Then for any $m\geq 1$, we have
+\begin{align*}
+\Omega = \bigcup_{i\geq 1} \overline{B}(x_i,1/m),
+\end{align*}
+where $\overline{B}(x_i,1/m)$ is the closed ball of radius $1/m$ centered at $x_i$. Since $\P(\Omega)=1$, there exists $n(m)$ sufficiently large so that 
+\begin{align*}
+\P(\Omega\backslash\bigcup_{i=1}^{n(m)} \overline{B}(x_i,\ofrac{m})) \leq \frac{\epsilon}{2^m}.
+\end{align*}
+Let $K = \displaystyle\bigcap_{m\geq 1}\bigcup_{i=1}^{n(m)} \overline{B}(x_i,1/m)$, which is closed and totally bounded. Since $\Omega$ is complete, $K$ is also complete and hence compact. We then have
+\begin{align*}
+\P(\Omega\backslash K) 
+&= \P(\bigcap_{m\geq 1} \left(\Omega\backslash\bigcup_{i=1}^{n(m)} \overline{B}(x_i,1/m)\right))\\
+&\leq \sum_{m\geq 1} \frac{\epsilon}{2^m}\\
+&\leq \epsilon.
+\end{align*}
+From \cref{wk3:lem:closed_approx}, for any $A\in\calA$, there exists a closed $F\subset A$ such that $\P(A\backslash F) \leq \epsilon$. Therefore, 
+\begin{align*}
+\P(A\backslash(F\cap K)) \leq 2\epsilon,
+\end{align*}
+and $F\cap K \subset A$ is a compact set. The theorem is now proved. 
+\end{proof}
+
+
+\section{Notes}
+
+\begin{enumerate}[(a)]
+	\item $([0,1],\calB([0,1]),\lambda)$ is a probability space, where $\lambda((a,b)) = b-a$ is called the Lebesgue measure. This is the uniform distribution on $[0,1]$.
+	\item Let $f: \Real\mapsto\Real_+$ be a function whose set of discontinuities has Lebesgue measure zero and $\int_{-\infty}^\infty f(x) \ud x=1$. Then $(\Real, \calB(\Real), \P)$ where $\P(A) = \int_A f(x) \ud x$, is a probability space. $f$ is an example of a \emph{probability density function} (pdf).
+	\item Let $\calX$ be a discrete set. Then $(\calX, 2^\calX, \P)$ where $\P(\{x\}) = p(x)$ with $\sum_{x\in\calX} p(x) =1$, is a probability space. Here, $2^\calX$ denotes the power set of $\calX$, or the collection of all subsets of $\calX$.
+	\item There exist non-measureable sets, i.e., one cannot assign a measure to these sets without running into logical consistency issues (see \cref{wk3:example1} or Durrett). This is why the existence of probability spaces is non-trivial as we cannot simply define a measure over the power set $2^\Omega$. 
+	\item Exercise: If $A$ is an algebra, then for any $B\in\sigma(A)$, $\exists B_n\in A$ such that 
+	\begin{align*}
+	\lim_{n\to\infty} \P(B\triangle B_n) = 0,
+	\end{align*}
+	where $B\triangle B_n = (B\cup B_n)\setminus(B\cap B_n)$ is the symmetric difference of two sets.
+\end{enumerate}
+
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}

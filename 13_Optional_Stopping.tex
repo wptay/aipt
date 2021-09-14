@@ -1,0 +1,276 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{3_ProbabilitySpaces}
+\externaldocument{4_Random_Variables}
+\externaldocument{5_Convergence_and_Independence}
+\externaldocument{6_Borel_Cantelli_Lemmas}
+\externaldocument{12_Conditional_Expectations}
+\externaldocument{15_Martingale_Convergence}
+
+\begin{document}
+
+\handout{13}{Optional Stopping}
+
+Review: Consider a probability space $(\Omega, \scF, \P)$. A sequence of sub-$\sigma$-algebras $\scF_0 \subset \scF_1 \subset \ldots \subset \scF$ is called a filtration. Suppose $M_n \in \scF_n$. Then, $(M_n, \scF_n)$ is a martingale if 
+\begin{align*}
+\E \abs{M_n} &< \infty,\ \forall n \geq 0, \\
+\E[M_n \given \scF_{n-1}] &= M_{n-1},\ \forall n \geq 0. 
+\end{align*}
+
+\section{Stopping Times}
+
+\begin{Definition}
+The random variable $\tau$ is called a \emph{stopping time} for $(\scF_n)_{n\geq0}$ if $\tau \in \{0,1,\ldots\} \cup \{\infty\}$ and $\{\tau \leq n\} \in \scF_n,\ \forall n \geq 0$.
+\end{Definition}
+
+From the definition of $\sigma$-algebras, we have
+\begin{align*}
+\{\tau > n\} &= \{\tau \leq n\}\setcomp \in \scF_n, \\
+\{\tau = n\} &= \{\tau \leq n\} \setminus \{\tau \leq n-1\} \in \scF_n.
+\end{align*}
+Consider a sequence $(X_n)_{n \geq 0}$. If $\tau < \infty$ a.s., we define 
+\begin{align*}
+X_\tau = \sum_{k=0}^\infty \indicator{\tau=k}X_k
+\end{align*}
+and we call $X_\tau$ a ``stopped process''.  Denote $n \wedge \tau = \min(n, \tau)$ and we have $n \wedge \tau < \infty$ a.s. 
+
+\begin{Theorem} \label{wk13:Thm:StoppingProcess}
+If $(M_n, \scF_n)$ is a martingale, then $(M_{n \wedge \tau}, \scF_n)$ is a martingale.
+\end{Theorem}
+\begin{proof}
+WLOG, we assume $M_0 = 0$. Let $A_n = \indicator{\tau \geq n} = \indicatore{\{\tau \leq n-1\}\setcomp}$ , where $\{\tau \leq n-1\}\setcomp \in \scF_{n-1}$. Therefore, $A_n$ is predictable. The martingale transform $\left(\sum_{k=1}^n A_k (M_k - M_{k-1}), \scF_n\right)$ is thus a martingale from \cref{wk12:MTT}. Furthermore, we have
+\begin{align*}
+\sum_{k=1}^n A_k (M_k - M_{k-1})
+&= \sum_{k=1}^n \indicator{\tau \geq k} (M_k - M_{k-1}) \\
+&= \sum_{k=1}^n \indicator{\tau \geq k} M_k - \sum_{k=0}^{n-1} \indicator{\tau \geq k+1} M_k \\
+&= \sum_{k=1}^{n-1} \indicator{\tau = k} M_k + \indicator{\tau \geq n} M_n \\
+&= \indicator{\tau \leq n-1} M_\tau + \indicator{\tau \geq n} M_n \\
+&= M_{n \wedge \tau},
+\end{align*}
+and the theorem is proved.
+\end{proof}
+
+\begin{Example}[Random walk]\label{wk13:ex:rw}
+Let
+\begin{align*}
+X_i = 
+\begin{cases} 
+1 & \text{w.p.}\ \frac{1}{2}, \\ 
+-1 & \text{w.p.}\ \frac{1}{2}, 
+\end{cases}
+\end{align*}
+for $i \geq 1$ be i.i.d.\ random variables. Let $S_n = \sum_{i=1}^n X_i$. Then, $\left(S_n, \scF_n \right)$ is a martingale (see \cref{ex:wk12_mex_1}).
+Let $A, B \in \bbZ^+$ and $\tau = \inf \{n: S_n=A \ \text{or}\ S_n=-B\}$ (the first time $S_n$ hitting $A$ or $-B$ ). From \cref{wk13:Thm:StoppingProcess}, $\left(S_{n \wedge \tau}, \scF_n\right)$ is a martingale. We therefore have
+\begin{align*}
+\E S_{n \wedge \tau} = \E S_0 = 0.
+\end{align*}
+Suppose $S_n$ has not hit $-B$ yet. Then, a sequence of $A+B$ realizations of $X_i=1$ will make the sum hit $A$. Let $E_k = \set*{X_i=1\given i \in \big[k(A+B), (k+1)(A+B)\big)}$, which are independent for all $k\geq0$. We have
+\begin{align*}
+\P(\tau > n(A+B)) \leq \P(\bigcap_{k=0}^{n-1} E_k\setcomp) = \left(1 - \frac{1}{2^{A+B}}\right)^n.
+\end{align*}
+Furthermore, 
+\begin{align*}
+\E \tau &= \sum_{k=1}^\infty \P(\tau \geq k) \\
+&\leq \sum_{n=0}^\infty \P(\tau > n(A+B))(A+B) \\
+&\leq (A+B) \sum_{n=0}^\infty \left(1 - \frac{1}{2^{A+B}}\right)^n \\
+&< \infty. 
+\end{align*}
+Therefore, $\tau < \infty$ a.s. We also have $\abs{S_{n \wedge \tau}} \leq \max \{A, B\}$. From DCT, we then obtain
+\begin{align*}
+0= \lim_{n \to \infty} \E S_{n \wedge \tau}
+&= \E S_\tau 
+= A\P(S_\tau = A) - B(1 - \P(S_\tau = A))\\
+&\implies
+\P(S_\tau = A) = \frac{B}{A+B}.
+\end{align*}
+We will see another way to prove $\tau<\infty$ a.s.\ in \cref{wk15:ex:rw}.
+\end{Example}
+
+\begin{Example}
+Let $M_n = S_n^2 - n$ and $(M_n, \scF_n)$ is a martingale (see \cref{ex:wk12_mex_2}) and $\tau$ be the same stopping time as in \cref{wk13:ex:rw}. Then $(M_{n \wedge \tau}, \scF_n)$ is a martingale with $\E M_{n \wedge \tau} = \E M_0 = 0$. We have
+\begin{align*}
+&\abs{M_{n \wedge \tau}} \leq (A \vee B)^2 + \tau, 
+\intertext{and since $\tau$ is integrable (see \cref{wk13:ex:rw}), the DCT yields}
+&\E M_\tau =\lim_{n \to \infty} \E M_{n \wedge \tau} = 0.
+\end{align*}
+Therefore, we have $0=\E M_\tau = \E S_\tau^2  - \E\tau$, and 
+\begin{align*}
+\E\tau &= \E S_\tau^2 \\
+&= \frac{B}{A+B}A^2 + \frac{A}{A+B}B^2 \\
+&= AB.
+\end{align*}
+\end{Example}
+
+\begin{Example}[Biased random walk]
+Let
+\begin{align*}
+X_i = 
+\begin{cases} 
+1 & \text{w.p.}\ p \neq \frac{1}{2}, \\ 
+-1 & \text{w.p.}\ q = 1 - p,
+\end{cases}
+\end{align*}
+for $i \geq 1$ be i.i.d.\ random variables and $\phi(\lambda) = \E e^{\lambda X_1} = p e^\lambda + q e^{-\lambda}$. Let 
+\begin{align*}
+M_n = \frac{e^{\lambda S_n}}{\phi(\lambda)^n}.
+\end{align*} 
+We choose $\lambda$ such that $\phi(\lambda) = 1 \implies e^\lambda = \dfrac{q}{p} \implies M_n = e^{\lambda S_n} = \left(\dfrac{q}{p}\right)^{S_n}$. Then $(M_n, \scF_n)$ is a martingale (see \cref{ex:wk12_mex_4}), and so is $(M_{n \wedge \tau}, \scF_n)$, where $\tau$ is the same stopping time as in \cref{wk13:ex:rw}. We have
+\begin{align*}
+&\E M_{n \wedge \tau} = \E M_0 = 1,\\
+& |M_{n \wedge \tau}| \leq (1 \vee q/p)^{A\vee B}.
+\end{align*}
+From DCT, we have
+\begin{align*}
+\E M_\tau = \lim_{n \to \infty} \E M_{n \wedge \tau} = 1.
+\end{align*}
+Denoting $\alpha = \P(S_\tau = A)$, we have
+\begin{align*}
+\E M_\tau = \alpha\left(\frac{q}{p}\right)^A + (1 - \alpha)\left(\frac{q}{p}\right)^{-B}.
+\end{align*}
+Therefore, we obtain
+\begin{align*}
+\alpha = \frac{\left(\frac{q}{p}\right)^B}{\left(\frac{q}{p}\right)^{A+B} - 1}.
+\end{align*}
+\end{Example}
+
+\section{Doob's Optional Stopping Theorem}
+
+In the previous examples, we have $\E M_\tau = \E M_0$ using the DCT and special properties of the stopping time $\tau$. We want to know when this is true in general. But first, a counterexample.  
+
+\begin{Example}[Counterexample]\label{wk13:ex:counter}
+Let
+\begin{align*}
+X_n = 
+\begin{cases} 
+2^n & \text{w.p.}\  \frac{1}{2}, \\ 
+-2^n & \text{w.p.}\ \frac{1}{2},
+\end{cases} 
+\end{align*}
+for $n \geq 0$ be independent random variables. Then $(S_n, \scF_n)$ is a martingale. Let $\tau = \min \{k \geq 0: S_k > 0\}$. When $\tau = k$, we have $S_\tau = S_k = -1 - 2 - 2^2 - \ldots -2^{k-1} + 2^k = 1$. Therefore, $\E S_\tau = 1 \neq \E S_0 = \E X_0 = 0$. 
+\end{Example}
+
+Let $\tau$ be a stopping time w.r.t.\ $(\scF_n)$. The $\sigma$-algebra (exercise: verify that it is a $\sigma$-algebra)
+\begin{align*}
+\scF_\tau = \set*{A \in \scF\given \set*{\tau \leq n} \cap A \in \scF_n, \forall n \geq 0}
+\end{align*}
+consists of all events that depend on information up to the stopping time $\tau$. We have the following properties:
+\begin{enumerate}[(i)]
+\item $\tau \in \scF_\tau$ ($\tau$ is measurable w.r.t.\ $\scF_\tau$). This is because $\{\tau \leq n\} \cap \{\tau \leq k\} = \{\tau \leq n \wedge k\} \in \scF_{n \wedge k} \subset \scF_n$ since $\tau$ is a stopping time.
+\item If $(M_n)$ is adapted to $(\scF_n)$ and $\tau<\infty$ a.s., then $M_\tau \in \scF_\tau$.
+Proof: $\forall B \in \calB, \{\tau \leq n\} \cap \{M_\tau \in B\} = \bigcup_{k \leq n} \{\tau =k\} \cap \{M_k \in B\} \in \scF_n$.
+\item Let $\tau, \nu$ be stopping times w.r.t.\ $(\scF_n)$. Then $\{\tau < \nu\}, \{\tau = \nu\}, \{\tau > \nu\} \in \scF_\tau, \scF_\nu$.
+\item If $A \in \scF_\nu$, then $A \cap \{\tau \geq \nu\}$,  $A \cap \{\tau > \nu\} \in \scF_\tau$.
+\item $\tau(\omega) \leq \nu(\omega), \forall \omega \in \Omega \implies \scF_\tau \subset \scF_\nu$.
+\end{enumerate}
+%
+\begin{Theorem}[Optional Stopping Theorem] \label{wk13:thm:optional_stopping}
+Let $(M_n, \scF_n)$ be a martingale. Suppose
+\begin{enumerate}[(i)]
+\item $\tau, \nu < \infty$ are stopping times w.r.t.\ $(\scF_n)$,
+\item $\E \abs{M_\tau} < \infty$,
+\item $\lim_{n \to \infty} \E \abs{M_n} \indicator{\tau \geq n} = 0$.
+\end{enumerate}
+Then $\forall A \in \scF_\nu$, 
+\begin{align*}
+\E M_\tau \indicatore{A \cap \{\tau \geq \nu\}} = \E M_\nu \indicatore{A \cap \{\tau \geq \nu\}}.
+\end{align*}
+\end{Theorem}
+An intuitive interpretation is as follows: A martingale $(M_n,\scF_n)$ represents a fair game (e.g., $M_n$ is stock price under an efficient market). A stopping time $\tau$ represents a strategy to stop the game based only on information up to a given time (e.g., to sell off a stock, execute an option, etc.). By taking $A=\Omega$ and $\nu=0$, the theorem says that $\E M_\tau = \E M_0$ for any $\tau$ satisfying the theorem conditions. Thus, there is no ``winning strategy'' in an efficient market! Furthermore, given any two competing strategies $\tau$ and $\nu$, there is no advantage $\nu$ can gain over $\tau$ in terms of expected wealth even on events it has full information about. 
+
+In \cref{wk13:ex:counter}, we can check that 
+\begin{align*}
+\E |S_n|\indicator{\tau\geq n} = \P(\tau=n) + (2^{n+1}-1)\P(\tau\geq n+1)= 1,
+\end{align*}
+which violates the third condition in \cref{wk13:thm:optional_stopping}.
+
+\begin{proof}
+For $A \in \scF_\nu$, let $A_n = A \cap \{\nu = n\} \in \scF_n $.  We first show that 
+\begin{align}\label{MtauA}
+\E M_\tau \indicatore{A_n \cap \{\tau \geq n\}} = \E M_n \indicatore{A_n \cap \{\tau \geq n\}}.
+\end{align}
+We have
+\begin{align*}
+\E M_n \indicatore{A_n \cap \{\tau \geq n\}}
+&= \E M_n \indicatore{A_n \cap \{\tau = n\}} + \E M_n \indicatore{A_n \cap \{\tau > n\}} \\
+&= \E M_\tau \indicatore{A_n \cap \{\tau = n\}} + \E[ {\E[M_{n+1} \given \scF_n]}\, \indicatore{A_n \cap \{\tau > n\}}] \\
+&= \E M_\tau \indicatore{A_n \cap \{\tau = n\}} + \E[ {\E[M_{n+1}\indicatore{A_n \cap \{\tau > n\}} \given \scF_n]} ]\ \ \because \indicatore{A_n \cap \{\tau > n\}} \in \scF_n\\
+&= \E M_\tau \indicatore{A_n \cap \{\tau = n\}} + \E M_{n+1} \indicatore{A_n \cap \{\tau \geq n+1\}}.
+\end{align*}
+By induction, we have for any $m>n$,
+\begin{align}
+\E M_n \indicatore{A_n \cap \{\tau \geq n\}}
+= \E M_\tau \indicatore{A_n \cap \{n \leq \tau < m\}} + \E M_m \indicatore{A_n \cap \{\tau \geq m\}}.\label{wk13:Mtau}
+\end{align}
+We have
+\begin{align*}
+&\abs*{\E M_m \indicator{A_n \cap \{\tau \geq m\}}} \leq \E \abs{M_m} \indicatore{\tau \geq m} \xrightarrow{m\to\infty} 0.
+\end{align*}
+Since $\E |M_\tau| < \infty$, the DCT yields
+\begin{align*}
+\lim_{m \to \infty} \E M_\tau \indicatore{A_n \cap \{n \leq \tau < m\}}
+= \E M_\tau \indicatore{A_n \cap \{\tau \geq n\}}.
+\end{align*}
+Therefore by letting $m\to\infty$ in \cref{wk13:Mtau}, we obtain \cref{MtauA}. We finally have
+\begin{align*}
+\E M_\tau \indicatore{A \cap \{\tau \geq \nu\}}
+&= \sum_{n \geq 0} \E M_\tau \indicatore{A \cap \{\nu = n\} \cap \{\tau \geq n\}} \\
+&= \sum_{n \geq 0} \E M_\tau \indicatore{A_n \cap \{\tau \geq n\}} \\
+&\eqa{\cref{MtauA}} \sum_{n \geq 0} \E M_n \indicatore{A_n \cap \{\tau \geq n\}} \\
+&= \E M_\nu \indicatore{A \cap \{\tau \geq \nu\}},
+\end{align*}
+which completes the proof.
+\end{proof}
+%
+Some commonly used special cases of \cref{wk13:thm:optional_stopping} are the following:
+\begin{enumerate}
+\item Let $\nu=0$ and  $A = \Omega$. Then from \cref{wk13:thm:optional_stopping}, we have  $\E M_\tau = \E M_0$.
+\item If $\tau \leq B < \infty$ is bounded a.s., then the conditions in \cref{wk13:thm:optional_stopping} are satisfied.
+\item Suppose $\tau <\infty$. If $\abs{M_n} \leq K < \infty$ is bounded a.s., then the conditions in \cref{wk13:thm:optional_stopping} are satisfied.
+\end{enumerate}
+
+If we have stronger conditions on the martingale, we can obtain similar optional stopping results without appealing to \cref{wk13:thm:optional_stopping}. One such result is assuming \emph{bounded} martingale differences. 
+\begin{Lemma}\label{wk13:lem:M_bdd_diff}
+Let $(M_n, \scF_n)$ be a martingale. If $\abs{M_n - M_{n-1}} \leq K <\infty$ a.s.\ and $\E \tau < \infty$, then $\E M_\tau = \E M_0$. 
+\end{Lemma}
+\begin{proof}
+We have
+\begin{align*}
+\abs*{M_{n \wedge \tau} - M_0} = \abs*{\sum_{k=1}^{n \wedge \tau} (M_k - M_{k-1})} \leq K\tau.
+\end{align*}
+Then, from DCT, we obtain
+\begin{align*}
+\E M_\tau = \lim_{n \to \infty} \E M_{n \wedge \tau} = \E M_0,
+\end{align*}
+where the last inequality follows from \cref{wk13:Thm:StoppingProcess}.
+\end{proof}
+%
+\begin{Example}
+At each time $n = 1, 2, \ldots$, a monkey chooses one letter randomly and uniformly from the 26 English letters. What is the expected time for the monkey to produce the sequence ``ABRACADABRA''?
+
+Solution: Let $T$ be the first time the monkey produces the desired sequence. One can show that $\E T < \infty$ and hence $T < \infty$ a.s. (hint: see \cref{wk13:ex:rw}). Suppose at each time $j$, a new gambler arrives, bet $1$ that the $j$-th letter is ``A''. If he loses, he leaves. If he wins, he receives a reward of 26, bet all of that on the $(j+1)$-th letter being ``B'', and so on according to the sequence ``ABRACADABRA''. When the end of the sequence is reached, he also leaves. Denote $M_n^j$ as the payoff of gambler $j$ at time $n$. We let $M_n^j =0 $ if $n < j$. we have
+\begin{align*}
+\E M_n^j \leq 26^{n-j+1} &< \infty.  
+\end{align*}
+If the gambler loses before time $n$, we have
+\begin{align*}
+\E[M_n^j \given \scF_{n-1}] = 0 = M_{n-1}^j.
+\end{align*}
+Otherwise, he wins $n - j$ times from $j$ till time $n-1$ and we have
+\begin{align*}
+\E[M_n^j \given \scF_{n-1}] = 26^{n-j+1}\cdot\frac{1}{26} + 0\cdot \frac{25}{26} = 26^{n-j} = M_{n-1}^j.
+\end{align*}
+Therefore, $(M_n^j, \scF_n)$ is a martingale. Let $X_0=0$ and $X_n = \sum_{j=1}^n (M_n^j-1)$ for $n\geq1$, which is the total payoff of all gamblers at time $n$. It is clear that $(X_n, \scF_n)$ is a martingale and $\abs{X_n - X_{n-1}} \leq  26^{11} + 26^{4} + 26 < \infty$ (consider the maximum increase or decrease in payoff going from time $n-1$ to $n$). From \cref{wk13:lem:M_bdd_diff} (for the case where the martingale has bounded differences), we have 
+\begin{align*}
+&\E[26^{11} + 26^{4} + 26 - T] = \E X_T = \E X_0 = 0. \\
+\implies
+&\E T = 26^{11} + 26^{4} + 26.
+\end{align*}
+\end{Example}
+
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}
+
+

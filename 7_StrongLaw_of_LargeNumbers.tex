@@ -1,0 +1,468 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{3_ProbabilitySpaces}
+\externaldocument{4_Random_Variables}
+\externaldocument{5_Convergence_and_Independence}
+\externaldocument{6_Borel_Cantelli_Lemmas}
+
+\begin{document}
+
+\handout{7}{Strong Law of Large Numbers}
+
+\section{SLLN}
+In this note, we prove the Strong Law of Large Numbers (SLLN). We give three different proofs of SLLN, which are based on the ideas of maximal inequality, truncation, and positivity. First, let us state the SLLN.
+
+\begin{Theorem}[Kolmogorov's SLLN]
+Suppose $X_1, X_2, \ldots$ are i.i.d.\ random variables, $\E |X_1| < \infty$, $\E X_1 = 0$, and $S_n = \sum_{i=1}^n X_i$. We have
+\begin{align*}
+\frac{S_n}{n} \to 0 \ \text{a.s. as} \ n \to \infty. 
+\end{align*}
+\end{Theorem}
+
+\section{The First Proof: \texorpdfstring{$L^1$}{L1} Maximal Inequality}
+
+For a sequence $a_1, a_2, \ldots, a_N$, we say that $a_j$ is an $n$-leader if $a_j + a_{j+1} + \ldots + a_k > 0$ for some $k$ such that $j \leq k \leq N$ and $k - j + 1 \leq n \leq N$.
+
+\begin{Lemma} \label{wk7:lemma:n_leader}
+Let $G \neq \emptyset$ be the set of indices of all $n$-leaders of $a_1, \ldots, a_N$. Then
+\begin{align*}
+\sum_{j \in G} a_j > 0.
+\end{align*}
+\end{Lemma}
+\begin{proof}
+Let
+\begin{align*}
+j_1 &= \min G, \\
+k_1 &= \min \{k \geq j_1 : a_{j_1} + \ldots + a_k > 0\}.
+\end{align*}
+Since $j_1\in G$, $k_1 \leq N$ exists and $k_1 - j_1 + 1 \leq n$. Then we have $\sum_{j = j_1}^{s-1} a_j < 0$ for $j_1 \leq s \leq k_1$. Therefore, 
+\begin{align*}
+&\sum_{k=s}^{k_1} a_j = \sum_{j=j_1}^{k_1} a_j - \sum_{j=j_1}^{s-1} a_j > 0, \\
+\end{align*}
+This implies that $s \in G$ and hence $\left[j_1, k_1\right] \subset G$. Let $G_1 = G \backslash \left[j_1, k_1\right] \neq \emptyset$ and repeat the same process until $G_{l+1}=\emptyset$ for some $l$. We obtain
+\begin{align*}
+\bigcup_{i=1}^{l} [j_i, k_i] = G,
+\end{align*}
+where $\left[j_i, k_i\right] \cap \left[j_m, k_m\right] = \emptyset,\ \forall i \neq m$. Finally, we have
+\begin{align*}
+\sum_{j \in G} a_j = \sum_{i=1}^{l} \sum_{s=j_i}^{k_i} a_s > 0.
+\end{align*}
+\end{proof}
+
+\begin{Theorem}[$L^1$ maximal inequality] \label{wk7:thm:maximal_inequality}
+Let $X_k$, $k \geq 1$, be i.i.d.\ random variables. Then, $\forall \epsilon > 0$,
+\begin{align*}
+\P(\max_{1 \leq k \leq n} \frac{S_k}{k} > \epsilon) \leq \ofrac{\epsilon}\E X_1^+.
+\end{align*}
+\end{Theorem}
+\begin{proof}
+Fix $\epsilon > 0$ and $N>1$. For $1\leq n \leq N$, let
+\begin{align*}
+A_j = \set*{\omega\given \max_{\mathclap{\substack{1 \leq k \leq n \\ j+k-1 \leq N}}} \frac{S(j,j+k-1)}{k} > \epsilon},
+\end{align*}
+where $S(j,k) = X_j + \ldots + X_k$. From the definition, we have
+\begin{align*}
+A_j = \set*{\omega\given a_j(\omega) \ \text{is $n$-leader in} (a_1, a_2, \ldots, a_N)},
+\end{align*}
+where $a_j(\omega) = X_j(\omega) - \epsilon$.
+Applying \cref{wk7:lemma:n_leader}, we obtain
+\begin{align*}
+\sum_{j=1}^N (X_j - \epsilon) \indicatore{A_j} > 0,
+\end{align*}
+which yields
+\begin{align}
+\epsilon \sum_{j=1}^{N-n} \indicatore{A_j} 
+\leq \epsilon \sum_{j=1}^N \indicatore{A_j}
+< \sum_{j=1}^N X_j \indicatore{A_j}
+\leq \sum_{j=1}^N X_j^+. \label{ineq:L1}
+\end{align}
+Furthermore, for $1 \leq j \leq N- n$, since the $X_i$'s are i.i.d., we have
+\begin{align*}
+\P(A_j) 
+= \P(A_1)
+&= \P(\max_{1 \leq k \leq n} \frac{S_k}{k} > \epsilon).
+\end{align*}
+Taking expectations in \cref{ineq:L1}, we obtain
+\begin{align*}
+\epsilon (N-n) \P(A_1) &\leq N \E X_1^+ \\
+\frac{N-n}{N} \P(A_1) &\leq \frac{1}{\epsilon} \E X_1^+.
+\end{align*}
+By taking $N \to \infty$, the proof is complete.
+\end{proof}
+
+\begin{Corollary} \label{wk7:cor:maximal_inequality}
+Let $X_k, k \geq 1$ be i.i.d random variables. Then, $\forall\ \epsilon > 0$,
+\begin{align*}
+\P(\max_{1 \leq k \leq n} \left|\frac{S_k}{k}\right| > \epsilon) \leq \frac{1}{\epsilon} \E |X_1|.
+\end{align*}
+\end{Corollary}
+\begin{proof}
+Apply the $L^1$ maximal inequality to $(X_k)$ and $(-X_k)$.
+\end{proof}
+
+We are now ready to give the first proof of the SLLN. Fix $\lambda>0$. Let
+\begin{align*}
+X_k' &= X_k \indicatore{\{|X_k| \leq \lambda\}}, \\
+X_k'' &= X_k \indicatore{\{|X_k| > \lambda\}}.
+\end{align*}
+As the threshold $\lambda$ is fixed for all $k$, this is known as \emph{fixed truncation}. We let
+\begin{align*}
+S_n' &= X_1' + \ldots + X_n', \\
+S_n'' &= X_1'' + \ldots + X_n'',
+\end{align*}
+so that $S_n = S_n' + S_n''$. We have
+\begin{align*}
+&\E X_k' + \E X_k'' = \E X_k = 0, \\
+& S_n = S_n' - n\E X_1' + S_n'' - n\E X_1'',\\
+&\left| \frac{S_n}{n} \right| \leq 
+\left| \frac{S_n'}{n} - \E X_1 \indicatore{\{|X_1| \leq \lambda\}} \right| +
+\left| \frac{S_n''}{n} - \E X_1 \indicatore{\{|X_1| > \lambda\}} \right|.
+\end{align*}
+Since $X_k'$ has bounded moments, we can apply the SLLN with 2nd moments (\cref{wk6:lemma:SLLN_2nd_moments}) to obtain
+\begin{align*}
+\left| \frac{S_n'}{n} - \E X_1 \indicatore{\{|X_1| \leq \lambda\}} \right| \to 0 \ \text{a.s.}
+\end{align*}
+Furthermore, we have
+\begin{align*}
+L =
+\limsup_{n \to \infty} \left| \frac{S_n}{n} \right|
+&\leq \limsup_{n \to \infty} \left| \frac{S_n''}{n} - \E X_1 \indicatore{\{|X_1| > \lambda\}} \right| \\
+&\leq \sup_{n \geq 1} \left| \frac{S_n''}{n} - \E X_1 \indicatore{\{|X_1| > \lambda\}} \right| \\
+&\leq \sup_{n \geq 1} \left| \frac{S_n''}{n} \right| + \E X_1 \indicatore{\{|X_1| > \lambda\}} .
+\end{align*}
+Since $\E X_1 \indicatore{\{|X_1| > \lambda\}} \leq \E |X_1| < \infty$, we apply DCT (\cref{Dominated Convergence Theorem}) to obtain
+\begin{align*}
+\lim_{\lambda \to \infty} \E X_1 \indicatore{\{|X_1| > \lambda\}} 
+= \E X_1 \indicatore{\{|X_1| = \infty\}} = 0.
+\end{align*}
+Therefore, $\forall \epsilon > 0$, $\exists \lambda_0$ such that
+\begin{align*}
+\E X_1 \indicatore{\{|X_1| > \lambda\}} < \epsilon,\ \forall \lambda \geq \lambda_0.
+\end{align*}
+By using the above result and applying \cref{wk7:cor:maximal_inequality}, we obtain for all $\lambda \geq \lambda_0$, 
+\begin{align*}
+\P(L > 2\epsilon) 
+&\leq \P(\sup_{n \geq 1} \left| \frac{S_n''}{n} \right| > \epsilon) \\
+&\leq \lim_{\lambda \to \infty} \frac{1}{\epsilon} \E |X_1| \indicatore{\{|X_1| > \lambda\}} = 0.
+\end{align*}
+Taking $\epsilon \to 0$, we have
+\begin{align*}
+\P(L > 0) = 0 \implies \P(L = 0) = 1
+\implies
+\frac{S_n}{n} \to 0 \ \text{a.s. as} \ n \to \infty.
+\end{align*}
+The first proof of SLLN is now complete.
+%
+%
+\section{The Second Proof: Kolmogorov}
+
+We next discuss Kolmogorov's proof of SLLN, which was done around 1930.
+
+\begin{Theorem}[Kolmogorov's maximal inequality] \label{wk7:lemma:Kolmogorov_maximal_ineq}
+Suppose $X_k, k \geq 1$ are independent random variables and $\E |X_k| < \infty$, then
+\begin{align*}
+\P(\max_{1 \leq k \leq n} |S_k| \geq \lambda) 
+\leq \frac{1}{\lambda^2} \var(S_n),\ \forall\ \lambda > 0.
+\end{align*}
+\end{Theorem}
+Note that $\var(S_n)$ always exists. If it is infinite, then the bound is trivial.
+\begin{proof}
+Without loss of generality, we assume $\E X_k = 0$. Let
+\begin{align*}
+&\tau = \min \set*{1 \leq k \leq n \given |S_k| \geq \lambda},
+\end{align*}
+where $\tau = \infty$ if $|S_k|<\lambda$ for all $1\leq k\leq n$. Define
+\begin{align*}
+&S_\tau = \sum_{k=1}^n S_k \indicatore{\{\tau = k\}}.
+\end{align*}
+Since
+\begin{align*}
+&\lambda^2 \indicatore{\{\max_{1 \leq k \leq n} |S_k| \geq \lambda\}} \leq S_{\tau}^2,
+\end{align*}
+we obtain
+\begin{align*}
+&\lambda^2 \P(\max_{1 \leq k \leq n} |S_k| \geq \lambda) \leq \E S_{\tau}^2.
+\end{align*}
+It suffices to prove $\E S_{\tau}^2 \leq \E S_n^2$. We have
+\begin{align*}
+S_n &= S_{\tau} + S_n - S_{\tau}, \\
+S_n^2 &= S_{\tau}^2 + \left(S_n - S_{\tau}\right)^2 + 2S_{\tau}\left(S_n - S_{\tau}\right),
+\end{align*}
+and
+\begin{align*}
+\E S_{\tau}\left(S_n - S_{\tau}\right)
+&= \E[\sum_{k=1}^n \indicatore{\{\tau = k\}} S_k\left(S_n - S_k\right)] \\
+&= \sum_{k=1}^n \E[\indicatore{\{\tau = k\}} S_k] \E \left(S_n - S_k\right) = 0,
+\end{align*}
+where the penultimate equality follows from independence. We thus have
+\begin{align*}
+\E S_{\tau}^2 \leq \E S_n^2,
+\end{align*}
+and the proof is complete.
+\end{proof}
+
+\begin{Theorem}[Variance convergence criterion] \label{wk7:thm:var_conv_criteria}
+Suppose $Y_k,\ k \geq 1$ are independent random variables and $\E Y_k = 0$. If $\sum_{k=1}^{\infty} \var(Y_k) < \infty$, then
+\begin{align*}
+\sum_{k=1}^{\infty} Y_k \ \text{converges a.s.}
+\end{align*}
+\end{Theorem}
+\begin{proof}
+Let $S_n(\omega) = \sum_{k=1}^n Y_k(\omega)$. It suffices to show that $(S_n)_{n \geq 1}$ is Cauchy a.s., i.e.,
+\begin{align*}
+R_N = \sup_{n,m \geq N} |S_n - S_m| \to 0 \ \text{a.s. as} \ N \to \infty.
+\end{align*}
+Let $N \geq N_0 \geq 1$. We have
+\begin{align*}
+R_N 
+&\leq R_{N_0} \\
+&\leq \sup_{n \geq N_0} |S_n - S_{N_0}| + \sup_{m \geq N_0} |S_m - S_{N_0}|.
+\end{align*}
+Therefore, $\forall \epsilon > 0$,
+\begin{align*}
+\P(\limsup_{N \to \infty} R_N > \epsilon) 
+&\leq 2 \P(\sup_{n \geq N_0} |S_n - S_{N_0}| > \frac{\epsilon}{2}) \\
+&\leq \frac{8}{\epsilon^2} \sum_{k = N_0 +1}^{\infty} \var(Y_k),
+\end{align*} 
+where the last inequality follows from Chebyshev's inequality. Since $\sum_{k=1}^{\infty} \var(Y_k) < \infty$, we have
+\begin{align*}
+&\lim_{N_0 \to \infty}\sum_{k = N_0 +1}^{\infty} \var(Y_k) = 0 \\
+\implies
+&\P(\limsup_{N \to \infty} R_N > \epsilon) = 0.
+\end{align*} 
+\end{proof}
+
+Let $\hat{X}_k = X_k \indicatore{\{|X_k| \leq k\}}$. This is called \emph{moving truncation}. We have
+\begin{align*}
+\sum_{k=1}^{\infty} \P(\hat{X}_k \neq X_k) 
+&= \sum_{k \geq 1} \P(|X_k| > k) \\
+&= \sum_{k \geq 1} \P(|X_1| > k) \\
+&\leq \E |X_1| < \infty.
+\end{align*} 
+From the first Borel-Cantelli lemma (\cref{wk6:lemma:borel_cantelli}), we obtain $\P(\hat{X}_k \neq X_k \ \text{i.o}) = 0$, which means that for a.s.\ all $\omega \in \Omega$, $\exists K(\omega)\ \st X_k(\omega) = \hat{X}_k(\omega), \forall k \geq K(\omega)$. Therefore, $\dfrac{1}{n} \sum_{k=1}^{n} X_k \to 0 \ \text{a.s.}$ if and only if $\dfrac{1}{n} \sum_{k=1}^{n} \hat{X}_k \to 0 \ \text{a.s.}$ In the rest of this section, we prove $\dfrac{1}{n} \sum_{k=1}^{n} \hat{X}_k \to 0 \ \text{a.s.}$.
+
+
+\begin{Lemma} \label{wk7:lemma:var_mean_ineq}
+Suppose $X_k,\ k \geq 1$ are identically distributed random variables and $\hat{X}_k = X_k \indicatore{\{|X_k| \leq k\}}$. We have
+\begin{align*}
+\sum_{k=1}^{\infty} \frac{\var(\hat{X}_k)}{k^2} \leq 2 \E |X_1|.
+\end{align*}
+\end{Lemma}
+%
+\begin{proof}
+\begin{align*}
+\sum_{k=1}^{\infty} \frac{\var(\hat{X}_k)}{k^2} 
+&\leq \sum_{k=1}^{\infty} \frac{\E \hat{X}_k^2}{k^2} \\
+&= \sum_{k=1}^{\infty} \frac{1}{k^2} \E[X_1^2 \indicatore{\{|X_1| \leq k\}}] \\
+&= \E[X_1^2 \sum_{k=1}^{\infty} \frac{1}{k^2} \indicatore{\{|X_1| \leq k\}}] \\
+&\leq 2 \E |X_1|,
+\end{align*}
+where the last equality comes from Fubini's theorem (\cref{wk5:Fubini_theorem}) and the last inequality is because 
+\begin{align*}
+\phi(x) = x^2\sum_{k\geq1} \ofrac{k^2} \indicator{x\leq k} \leq 2x
+\end{align*}
+for all $x\geq0$. To prove this, we note that
+\begin{align*}
+\int_{i-1}^{\infty} \frac{1}{x^2} \ud x = \frac{1}{i-1} \geq \sum_{k = i}^{\infty} \frac{1}{k^2}.
+\end{align*}
+If $0 \leq x \leq 1$, we have
+\begin{align*}
+\phi(x) = x^2 \sum_{k = 1}^{\infty} \frac{1}{k^2} 
+= x^2 \left(1 + \sum_{k = 2}^{\infty} \frac{1}{k^2} \right)
+\leq 2 x^2 \leq 2x.
+\end{align*}
+A similar reasoning applies for $1 < x \leq 2$ and $2 < x < \infty$ and the proof is complete.
+\end{proof}
+%
+\begin{Lemma}[Cesaro's Lemma] \label{wk7:lemma:Cesaro}
+If $\lim_{n \to \infty} a_n = a$, then 
+\begin{align*}
+\lim_{n \to \infty} \frac{1}{n} \sum_{k = 1}^{n} a_k = a.
+\end{align*}
+\end{Lemma}
+
+\begin{proof}
+Without loss of generality, we assume $a = 0$. For $k \leq n$, we have
+\begin{align*}
+&\left| \frac{1}{n} \sum_{i=1}^n a_i\right|
+\leq \frac{1}{n} \left|\sum_{i=1}^k a_i\right| + \frac{n-k}{n} \sup_{j>k} |a_j|, \\
+\implies
+&\limsup_{n \to \infty}\frac{1}{n} \left|\sum_{i=1}^n a_i\right| \leq \limsup_{j \to \infty} |a_j| = 0.
+\end{align*}
+\end{proof}
+%
+\begin{Lemma}[Kronecker's Lemma] \label{wk7:lemma:Kronecker}
+If $\displaystyle\sum_{k = 1}^{\infty} \frac{a_k}{k}$ converges, then 
+\begin{align*}
+\lim_{n \to \infty} \frac{1}{n} \sum_{k = 1}^{n} a_k = 0.
+\end{align*}
+\end{Lemma}
+%
+\begin{proof}
+Let $r_n = \displaystyle\sum_{i = n+1}^{\infty} \frac{a_i}{i}$. We have
+\begin{align*}
+\lim_{n \to \infty} r_n = 0.
+\end{align*}
+From Cesaro's lemma (\cref{wk7:lemma:Cesaro}), we have
+\begin{align*}
+\lim_{n \to \infty} \frac{1}{n} \sum_{k=0}^{n-1} r_k = 0.
+\end{align*}
+Furthermore, for $k<n$, we have
+\begin{align*}
+r_k = \frac{a_{k+1}}{k+1} + \frac{a_{k+2}}{k+2} + \cdots + \frac{a_{n}}{n} + r_n.
+\end{align*}
+Therefore,
+\begin{align*}
+&\sum_{k=0}^{n-1} r_k = a_1 + \ldots + a_n + n r_n, \\
+\implies
+&\frac{1}{n} \sum_{k=1}^{n} a_k = -r_n + \frac{1}{n} \sum_{k=0}^{n-1} r_k.
+\end{align*}
+By using the above results, we obtain
+\begin{align*}
+\lim_{n \to \infty} \frac{1}{n} \sum_{k=1}^{n} a_k = 0.
+\end{align*}
+\end{proof}
+%
+
+We are now ready to give Kolmogorov's proof of the SLLN. From \cref{wk7:lemma:var_mean_ineq}, we have
+\begin{align*}
+\sum_{k = 1}^{\infty} \E[\frac{1}{k^2} \left(\hat{X}_k - \E \hat{X}_k  \right)^2] < \infty.
+\end{align*}
+From \cref{wk7:thm:var_conv_criteria}, we obtain
+\begin{align*}
+\sum_{k = 1}^{\infty} \frac{1}{k} \left(\hat{X}_k - \E \hat{X}_k  \right) \text{ converges a.s.}
+\end{align*}
+From Kronecker's lemma (\cref{wk7:lemma:Kronecker}), we have
+\begin{align}\label{avgconv}
+\frac{1}{n} \sum_{k = 1}^{n} \left(\hat{X}_k - \E \hat{X}_k  \right) \to 0 \ \text{a.s.}
+\end{align}
+Furthermore, using the DCT, we have
+\begin{align}
+&\lim_{k \to \infty} \E \hat{X}_k = \E[\lim_{k \to \infty} X_1 \indicatore{\{|X_1| \leq k\}}] = \E X_1 = 0, \\
+\implies
+&\frac{1}{n} \sum_{k = 1}^{n} \E \hat{X}_k \to 0 \ \text{a.s.}. \label{hatXExp}
+\end{align}
+Therefore, from \cref{avgconv}, we obtain 
+\begin{align*}
+&\frac{1}{n} \sum_{k = 1}^{n} \hat{X}_k \to 0 \ \text{a.s.},
+\end{align*}
+and the SLLN is proved.
+
+We now give a generalization of Kronecker's lemma, which will be useful later on.
+\begin{Lemma}[Generalized Kronecker's Lemma]\label{wk7:Generalized_Kronecker}
+Suppose $0< b_n \to \infty$ as $n\to\infty$. If $\displaystyle\sum_{n=1}^{\infty} \frac{a_n}{b_n}$ converges in $\bbR$, then
+\begin{align*}
+\frac{1}{b_n} \sum_{k=1}^n a_k \to 0 \ \text{as $n \to \infty$}.
+\end{align*}
+\end{Lemma}
+%
+\begin{proof}
+Without loss of generality, we can suppose that $b_n \in \bbZ_+$, $\forall n\geq1$. Let $b_0 = 0$, $s_0 = 0$ and
+\begin{align*}
+s_n &= \sum_{k=1}^n \frac{a_k}{b_k} \to s \in \bbR.
+\end{align*}
+It can be checked that
+\begin{align*}
+\frac{1}{b_n} \sum_{k=1}^n a_k 
+&= s_n - \frac{1}{b_n} \sum_{k=1}^n (b_k - b_{k-1}) s_{k-1} \to 0,
+\end{align*}
+since from Cesaro's lemma (note that $b_k - b_{k-1} \in \bbZ_+$ and $b_n=\sum_{k=1}^n (b_k - b_{k-1})$), we have
+\begin{align*}
+\lim_{n \to \infty} \frac{1}{b_n} \sum_{k=1}^n (b_k - b_{k-1}) s_{k-1} = s.
+\end{align*}
+\end{proof}
+
+\begin{Theorem}[Generalized variance convergence criterion] Suppose $Y_k, k \geq 1$ are independent random variables, $\E Y_k = 0$, and $0< b_k \to \infty$ as $k\to\infty$. We have
+\begin{align*}
+\sum_{k=1}^{\infty} \frac{\var(Y_k)}{b_k^2} < \infty
+\implies
+\frac{1}{b_n} \sum_{k=1}^{\infty} Y_k \to 0 \ \text{a.s.}
+\end{align*}
+\end{Theorem}
+\begin{proof}
+Apply \cref{wk7:thm:var_conv_criteria} to $Y_k/b_k$ and the result follows from \cref{wk7:Generalized_Kronecker}.
+\end{proof}
+
+\section{The Third Proof: Etemadi's Use of Positivity}
+
+In the third proof, we present the surprising and elegant proof of Etemadi discovered in 1981, some 50 years after Kolmogorov first proved the SLLN. This proof also strengthens the result to require only pairwise independence.
+
+\begin{Theorem}[Etemadi's SLLN]
+Suppose $X_i,\ i \geq 1$ are identically distributed and pairwise independent, and $\E X_i = \mu$. We have
+\begin{align*}
+\frac{S_n}{n} \to \mu \ \text{a.s. as $n\to\infty$}.
+\end{align*}
+\end{Theorem}
+\begin{proof}
+We first observe that $X_i = X_i^+ - X_i^-$ and
+\begin{align*}
+X_i \independent X_j \implies 
+X_i^+ \independent X_j^+,\ X_i^- \independent X_j^-.
+\end{align*}
+Therefore, we can without loss of generality assume $X_i \geq 0$. This turns out to be the key of Etemadi's proof. Let
+\begin{align*}
+\hat{X}_i &= X_i \indicatore{\{X_i \leq i\}}, \\
+\hat{S}_n &= \sum_{i = 1}^n \hat{X}_i.
+\end{align*}
+As shown previously, it suffices to show that $\hat{S}_n/n \to \mu$ a.s. Let $\alpha \in (1, 2)$, and $j_n = \lfloor \alpha^n \rfloor$. We have
+\begin{align*}
+&1 \leq j_n \leq \alpha^n < j_{n+1} \leq 2 j_n, \\
+\implies
+&\frac{1}{j_n} \leq \frac{2}{\alpha^n}.
+\end{align*}
+For a fixed $i$, let $n_0 = \min \{n:\alpha^n \geq i\}$. We have
+\begin{align}
+\sum_{n: j_n \geq i} \frac{1}{j_n^2} 
+\leq \sum_{n: j_n \geq i} \frac{4}{\alpha^{2n}} 
+= 4 \sum_{k=0}^{\infty} \frac{1}{\alpha^{2k} \alpha^{2 n_0}}
+\leq 4 \sum_{k=0}^{\infty} \frac{1}{i^2} \frac{1}{\alpha^{2k}}
+= \frac{4}{i^2} \frac{1}{1 - \alpha^{-2}}. \label{ineq:sumjn}
+\end{align}
+For $\epsilon > 0$ and using Chebyshev's inequality together with pairwise independence, we have
+\begin{align*}
+\sum_{n=1}^{\infty} \P(\left| \hat{S}_{j_n} - \E \hat{S}_{j_n} \right| \geq \epsilon j_n)
+&\leq \frac{1}{\epsilon^2} \sum_{n=1}^{\infty} \frac{1}{j_n^2} \var(\hat{S}_{j_n}) \\
+&= \frac{1}{\epsilon^2} \sum_{n=1}^{\infty} \frac{1}{j_n^2} \sum_{i=1}^{j_n} \var(\hat{X}_i) \\
+&= \frac{1}{\epsilon^2} \sum_{i=1}^{\infty} \var(\hat{X}_i) \sum_{n:j_n \geq i} \frac{1}{j_n^2} \\
+&\leq \frac{4}{\epsilon^2} \frac{1}{1 - \alpha^{-2}} \sum_{i=1}^{\infty} \frac{\var(\hat{X}_i)}{i^2} \\
+&\leq \frac{8}{\epsilon^2} \frac{1}{1 - \alpha^{-2}} \E |X_1| < \infty,
+\end{align*}
+where the penultimate inequality follows from \cref{ineq:sumjn}, and the last equality from \cref{wk7:lemma:var_mean_ineq}. From \cref{wk6:lemma:sum_P_finite_convto_0}, we obtain
+\begin{align*}
+\frac{\hat{S}_{j_n} - \E \hat{S}_{j_n}}{j_n} \to 0 \ \text{a.s.}
+\end{align*}
+Using the same argument as in \cref{hatXExp}, we have
+\begin{align*}
+\E \hat{X}_i \to \E X_i = \mu
+\implies
+\frac{\E \hat{S}_{j_n}}{j_n} \to \mu.
+\end{align*}
+Therefore, we obtain
+\begin{align*}
+\frac{\hat{S}_{j_n}}{j_n} \to \mu \ \text{a.s.}
+\end{align*}
+Finally, for any $n$, there exists $k$ such that 
+\begin{align*}
+&j_k \leq n < j_{k+1}, 
+\end{align*}
+and because $\hat{X}_i \geq 0$ for all $i\geq 1$, we have a.s.,
+\begin{align*}
+&\hat{S}_{j_k} \leq \hat{S}_n \leq \hat{S}_{j_{k+1}}, \\
+\implies
+&\frac{j_k}{j_{k+1}} \frac{\hat{S}_{j_k}}{j_k} \leq \frac{\hat{S}_n}{n} \leq \frac{j_{k+1}}{j_k} \frac{\hat{S}_{j_{k+1}}}{j_{k+1}}, \\
+\implies
+&\lim_{n \to \infty} \frac{j_k}{j_{k+1}} \frac{\hat{S}_{j_k}}{j_k} \leq \liminf_{n \to \infty} \frac{\hat{S}_n}{n} \leq \limsup_{n \to \infty} \frac{\hat{S}_n}{n} \leq \lim_{n \to \infty} \frac{j_{k+1}}{j_k} \frac{\hat{S}_{j_{k+1}}}{j_{k+1}}, \\
+\implies
+&\frac{1}{\alpha} \mu \leq \liminf_{n \to \infty} \frac{\hat{S}_n}{n}\leq \limsup_{n \to \infty} \frac{\hat{S}_n}{n} \leq \alpha \mu.
+\end{align*}
+Taking $\alpha \to 1$, we obtain
+\begin{align*}
+\lim_{n \to \infty} \frac{\hat{S}_n}{n} &= \mu\ \text{a.s.}
+\end{align*}
+\end{proof}
+%
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}

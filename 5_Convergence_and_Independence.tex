@@ -1,0 +1,371 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{3_ProbabilitySpaces}
+\externaldocument{4_Random_Variables}
+
+
+\begin{document}
+
+\handout{5}{Convergence and Independence}
+
+
+\section{Convergence}
+
+\begin{Definition}[Almost sure convergence]
+We say $X_n \to X$ almost surely (a.s.) or with probability~1 if 
+\begin{align*}
+\P (\set*{\omega: \lim_{n \to \infty} {X_n(\omega)=X(\omega)}})=1.
+\end{align*}
+\end{Definition}
+
+Recall that in the original MCT in \cref{Monotone Convergence Theorem}, we suppose that $0 \leq X_n(\omega) \leq X_{n+1}(\omega)$ and $X_n(\omega) \to X(\omega)$ for \emph{all} $\omega\in\Omega$. Here, we show that we can replace the condition ``for all $\omega\in\Omega$'' with ``almost surely''. Let 
+\begin{align*}
+A=\set*{\omega \given X_n(\omega) \to X(\omega),\, 0\leq X_n(\omega )\leq X_{n+1}(\omega ),\, n \geq 1}
+\end{align*}
+and suppose $\P (A)=1$. We have $0\leq X_n \indicatore{A}(\omega)\leq X_{n+1} \indicatore{A}(\omega)$, and $X_{n} \indicatore{A}(\omega) \to X \indicatore{A}(\omega)$ $\forall \omega \in \Omega$. Then from the MCT in \cref{Monotone Convergence Theorem}, we have
+\begin{align*}
+\E[X_n \indicatore{A}] \to \E[X \indicatore{A}].
+\end{align*}
+For any $Y \geq 0$, let $Y \wedge n = \min(Y,n)$ for $n\geq 1$. Observe that
+\begin{align}
+\E[Y\indicatore{A^c}] 
+&= \E[\lim_{n \to \infty} (Y \wedge n) \indicatore{A^c}]\nn
+&= \lim_{n \to \infty} \E[(Y \wedge n)\indicatore{A^c}]\label{XAcMCT}\\
+& \leq \lim_{n \to \infty} {n \P (A^c)}\nn
+&= 0,\nonumber
+\end{align}
+where we have use the MCT in \cref{XAcMCT}. Therefore, $\E[X_n \indicatore{A}] = \E X_n$ and $\E[X \indicatore{A}] = \E X$, and the MCT holds if ``$\forall \omega\in\Omega$'' is replaced with ``almost surely'' in its theorem statement. The same thing applies for Fatou's Lemma and the DCT.
+
+\begin{Definition}[Convergence in probability]
+If $\forall \epsilon >0$,  
+\begin{align*}
+\lim_ {n \to \infty} \P({|X_n - X| \geq \epsilon})=0, 
+\end{align*}
+we say that $X_n$ converges to $X$ in probability and write $X_n \convp X$.
+\end{Definition}
+
+\begin{Lemma}\label{wk5:Lem:Convergence in probability}
+If $X_n \to X$ a.s., then $X_n \convp X$.
+\end{Lemma}
+\begin{proof}
+Suppose $X_n \to X$ a.s., then $\indicator{|X_n-X|\geq \epsilon} \to 0$ a.s. From DCT (since probability measure is finite), we have $\P(|X_n-X|\geq \epsilon)\to 0$.
+\end{proof}
+
+The converse is not true and here is an example.
+
+\begin{Example}
+Suppose $\Omega=[0,1]$. Consider the random variables $X_n$ shown in \cref{wk5:fg:Counter Example}, where $X_n$ follows a similar pattern for $n\geq 5$. We have $X_n \convp 0$, but clearly $X_n \nrightarrow 0$ a.s. as $X_n(\omega) = 1$ for infinitely many values of $n$ for every $\omega\in\Omega$.
+
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=.6\textwidth]{conv_prob} 
+\caption{$X_n$ converges in probability but not almost surely.} 
+\label{wk5:fg:Counter Example}
+\end{figure}
+\end{Example}
+
+\section{Weak Law of Large Numbers}
+
+Markov’s inequality: Suppose $a>0$ and $X\geq 0$. Then, 
+\begin{align*}
+a \indicatore{\{X\geq a\}}(\omega) \leq X\indicatore{\{X\geq a\}}(\omega)\leq X.
+\end{align*}
+Taking expectations, we have
+\begin{align*}
+a\P(X\geq a) & \leq \E X,\\
+\P(X\geq a) & \leq \frac{1}{a}\E X.
+\end{align*}
+
+Chebyshev's inequality follows from Markov's inequality by replacing $X$ with $|X- \E X|^2$ and setting $a=\epsilon^2$: for $\epsilon>0$, 
+\begin{align*}
+\P( |X- \E X | \geq \epsilon) \leq \frac{1}{\epsilon ^2} \var(X).
+\end{align*}
+
+\begin{Theorem}[Weak Law of Large Numbers (WLLN)]\label{wk5:Thm:WLLN}
+Suppose $X_1,X_2, \ldots$ are such that $\E X_i=0$, $\E X_i^2=\sigma^2<\infty$ and $\E[X_i X_j] \leq 0$ for  $i\neq j$. Then,
+\begin{align*}
+\ofrac{n} \sum_{i=1}^n {X_i} \convp 0 \text{ as } n \to \infty.
+\end{align*}
+\end{Theorem}
+\begin{proof}
+We have
+\begin{align*}
+\E[\left(\frac{1}{n} \sum_{i=1}^n{X_i}\right)^2] 
+&= \frac{1}{n^2} \E [\sum_{i}^n{X_i^2}+2\sum_{i<j}{X_i X_j}]\\
+& \leq \frac{1}{n^2}  \sum_{i}^n{\E X_i^2}= \frac{\sigma^2}{n}.
+\end{align*}
+From Chebyshev's inequality, we then have for any $\epsilon>0$, 
+\begin{align*}
+\P(\abs*{\frac{1}{n} \sum_{i=1}^n{X_i}} \geq \epsilon)\leq \frac{1}{\epsilon^2}\frac{\sigma^2}{n}\to 0,
+\end{align*}
+as $n\to\infty$.
+\end{proof}
+
+
+\section{Product Measures}
+
+Given two measure spaces $(\Omega_1, \calA_1, \mu_1)$ and $(\Omega_2, \calA_2, \mu_2)$, where both $\mu_1$and $\mu_2$ are $\sigma$-finite, we can define a new measurable space $(\Omega, \calF)$, where $\Omega=\Omega_1\times\Omega_2$ and 
+\begin{align*}
+\calF= \sigma\left\{A \times B: A\in \calA_1, B\in \calA_2 \right\}.
+\end{align*}
+We call $A\times B$ a rectangle. A natural measure $\mu$ for this measurable space satisfies 
+\begin{align}\label{prod_mu}
+\mu (A \times B )=\mu_1 (A) \mu_2(B)
+\end{align}
+for all rectanges $A\times B$. It can be checked that the collection of finite disjoint unions of rectangles is an algebra (exercise). To extend this measure $\mu$ to $\calF$, we make use of Caratheodory's Extension Theorem (\cref{Caratheodory Theorem}): we show that for $A\times B = \bigcup_{i \geq 1} {A_i \times B_i}$ a disjoint union of rectangles, we have $\mu (A \times B)= \sum_{i \geq 1} {\mu_1 (A_i) \mu_2(B_i)}$. 
+
+For $x \in A$, let $I(x)=\{i:x \in A_i\}$ and $B= \bigcup_{i \in I(x)} {B_i}$ a disjoint union. We have
+\begin{align*}
+\indicatore{A}(x) \mu_2(B) 
+&=\indicatore{A}(x) \mu_2\left(\bigcup_{i \in I(x)} {B_i}\right)\\
+&= \sum_{i \in I(x)} \indicatore{A}(x) \mu_2 (B_i)\\
+& =\sum_{i\geq 1} \indicatore{A_i}(x) \mu_2 (B_i).
+\end{align*}
+Integrating w.r.t.\ $\mu_1$, we have
+\begin{align*}
+\mu (A\times B) 
+%&= \mu_1(A) \mu_2(B)\\
+&=\int \lim_{n \to \infty}{\sum_{i=1}^n {\indicatore{A_i} (x)\mu_2 (B_i) \ud \mu_1}}\\
+&\stackrel{\text{MCT}}{=}\lim_{n \to \infty} \int {\sum_{i=1}^n {\indicatore{A_i} (x)\mu_2 (B_i) \ud \mu_1}}\\
+& =\lim_{n \to \infty}\sum_{i=1}^n{\int  \indicatore{A_i} (x)\mu_2 (B_i) \ud \mu_1}\\
+& =\sum_{i\geq 1}\mu_1(A_i)\mu_2 (B_i),
+\end{align*}
+where the interchange of the sum and integral in the penultimate equality holds because the number of terms is finite. Therefore, Caratheodory’s Extension Theorem shows that there is a unique extension of $\mu$ defined by \cref{prod_mu} to $\calF$. This is called a \emph{product measure}. Notationally, we write $\mu = \mu_1 \times \mu_2$.
+
+The next theorem tells us when we can interchange integrals in general.
+\begin{Theorem}[Fubini or Fubini-Tonelli]\label{wk5:Fubini_theorem}
+Suppose $(\Omega_1, \calA_1, \mu_1)$ and $(\Omega_2, \calA_2, \mu_2)$ are $\sigma$-finite and $\mu = \mu_1 \times \mu_2$ is the product measure. Consider $f:\Omega=\Omega_1\times\Omega_2 \mapsto \Real$. If $f \geq 0$ or $\int{|f|} \ud\mu< \infty$, then
+\begin{align*}
+\int_{\Omega_1} \int_{\Omega_2} f (x,y) \ud \mu_2 \ud \mu_1 = \int_{\Omega} f \ud \mu = \int_{\Omega_2} \int_{\Omega_1} f (x,y) \ud \mu_1 \ud \mu_2.
+\end{align*}
+\end{Theorem}
+\begin{proof}
+Note that implicit in the theorem statement are the following that we need to prove:
+\begin{enumerate}[(i)]
+\item For each $x \in \Omega_1$, $y \mapsto f(x,y)$ is $\calA_2$-measurable.
+\item  $x \mapsto \int_{\Omega_2} f(x,y) \ud \mu_2$ is $\calA_1$-measurable.
+\item $\int_{\Omega_1} \int_{\Omega_2} f (x,y) \ud \mu_2 \ud \mu_1 = \int_{\Omega} f \ud \mu$.
+\end{enumerate}
+Without loss of generality, we may assume $\mu_1,\mu_2<\infty$ as the same proof is valid on each partition of $\Omega$ and then we can apply the MCT.
+
+The proof follows the steps discussed at the end of \cref{sec:Expectation}. We first prove the theorem for the simplest case where $f = \indicatore{E}$, where $E\in \calF$, the product $\sigma$-algebra. Let $E_x=\{y:(x,y)\in E\}$. 
+
+(i): Fix $x$, then $y \mapsto f(x,y)= \indicatore{E_x}(y)$. We need to show $E_x \in \calA_2$. Let $\calE=\{E \in \calF : E_x \in \calA_2\}$. We have $(E^c)_x=(E_x)^c$ since $y \in (E^c)_x \Leftrightarrow (x,y)\in E^c \Leftrightarrow y\in (E_x)^c$, and $\left(\bigcup_{i\geq1} E_i\right)_x = \bigcup_{i\geq1} (E_i)_x$. Therefore, $\calE$ is a $\sigma$-algebra and it contains all rectangles $A \times B$ where $A\in \calA$ and $B\in \calB$, which implies that $\calF \subset \calE$.
+
+(ii) $\&$ (iii): Let $\calL=\set*{E \in \calF\given f= \indicatore{E} \text{ satisfies (ii) \&(iii)}}$. 
+\begin{itemize}
+\item $\Omega \in \calL$.
+\item  If $E \in \calL$, $\mu_2((E^c)_x) =\mu_2((E_x)^c)=\mu_2(\Omega_2)-\mu_2(E_x)$. Since $\mu_2(\Omega_2)< \infty$ and $\mu_2(E_x)$ is $\calA_1$-measurable, $\mu_2((E^c)_x)$ is $\calA_1$-measurable. We also have
+\begin{align*}
+\int \mu_2((E^c)_x) \ud \mu_1
+& =\mu_2(\Omega_2)\mu_1(\Omega_1)-\int \mu_2(E_x) \ud \mu_1\\
+& =\mu(\Omega)-\mu(E)\\
+& =\mu(E^c).
+\end{align*}
+Therefore, $E^c \in \calL$.
+
+\item If $E_i \in \calL$, $i\geq 1$, are disjoint, then
+\begin{align*}
+\mu_2\parens*{\parens{\bigcup_{i \geq 1}E_i}_x}
+&=\mu_2\left(\bigcup_{i \geq 1}({E_i})_x\right) \\
+& = \sum_{i \geq 1} \mu_2((E_i)_x)\\
+& =\lim_{n \to \infty} \sum_{i=1}^n \mu_2((E_i)_x),
+\end{align*}
+which is $\calA_1$-measurable from \cref{lem:wk4:infX_rv} since each $\mu_2((E_i)_x)$ is $\calA_1$-measurable. From the MCT, we have
+\begin{align*}
+\int \mu_2\left((\bigcup_{i \geq 1}{E_i})_x\right) \ud \mu_1 
+& = \lim_{n \to \infty}{\int \sum_{i = 1}^n{\mu_2 ((E_i)_x} )\ud \mu_1 }\\
+& =  \lim_{n \to \infty}{\sum_{i = 1}^n{\int \mu_2 ((E_i)_x} )\ud \mu_1 }\\
+& = \lim_{n \to \infty}\sum_{i=1}^n \mu (E_i)\\
+& = \mu\parens*{\bigcup_{i \geq 1} {E_i}}.
+\end{align*}
+\end{itemize}
+Therefore, $\calL$ is a $\lambda$-system containing the collection of rectangles, which is a $\pi$-system. From the $\pi$-$\lambda$ Theorem, we obtain $\calF \subset \calL$. We have now shown that Fubini's Theorem holds for $f=\indicatore{E}$, $E \in \calF$.
+
+From linearity of integrals, the theorem holds for all simple functions $f$.
+
+For $f \geq 0$, $\exists$ simple $f_i \uparrow f$. Applying MCT gives Fubini's theorem for non-negative $f$.
+
+Finally, for general $f=f^+-f^-$, we note that $\int |f| \ud \mu <\infty$ implies $\int f^+ \ud \mu, \int f^- \ud \mu<\infty$, and
+\begin{align*}
+\int f^+ \ud \mu = \int \int f^+(x,y) \ud \mu_1 \ud \mu_2 \implies  \int f^+(x,y) \ud \mu_1 <\infty\ \text{$\mu_2$-a.e.} \\
+= \int \int f^+(x,y) \ud \mu_2 \ud \mu_1 \implies  \int f^+(x,y) \ud \mu_2 <\infty\ \text{$\mu_1$-a.e.} 
+\end{align*}
+Similarly for $f^-$ so that
+\begin{align*}
+ \int \int f^+(x,y) \ud \mu_1 \ud \mu_2 - \int \int f^-(x,y) \ud \mu_1 \ud \mu_2 = \int \int f(x,y) \ud \mu_1 \ud \mu_2.
+\end{align*}
+The proof is now complete.
+\end{proof}
+
+
+
+\begin{Example}
+\begin{equation}
+\bordermatrix{
+& x &&  \longrightarrow \cr
+&\vdots && \vdots && \vdots&& \vdots \cr\\
+&0\ && 0 && 0 \ && 1 && \ldots \cr\\
+y \bigg\uparrow &0\ && 0 && 1 \ && -1 && \ldots \cr\\
+&0\ && 1 && -1 \ && 0 && \ldots \cr\\
+&1\ && -1 && 0 \ && 0 && \ldots \cr
+}
+\end{equation}
+We have
+\begin{align*}
+\sum_y \sum_x f(x,y) &= \sum_y 0 = 0.\\
+\sum_x \sum_y f(x,y) &= 1+0+0+\cdots = 1.
+\end{align*}
+This example shows that the conditions in Fubini's Theorem are essentially necessary. 
+\end{Example}
+
+
+\begin{Example}
+Suppose $((0,1),\calB (0,1),\lambda) \times ((0,1),2^{(0,1)},\nu)$, where $\nu(A)=|A|$ is the counting measure, which is not $\sigma$-finite. Let
+\begin{equation}
+f(x,y)=\left\{
+\begin{aligned}
+1, && \text{if } x=y,\\
+0, && \text{otherwise.} 
+\end{aligned}
+\right.
+\end{equation}
+Then we have
+\begin{align*}
+\int f(x,y) \ud \nu = 1 \text{ for each } x \implies \int \int f(x,y) \ud \nu \ud \lambda= 1,\\
+\int f(x,y) \ud \lambda = 0 \text{ for each } y \implies \int \int f(x,y) \ud \lambda \ud \nu= 0.
+\end{align*}
+This example shows that $\sigma$-finiteness of the measures is necessary. 
+\end{Example}
+
+
+
+
+\section{Independence}
+
+Throughout this section, we consider a probability space $(\Omega,\calA,\P)$.
+
+\begin{Definition}
+Two events $A$ and $B$ are independent if $\P(A \cap B) = \P(A)\P(B)$. We write $A \independent B$.
+\end{Definition}
+
+If $A \independent B$, then it is easy to verify the following:
+\begin{enumerate}[(i)]
+\item $A^c \independent B$.
+\item $A \independent B^c$.
+\item $A^c \independent B^c$.
+\end{enumerate}
+I.e., the two $\sigma$-algebras $\{\emptyset,\Omega ,A, A^c\}$ and $\{\emptyset,\Omega ,B, B^c\}$ are ``independent''.
+
+\begin{Definition}
+The sub-$\sigma$-algebra $\calA_i \subset \calA$, $i=1,2,\ldots, n$, are independent if $\forall A_i \in \calA_i$, 
+\begin{align*}
+\P(\bigcap_{i=1}^n {A_i})= \prod_{i=1}^n {\P(A_i)}.
+\end{align*}
+They are said to be \emph{pairwise independent} if $\P(A_i \cap A_j)=\P(A_i)\P(A_j)$ $\forall i \neq j$.
+\end{Definition}
+
+We say that the random variables $X_1,X_2,\ldots,X_n$ are independent if $\sigma(X_i)$, $i=1,\ldots,n$, are independent, i.e., $\forall B_i \in \calB$, $i=1,\ldots,n$,
+\begin{align*}
+\P (X_1\in B_1,X_2\in B_2,\ldots,X_n\in B_n)= \prod_{i=1}^n {\P(X_i \in B_i)}.
+\end{align*}
+
+Note that independence $\implies$ pairwise independence but the converse is false. Here are two counter examples to show that pairwise independence does not imply independence.
+
+\begin{Example}\label{wk5:Independence1}
+\begin{figure}[!htb]
+\centering
+\includegraphics[width=.2\textwidth]{wk5_tetrahedron.png} 
+\caption{Dice example: pairwise independence does not imply independence.} 
+\label{wk5:fg:Independence}
+\end{figure}
+Consider a fair tetrahedron dice that has one red edge, one green edge and one blue edge as shown in \cref{wk5:fg:Independence}. The bottom has all three colors. Let $r$ be the event that the dice when tossed lands on a face with a red boundary. The events $b$, $g$ and $rgb$ are defined similarly. Then, by symmetry, we have
+\begin{align*}
+&\P (r)=\P(g)=\P(b)=\frac{1}{2}, \\
+&\P (rgb)=\P(rg)=\P(gb)=\P(rb)=\frac{1}{4}.
+\end{align*}
+Therefore, these events are pairwise independent but not independent.
+\end{Example}
+
+\begin{Example}\label{wk5:Independence2}
+Consider two six-sided fair dice. Let
+\begin{align*}
+A_1 & =\{ \text{1st dice is odd} \}, \\
+A_2 & =\{ \text{2nd dice is odd} \},\\
+A_{sum} & =\{ \text{sum of the two dice is odd} \}.
+\end{align*}
+We have
+\begin{align*}
+&\P (A_1) =\P (A_1) =\P (A_{sum}) =\frac{1}{2},\\
+&\P (A_1\cap A_2) =\P (A_1\cap A_{sum})=\P (A_2\cap A_{sum}) =\frac{1}{4},\\
+&\P (A_1\cap A_2 \cap A_{sum}) =0.
+\end{align*}
+Therefore, the events are pairwise independent but not independent. In particular, $\sigma(A_1)$ is not independent with $\sigma(\{A_2,A_{sum}\})$.
+\end{Example}
+
+\begin{Lemma}\label{wk5:lem:pi-independent} 
+Suppose the two collections of subsets $\calE$ and $\calC$ are $\pi$-systems and $\P(B \cap C)=\P(B) \P (C),\ \forall B \in \calE$, $C \in \calC$. Then $\sigma (\calE)$ and $\sigma (\calC)$ are independent.
+\end{Lemma}
+\begin{proof}
+Let $\calD_1=\{D \in \calA : \P (D\cap C)= \P(D) \P(C), \forall C \in \calC \}$. As an exercise, one can check that $\calD_1$ is a $\lambda$-system. Since $\calE \subset \calD_1$, from the $\pi$-$\lambda$ theorem we have $\sigma(\calE)\subset \calD_1$.
+
+Let $\calD_2=\{D \in \calA : \P (B\cap D)= \P(B) \P(D), \forall B \in \sigma(\calE) \}$. Similarly $\calD_2$ is a $\lambda$-system. From above, $\calC \subset \calD_2$ and by the $\pi$-$\lambda$ theorem, we have $\sigma(\calC)\subset \calD_2$. Therefore, $\sigma (\calE) \independent \sigma (\calC)$.
+\end{proof}
+By induction, if $\calB_i$ for $i=1,\ldots,n$ are $\pi$-systems and are independent, then $\sigma(\calB _i)$ are independent.
+
+\begin{Corollary}
+The random variables $X_1,X_2,\ldots,X_n$ are independent if 
+\begin{align*}
+\P (X_1\leq t_1,X_2\leq t_2,\ldots, X_n\leq t_n)= \prod_{i=1}^n {\P(X_i\leq t_i)}.
+\end{align*}
+\end{Corollary}
+\begin{proof}
+Since $\{(-\infty,t]: t\in\Real\}$ is a $\pi$-system that generates $\calB(\Real)$, the corollary follows from \cref{wk5:lem:pi-independent}.
+\end{proof}
+
+\begin{Lemma} 
+Suppose that each random variable $X_i$ has pdf $f_i$, $i=1,\ldots,n$. Then $X_1,\ldots , X_n$ are independent iff $\exists$ a joint pdf $f(x_1,\ldots,x_n)=\prod_{i=1}^n {f_i (X_i)}$.
+\end{Lemma}
+\begin{proof}
+`$\Leftarrow$':
+\begin{align*}
+\P (\bigcap_{i=1}^n \{X_i \in A_i\}) & = \int_{A_1 \times \cdots \times A_n} f(x_1, \ldots, x_n) \ud x_1 \cdots \ud x_n\\
+& = \int_{A_1 \times \cdots \times A_n} \prod_{i=1}^n {f(x_i)} \ud x_1 \cdots \ud x_n\\
+& =  \prod_{i=1}^n \int_{A_i} {f(x_i)} \ud x_i\\
+& =  \prod_{i=1}^n {\P (X_i \in A_i)}. 
+\end{align*}
+`$\Rightarrow$':
+Let $X=(X_1,\ldots,X_n)$. For $A_i \in \calB$, $i=1, \ldots n$, we are given
+\begin{align}
+\P(X \in A_1\times \cdots \times A_n) & =\prod_{i=1}^n {\P (X_i \in A_i)}\nn
+& =  \prod_{i=1}^n \int_{A_i} {f_i(x_i)} \ud x_i\nn
+& = \int_{A_1 \times \cdots \times A_n} \prod_{i=1}^n f_i(x_i) \ud x_1\cdots\ud x_n.\label{prodA}
+\end{align}
+We want to show that 
+\begin{align*}
+\P(X\in A) = \int_A \prod_{i=1}^n f_i(x_i) \ud x_1\cdots\ud x_n
+\end{align*}
+for all $A$ in the product $\sigma$-algebra $\calB(\Real^n)=\sigma \{A_1 \times \cdots \times A_n: A_i \in \calB\}$. 
+
+Let $\calL=\{A \in \calE : \P(X\in A)= \int_{A} \prod_{i=1}^n {f_i(x_i)} \ud x_1 \cdots \ud x_n\}$. It can be checked that $\calL$ is a $\lambda$-system and $\calP = \{ {A_1 \times \cdots \times A_n}: A_i \subset \calB\}$ is a $\pi$-system and generates $\calB(\Real^n)$. Since $\calP \subset \calL$ from \cref{prodA}, by the $\pi$-$\lambda$ Theorem, we have $\sigma(\calP) \subset \calL$ and the proof is complete.
+\end{proof}
+
+\begin{Lemma}
+If $X \independent Y$ and are integrable, then $\E[XY]=\E X \E Y$.
+\end{Lemma}
+\begin{proof}
+The distribution of $(X,Y)$ on $\Real^2$ is the product measure $\P_X \times \P_Y$. From Fubini's theorem, we have
+\begin{align*}
+\E[XY] = \int_{\Real^2} xy \ud \P_X\times\P_Y(x,y) = \int_\Real x \ud\P_X(x) \int_\Real y \ud \P_Y(y) = \E X \E Y.
+\end{align*}
+\end{proof}
+
+Suppose $X \independent Y$. For any measurable functions $f$ and $g$, $f(X)\independent g(Y)$ since $\sigma(f(X)) \subset \sigma(X)$.
+
+
+
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}

@@ -1,0 +1,481 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{1_BasicRealAnalysis_I}
+\externaldocument{3_ProbabilitySpaces}
+\externaldocument{4_Random_Variables}
+\externaldocument{5_Convergence_and_Independence}
+\externaldocument{6_Borel_Cantelli_Lemmas}
+\externaldocument{7_StrongLaw_of_LargeNumbers}
+\externaldocument{8_Glivenko-Cantelli_and_0-1_Laws}
+\externaldocument{9_Weak_Convergence}
+\externaldocument{10_Characteristic_Functions}
+
+\newcommand{\Po}[1]{\mathrm{Po}\left(#1\right)}
+
+\begin{document}
+
+\handout{11}{Lindeberg's Central Limit Theorem}
+
+\section{Lindeberg's Method}
+Recall the CLT for an i.i.d.\ sequence from the last session: Let $X_1, X_2, \ldots$ be an i.i.d.\ sequence with $\E X_i = 0$ and $\var X_i = 1$. We have
+\begin{align*}
+\frac{S_n}{\sqrt{n}} \convd \calN (0, 1).
+\end{align*}
+In this session, we show another proof of this CLT using Lindeberg's method. Let $G_1, G_2, \ldots$ be i.i.d. $\calN(0, 1)$, independent of $X_1,X_2,\ldots$. Let
+\begin{align*}
+T_{m,n} = \frac{1}{\sqrt{n}} (G_1 + \ldots + G_{m-1} + X_m + \ldots + X_n)
+\end{align*}
+with
+\begin{align*}
+T_{n+1,n} =& \frac{1}{\sqrt{n}} (G_1 + \ldots + G_n) \sim \calN (0, 1), \\
+T_{1,n} =& \frac{1}{\sqrt{n}} (X_1 + \ldots + X_n).
+\end{align*}
+We aim to show that $T_{1,n} \convd T_{n+1,n}$ as $n \to \infty$. Let $f \in C_b(\Real)$ with $c_2 = \sup \abs*{f\tc{2}} < \infty$ and $c_3 = \sup \abs*{f\tc{3}} < \infty$. We have
+\begin{align*}
+&\abs*{\E f(T_{1,n}) - \E f(T_{n+1,n})} \\
+&= \abs*{ \sum_{m=1}^{n} \left( \E f(T_{m,n}) - \E f(T_{m+1,n}) \right)} \\
+&\leq \sum_{m=1}^{n} \abs*{ \E f(T_{m,n}) - \E f(T_{m+1,n}) }.
+\end{align*}
+Let
+\begin{align*}
+U_m = \frac{1}{\sqrt{n}} \left(G_1 + \ldots + G_{m-1} + X_{m+1} + \ldots + X_n\right).
+\end{align*}
+Then,
+\begin{align*}
+T_{m,n} = U_m + \frac{X_m}{\sqrt{n}}, \\
+T_{m+1,n} = U_m + \frac{G_m}{\sqrt{n}}.
+\end{align*}
+Using Taylor series expansion at $U_m$ (see \cref{wk10:sec:CLT_IID}), for any $\epsilon>0$, we obtain
+\begin{align*}
+\abs*{f(T_{m,n}) - f(U_m) - f'(U_m)\frac{X_m}{\sqrt{n}} - f''(U_m)\frac{X_m^2}{2n}} \indicator{\abs*{X_m} \leq \epsilon \sqrt{n}} 
+\leq&
+\frac{c_3\abs*{X_m}^3}{6n^{3/2}} \indicator{\abs*{X_m} \leq \epsilon \sqrt{n}}
+\leq
+\frac{c_3\epsilon}{6n} X_m^2, \\
+%
+\abs*{f(T_{m,n}) - f(U_m) - f'(U_m)\frac{X_m}{\sqrt{n}} } \indicator{\abs*{X_m} > \epsilon \sqrt{n}}
+\leq&
+\frac{c_2 X_m^2}{2n} \indicator{\abs*{X_m} > \epsilon \sqrt{n}}.
+\end{align*}
+
+By combining the inequality $\abs*{f''(U_m)\frac{X_m^2}{2n}} \leq \frac{c_2 X_m^2}{2n}$ with the second inequality above, we obtain
+\begin{align*}
+\abs*{f(T_{m,n}) - f(U_m) - f'(U_m)\frac{X_m}{\sqrt{n}} - f''(U_m)\frac{X_m^2}{2n}} \indicator{\abs*{X_m} > \epsilon \sqrt{n}}
+\leq
+\frac{c_2 X_m^2}{n} \indicator{\abs*{X_m} > \epsilon \sqrt{n}}.
+\end{align*}
+Therefore, we have
+\begin{align*}
+\abs*{f(T_{m,n}) - f(U_m) - f'(U_m)\frac{X_m}{\sqrt{n}} - f''(U_m)\frac{X_m^2}{2n}}
+\leq
+\frac{c_3\epsilon}{6n}X_m^2 + \frac{c_2\ X_m^2}{n} \indicator{\abs*{X_m} > \epsilon \sqrt{n}}.
+\end{align*}
+Similarly, we can obtain
+\begin{align*}
+\abs*{f(T_{m+1,n}) - f(U_m) - f'(U_m)\frac{G_m}{\sqrt{n}} - f''(U_m)\frac{G_m^2}{2n}}
+\leq
+\frac{c_3\epsilon}{6n}G_m^2 + \frac{c_2 G_m^2}{n} \indicator{\abs*{G_m} > \epsilon \sqrt{n}}.
+\end{align*}
+Furthermore,  by definition, we have
+\begin{align*}
+\E[f'(U_m)X_m] =& \E[f'(U_m)] \E[X_m] = 0, \\
+\E[f''(U_m)X_m^2] =& \E[f''(U_m)] \E[X_m^2] = \E[f''(U_m)] = \E[f''(U_m)G_m^2],
+\end{align*}
+and
+\begin{align*}
+\abs*{ \E[f(T_{m,n})] - \E[f(T_{m+1,n})] } 
+\leq
+\frac{c_3\epsilon}{3n} + \frac{c_2}{n} \left( \E X_m^2 \indicator{\abs*{X_m} > \epsilon \sqrt{n}} +  \E G_m^2 \indicator{\abs*{G_m} > \epsilon \sqrt{n}} \right).
+\end{align*}
+Summing over $1\leq m \leq n$, we have
+\begin{align*}
+\abs*{\E[f(T_{1,n})] - \E[f(T_{n+1,n})]}
+\leq
+\frac{c_3\epsilon}{3} + c_2\left( \E X_1^2 \indicator{\abs*{X_1} > \epsilon \sqrt{n}} +  \E G_1^2 \indicator{\abs*{G_1} > \epsilon \sqrt{n}} \right).
+\end{align*}
+By the DCT (\cref{Dominated Convergence Theorem}), we obtain
+\begin{align*}
+&\E X_1^2 \indicator{\abs{X_1} > \epsilon \sqrt{n}} \to \E X_1^2 \indicator{\abs{X_1} = \infty} =0,\\
+&\E G_1^2 \indicator{\abs{G_1} > \epsilon \sqrt{n}} \to \E G_1^2 \indicator{\abs{G_1} = \infty} =0,
+\end{align*}
+as $n \to \infty$. Therefore, we have $\abs{\E[f(T_{1,n})] - \E[f(T_{n+1,n})]}\to 0$ by taking $n\to\infty$ and $\epsilon\to0$.
+
+
+\section{Lindeberg's CLT}
+\begin{Theorem}[Lindeberg's CLT]
+For each $n \geq 1$, let $\left(X_{n,m}\right)_{m=1}^n$ be a sequence of independent random variables with $\E X_{n,m} = 0$. Then, $S_n = \sum_{m=1}^n X_{n,m} \convd \calN (0,1) \ \text{as} \ n \to \infty$ if
+\begin{enumerate}[(i)]
+\item\label[condition]{Lindeberg_condition1} $\sum_{m=1}^n \E X_{n,m}^2 \to 1$ as $n \to \infty$; and
+\item\label[condition]{Lindeberg_condition2} $\forall \epsilon > 0$, $\sum_{m=1}^n \E X_{n,m}^2 \indicator{\abs{X_{n,m}} > \epsilon} \to 0$ as $n \to \infty$. 
+\end{enumerate}
+\end{Theorem}
+
+\begin{Remark}
+Let $Y_1,Y_2,\ldots$ be i.i.d.\, $\E Y_1=0$, $\E Y_1^2=1$, and $X_{n,m}=Y_m/\sqrt{n}$. Then $\sum_{m=1}^n \E X_{n,m}^2=1$ and for all $\epsilon>0$, we have
+\begin{align*}
+\sum_{m=1}^n \E X_{n,m}^2 \indicator{\abs{X_{n,m}} > \epsilon}
+= \E Y_1^2\indicator{|Y_1|>\epsilon\sqrt{n}} \xrightarrow{\text{DCT}} 0.
+\end{align*}
+Therefore, the CLT for i.i.d.\ sequence follows from Lindeberg's CLT.
+\end{Remark}
+
+\begin{proof}
+By Chebyshev's inequality, we have
+\begin{align*}
+\P(\abs*{S_n} > M) \leq \ofrac{M^2} \sum_{m=1}^n \E X_{n,m}^2 \leq \frac{2}{M^2}, \ \forall n \ \text{sufficiently large}.
+\end{align*}
+Therefore, $(\P_{S_n})_{n\geq 1}$ is uniformly tight. From \cref{wk10:lem:uniformly_tight_and_varphi_conv_implies_convd}, to prove the theorem is equivalent to showing that the characteristic function $\varphi_{S_n}(t) \to e^{-\frac{t^2}{2}}$ as $n\to\infty$. We have
+\begin{align*}
+\log \varphi_{S_n}(t) 
+= \log \left( \prod_{m=1}^n \E e^{\iu tX_{n,m}} \right) 
+= \sum_{m=1}^n \log \left( 1 + \E e^{\iu tX_{n,m}} - 1 \right).
+\end{align*}
+By Taylor's series, we have the following elementary facts:
+\begin{align} 
+\abs*{\log(1+\xi) - \xi} 
+\leq& \xi^2 \ \text{for}\ \abs*{\xi} \leq \frac{1}{2}, \label{Lindeberg_intmd_ineq1}\\ 
+\abs*{e^{\iu a} - \sum_{k=0}^n \frac{(\iu a)^k}{k!}}
+\leq& \frac{\abs*{a}^{n+1}}{(n+1)!} \text{ for } a\in\Real.\label{Lindeberg_intmd_ineq2}
+\end{align}
+From \cref{Lindeberg_intmd_ineq2} and $\E X_{n,m} = 0$, we have
+\begin{align} \nonumber
+&\abs*{\E e^{\iu t X_{n,m}} - 1} \\ \nonumber
+=& \abs*{\E e^{\iu t X_{n,m}} - 1 - \iu t\E X_{n,m}} \\ \label{Lindeberg_intmd_ineq3}
+\leq& \frac{t^2}{2} \E X_{n,m}^2 \\ \nonumber
+\leq& \frac{t^2}{2} \epsilon^2 + \frac{t^2}{2}  \E X_{n,m}^2 \indicator{\abs*{X_{n,m}} > \epsilon}.
+\end{align}
+Because $\E X_{n,m}^2 \indicator{\abs*{X_{n,m} > \epsilon}} \to 0$ as $n \to \infty$, there exists $n_0(m)$ such that for $n \geq n_0(m)$, we have 
+\begin{align*}
+\abs*{\E e^{\iu t X_{n,m}} - 1}  \leq t^2\epsilon^2. 
+\end{align*}
+For $\epsilon \leq \dfrac{1}{t \sqrt{2}}$, 
+\begin{align*}
+\abs*{\E e^{\iu t X_{n,m}} - 1} \leq \frac{1}{2},
+\end{align*}
+thus from \cref{Lindeberg_intmd_ineq1,Lindeberg_intmd_ineq3}, we have
+\begin{align*}
+&\sum_{m=1}^n \abs*{\log \left(1+(\E e^{\iu t X_{n,m}} - 1)\right) - \left( \E e^{\iu t X_{n,m}} - 1 \right)} \\
+\leq& \sum_{m=1}^n \abs*{\E e^{\iu t X_{n,m}} - 1 }^2  \\
+\leq& \sum_{m=1}^n \frac{t^4}{4} \left( \E X_{n,m}^2 \right)^2 \\
+\leq& \frac{t^4}{4} \max_{1 \leq m \leq n} \E X_{n,m}^2 \sum_{m=1}^n \E X_{n,m}^2.
+\end{align*}
+We have
+\begin{align*}
+\max_{1 \leq m \leq n} \E X_{n,m}^2 
+\leq \epsilon^2 + \max_{1 \leq m \leq n} \E X_{n,m}^2 \indicator{\abs*{X_{n,m}} > \epsilon}
+\to \epsilon^2 \ \text{as}\ n \to \infty,
+\end{align*}
+where the convergence follows from \cref{Lindeberg_condition2}. Combining the above result with \cref{Lindeberg_condition1}, we obtain
+\begin{align}
+\sum_{m=1}^n \abs*{\log \left(1+(\E e^{\iu t X_{n,m}} - 1)\right) - \left( \E e^{\iu t X_{n,m}} - 1 \right)}
+\leq 
+\frac{t^4}{2}\epsilon^2 \ \text{as}\ n \to \infty. \label{Lindeberg_intmd_ineq4}
+\end{align}
+Next we show
+\begin{align*}
+\abs*{\sum_{m=1}^n \left(\E e^{\iu t X_{n,m}} - 1 \right) + \frac{t^2}{2}} \to 0,
+\end{align*}
+which, due to \cref{Lindeberg_condition1}, is equivalent to showing that
+\begin{align*}
+\abs*{\sum_{m=1}^n \left(\E e^{\iu t X_{n,m}} - 1 \right) + \frac{t^2}{2} \sum_{m=1}^n \E X_{n,m}^2} \to 0.
+\end{align*}
+From the Taylor series expansion and using a similar argument in Lindeberg's method, we obtain
+\begin{align*}
+\abs*{ e^{\iu t X_{n,m}} - 1 - \iu t X_{n,m} + \frac{t^2}{2} X_{n,m}^2} \indicator{\abs*{X_{n,m}} > \epsilon}
+\leq& t^2 X_{n,m}^2 \indicator{\abs*{X_{n,m}} > \epsilon}, \\
+%
+\abs*{ e^{\iu t X_{n,m}} - 1 - \iu t X_{n,m} + \frac{t^2}{2} X_{n,m}^2} \indicator{\abs*{X_{n,m}} \leq \epsilon}
+\leq& \frac{t^3 \epsilon}{6} X_{n,m}^2.
+\end{align*}
+We then obtain
+\begin{align*}
+&\abs*{\sum_{m=1}^n \left( \E e^{\iu t X_{n,m}} - 1 \right) + \frac{t^2}{2} \sum_{m=1}^n \E X_{n,m}^2} \\
+\leq& t^2 \sum_{m=1}^n \E X_{n,m}^2 \indicator{\abs*{X_{n,m}} > \epsilon} + \frac{t^3 \epsilon}{6} \sum_{m=1}^n \E X_{n,m}^2 \\
+\leq& \frac{t^3 \epsilon}{6} \ \text{as}\ n \to \infty.
+\end{align*}
+Taking $\epsilon \to 0$, the theorem is proved.
+\end{proof}
+%
+\begin{Theorem}[Berry-Essen Theorem]
+Let $(X_m)_{m\geq1}$ be a sequence of independent random variables, $\E X_m = 0$. Let $\hat{F}_n$ be the cdf of $\dfrac{S_n}{\sqrt{\sum_{m=1}^n \E X_m^2}}$ and $G \sim \calN (0, 1)$. We have
+\begin{align*}
+\sup_x \abs*{\hat{F}_n(x) - G(x)} \leq \frac{10 \sum_{m=1}^n \E \abs{X_m}^3}{\left(\sum_{m=1}^n \E X_m^2\right)^{3/2}}.
+\end{align*}
+%
+For the special case where $(X_m)$ is an i.i.d. sequence and $\E X_1^2 = \sigma^2$, we have
+\begin{align*}
+\sup_x \abs*{\hat{F}_n(x) - G(x)} \leq \frac{10 \E \abs{X_1}^3}{\sigma^3 \sqrt{n}}.
+\end{align*}
+\end{Theorem}
+This theorem shows how fast the convergence is. The proof is omitted here as it is quite technical and tedious. Please see Durrett if interested. 
+
+\section{Kolmogorov's Three Series Theorem}
+
+\begin{Theorem}[Kolmogorov's Three Series Theorem] \label{Kolmogorov_Three_Series_Thm}
+Let $(X_i)_{i\geq1}$ be a sequence of independent random variables and let $Z_i = X_i \indicator{\abs*{X_i} \leq 1}$. Then, $\sum_{i=1}^n X_i$ converges a.s.\ if and only if
+\begin{enumerate}[(i)]
+\item $\sum_{i \geq 1} \P(\abs{X_i} > 1) < \infty$. \label[condition]{Kolmogorov_condition_1}
+\item $\sum_{i \geq 1} \E Z_i$ converges. \label[condition]{Kolmogorov_condition_2}
+\item $\sum_{i \geq 1} \var Z_i < \infty$. \label[condition]{Kolmogorov_condition_3}
+\end{enumerate} 
+\end{Theorem}
+%
+\begin{proof}
+``$\Leftarrow$'': Using \cref{Kolmogorov_condition_1}, we have
+\begin{align*}
+\sum_{i \geq 1} \P(X_i \neq Z_i) = \sum_{i \geq 1} \P(\abs{X_i} > 1) < \infty.
+\end{align*}
+From the Borel-Cantelli Lemma (\cref{wk6:lemma:borel_cantelli}), we have 
+\begin{align*}
+\P(X_i \neq Z_i\ \text{i.o.}) = 0.
+\end{align*}
+Therefore, 
+\begin{align*}
+\sum_{i \geq 1} X_i \ \text{converges}\
+\iff
+\sum_{i \geq 1} Z_i \ \text{converges}.
+\end{align*}
+Using \cref{Kolmogorov_condition_2}, we have
+\begin{align*}
+\sum_{i \geq 1} Z_i \ \text{converges}\ 
+\iff
+\sum_{i \geq 1} (Z_i - \E Z_i) \ \text{converges}.
+\end{align*}
+The proof now follows from \cref{Kolmogorov_condition_3} and the variance convergence criterion (\cref{wk7:thm:var_conv_criteria}).
+
+``$\Rightarrow$'': Suppose that $\sum_{i \geq 1} X_i$ converges a.s.\\
+We first show \cref{Kolmogorov_condition_1}. Since $\P(\abs*{X_i} > 1 \io) = 0$, the Borel-Cantelli Lemma (\cref{wk6:lemma:borel_cantelli}) yields 
+\begin{align*}
+\sum_{i \geq 1} \P(\abs*{X_i} > 1) < \infty. 
+\end{align*}
+
+
+We next show \cref{Kolmogorov_condition_3} by contradiction. From \cref{Kolmogorov_condition_1}, we have
+\begin{align}\label{xconvz}
+\sum_{i \geq 1}X_i \ \text{converges a.s.}\ \implies \sum_{i \geq 1}Z_i \ \text{converges a.s.}
+\end{align}
+Therefore, 
+\begin{align*}
+S(m,n) = \sum_{i=m}^n Z_i \to 0 \ \text{a.s as}\ m, n \to \infty. 
+\end{align*}
+Thus, for any $\delta > 0$, we have 
+\begin{align} \label{Kolmogorov_intmd_ineq}
+\P(\abs*{S(m,n)} > \delta) \leq \delta \ \text{for sufficiently large}\ m, n.
+\end{align} 
+Now assume $\sum_{i \geq 1} \var Z_i = \infty$. Then we have $\sigma^2(m,n) \triangleq \var(S(m,n)) = \sum_{i=m}^n \var(Z_i) \to \infty$ as $n \to \infty$ for fixed $m$. Let
+\begin{align*}
+T(m,n) 
+= \frac{S(m,n) - \E S(m,n)}{\sigma(m,n)}
+= \sum_{i=m}^n \frac{Z_i - \E Z_i}{\sigma(m,n)}.
+\end{align*}
+Let $\widetilde{Z}_i = Z_i - \E Z_i$. We have $\abs*{\widetilde{Z}_i} \leq 2$, and $\abs*{\frac{\widetilde{Z}_i}{\sigma(m,n)}} \to 0$ a.s as $n \to \infty$ because $\sigma(m,n) \to \infty$. For any $\epsilon>0$, $\exists n(m)$ such that for all $n \geq n(m)$, we have $\abs*{\frac{\widetilde{Z}_i}{\sigma(m,n)}} \leq \epsilon$ a.s. Therefore, we obtain
+\begin{align*}
+\sum_{i=m}^n \E[\frac{\widetilde{Z}_i^2}{\sigma^2(m,n)} \indicator{\abs*{\frac{\widetilde{Z}_i}{\sigma(m,n)}} > \epsilon}] = 0\ \as \text{ for}\ n \geq n(m).
+\end{align*}
+Furthermore, we have 
+\begin{align*}
+\sum_{m=1}^n \E[\frac{\widetilde{Z}_i^2}{\sigma^2(n,m)}] = 1.
+\end{align*}
+By Lindeberg's CLT, we therefore have
+\begin{align}
+T(m,n) \convd \calN (0,1) \ \text{as}\ m,n \to \infty.\label{TmnconvN}
+\end{align}
+But at the same time, we have
+\begin{align*}
+1-\delta \leq \P(\abs*{S(m,n)} \leq \delta) = \P(\abs*{T(m,n) + \frac{\E S(m,n)}{\sigma(m,n)}} \leq \frac{\delta}{\sigma(m,n)}).
+\end{align*}
+When $m, n \to \infty$, $\sigma(m,n) \to \infty$. Thus, $T(m,n)$ concentrates at a constant, which contradicts \cref{TmnconvN}. Therefore, the assumption that $\sum_{i \geq 1} \var Z_i = \infty$ is false.
+
+Finally, we show \cref{Kolmogorov_condition_2}. From the variance convergence criterion (\cref{wk7:thm:var_conv_criteria}), $\sum_{i \geq 1}(Z_i - \E Z_i)$ converges a.s. Thus, convergence of $\sum_{i \geq 1} \E Z_i$ follows from \cref{xconvz}.
+\end{proof}
+
+\section{Levy's Equivalence Theorem}
+
+\begin{Theorem}[Levy's Equivalence Theorem]\label{wk11:Levy's Equivalence Thm}
+Let $(X_i)_{i\geq1}$ be a sequence of independent random variables. Then, $\sum_{i \geq 1} X_i$ converges a.s. $\iff$ converges in probability $\iff$ converges in distribution.
+\end{Theorem}
+
+To prove the \cref{wk11:Levy's Equivalence Thm}, we start with a few lemmas.
+
+
+\begin{Lemma}\label{wk11:lem:Kolineq}
+Suppose $X_1,X_2,\ldots$ are independent. Let $S_n=\sum_{i\leq n} X_i$. If $\P(|S_n-S_j|\geq a) \leq p < 1$ for all $j\leq n$, then for all $x > a$, we have
+\begin{align*}
+\P(\max_{1\leq j\leq n} |S_j| \geq x) \leq \ofrac{1-p} \P(|S_n| > x-a).
+\end{align*}
+\end{Lemma}
+\begin{proof}
+Let $\tau = \min\braces*{j\leq n : |S_j|\geq x}$ with $\tau=n+1$ if $|S_j| < x$ for all $j\leq n$. If $\tau=j$, then $|S_j|\geq x$ and 
+\begin{align*}
+\braces*{\omega : |S_n - S_j| < a,\ \tau=j} \subset \braces*{\omega : |S_n| >x-a,\ \tau=j}.
+\end{align*}
+This gives us
+\begin{align*}
+\P(\max_{j\leq n}|S_j| \geq x)
+&=\P(\tau\leq n)\\
+&=\sum_{j=1}^n \P(\tau=j)\\
+&\leq \ofrac{1-p}\sum_{j=1}^n \P(|S_n-S_j|<a)\P(\tau=j)\\
+&=\ofrac{1-p}\sum_{j=1}^n \P(|S_n-S_j|<a,\ \tau=j) \text{ since $\{\tau=j\}$ depends only on $X_1,\ldots,X_j$} \\
+&\leq \ofrac{1-p}\sum_{j=1}^n \P(|S_n|>x-a,\ \tau=j)\\
+&= \ofrac{1-p}\P(|S_n|>x-a).
+\end{align*}
+\end{proof}
+
+\begin{Lemma}\label{wk11:lem:asiffmaxconvp}
+$Y_n\to Y$ a.s. iff $\max_{i\geq n} |Y_i-Y| \convp 0$.
+\end{Lemma}
+\begin{proof}
+We have $\max_{i\geq n} |Y_i-Y| \to 0\ \as\ \implies \max_{i\geq n} |Y_i-Y| \convp 0$.
+
+To show the converse, let $M_n = \max_{i\geq n} |Y_i-Y|$, which is a decreasing sequence bounded below by 0. Therefore $M_n \downarrow M$ for some $M$, which implies that $\forall \epsilon>0$, $\P(M>\epsilon) \leq \P(M_n>\epsilon) \to 0$ as $n\to\infty$. Therefore, from continuity of $\P$, $\P(M=0)=1$ and $M_n\to 0$ a.s. This is equivalent to saying that $Y_n\to Y$ a.s.
+\end{proof}
+
+\begin{Lemma}\label{wk11:lem:Yconvpiff}
+$(Y_n)$ converges in probability iff $\lim_{n,m\to\infty} \P(|Y_m-Y_n|\geq \epsilon) =0$ for all $\epsilon>0$.
+\end{Lemma}
+\begin{proof}
+The proof in the ``$\Rightarrow$'' direction is trivial. To prove the converse, we note that the given condition implies that for all $k\geq1$, $\exists n(k)$ such that $\forall n,m \geq n(k)$, we have
+\begin{align*}
+\P(|Y_m-Y_n|\geq\ofrac{2^k}) \leq \ofrac{2^k}. 
+\end{align*}
+We can choose $n(k+1) \geq n(k)$ so that
+\begin{align*}
+\P(|Y_{n(k+1)}-Y_{n(k)}|\geq\ofrac{2^k}) \leq \ofrac{2^k}. 
+\end{align*}
+Summing over $k\geq 1$, we have
+\begin{align*}
+\sum_{k\geq1} \P(|Y_{n(k+1)}-Y_{n(k)}|\geq\ofrac{2^k}) \leq 1 <\infty. 
+\end{align*}
+The Borel-Cantelli Lemma (\cref{wk6:lemma:borel_cantelli}) implies that $\P(|Y_{n(k+1)}-Y_{n(k)}|\geq\ofrac{2^k} \io)=0$ and therefore $\exists l$ such that for all $k\geq l$, $|Y_{n(k+1)}-Y_{n(k)}|<\ofrac{2^k}$ a.s. and for all $j\geq k$, we have
+\begin{align*}
+|Y_{n(j)}-Y_{n(k)}|< \sum_{i\geq k} \ofrac{2^i} \to 0 \text{ as $k\to\infty$}.
+\end{align*}
+Therefore $(Y_{n(k)})_{k\geq1}$ is Cauchy a.s., and it converges since $\Real$ is complete. Hence, $\exists Y = \lim_{k\to\infty} Y_{n(k)}$. For any $\epsilon>0$, we can then choose $n(k)$ sufficiently large so that $\forall n\geq n(k)$,
+\begin{align*}
+\P(|Y_n-Y|\geq 2\epsilon)
+&\leq \P(|Y_n - Y_{n(k)}|\geq\epsilon) + \P(|Y_{n(k)}-Y|\geq\epsilon) \\
+&\leq 2\epsilon.
+\end{align*}
+The lemma is now proved.
+\end{proof}
+
+\begin{Lemma}\label{wk11:lem:XYut}
+Suppose that $(\P_{X_n})$ and $(\P_{Y_n})$ are both uniformly tight. Then $(\P_{X_n+Y_n})$ is uniformly tight.
+\end{Lemma}
+\begin{proof}
+Exercise.
+\end{proof}
+
+\begin{Lemma}\label{wk11:lem:Q0}
+If $\P*\bbQ=\P$, then $\bbQ(\{0\})=1$.
+\end{Lemma}
+\begin{proof}
+Let $X\sim\P$ and $Y\sim\bbQ$ be independent with characteristic functions $\varphi_X$ and $\varphi_Y$ respectively. Since $\P*\bbQ=\P$, we have $\varphi_X(t)\varphi_Y(t)=\varphi_X(t)$ for all $t\in\Real$. Since $\varphi_X(t)$ is continuous and $\varphi_X(0)=1$, $\exists \epsilon>0$ such that $|\varphi_X(t)|>0$ $\forall |t| \leq \epsilon$. This implies that $\varphi_Y(t)=1$ for such values of $t$. Therefore $\E[\cos tY]=1$ but since $\cos(\cdot) \leq 1$, we must have $tY = 0 \mod 2\pi$ a.s. 
+
+Take $|s|, |t|\leq \epsilon$ with $s/t$ being irrational. Then for each $\omega$, we have
+\begin{align*}
+& tY(\omega) = 2\pi k,\ k\in\bbZ,\\
+& sY(\omega) = 2\pi m,\ m\in\bbZ.
+\end{align*}
+If $Y(\omega) \ne 0$, $s/t = m/k$, a contradiction. Therefore $Y=0$ a.s.
+\end{proof}
+
+\begin{proof}[Proof of \cref{wk11:Levy's Equivalence Thm}]
+We first show that $S_n=\sum_{i=1}^n X_i$ converges in probability implies convergence a.s. Suppose $S_n \convp S$, i.e., for all $\epsilon >0$, $\exists\ n(\epsilon)$ such that $\forall n\geq n(\epsilon)$,
+\begin{align}\label{Snconvp}
+\P(|S_n-S|>\epsilon) \leq \epsilon.
+\end{align}
+For $k,j\geq n(\epsilon)$, we have
+\begin{align*}
+\P(|S_k-S_j|\geq 2\epsilon) \leq \P(|S_k-S|\geq\epsilon) +\P(|S_j-S|\geq\epsilon) \leq 2\epsilon
+\end{align*}
+From \cref{wk11:lem:Kolineq}, we obtain
+\begin{align*}
+\P(\max_{n\leq j \leq k} |S_j-S_n| \geq 4\epsilon)
+&\leq \ofrac{1-2\epsilon} \P(|S_k - S_n|\geq 2\epsilon)\\
+&\leq \frac{2\epsilon}{1-2\epsilon}\\
+&\leq 3\epsilon,
+\end{align*}
+for $\epsilon$ sufficiently small. The MCT (\cref{Monotone Convergence Theorem}) then yields
+\begin{align*}
+\P(\max_{j \geq n} |S_j-S_n| \geq 4\epsilon) \leq 3\epsilon.
+\end{align*}
+Together with \cref{Snconvp}, we finally have
+\begin{align*}
+\P(\max_{j \geq n} |S_j-S| \geq 5\epsilon) \leq 4\epsilon.
+\end{align*} 
+\cref{wk11:lem:asiffmaxconvp} then implies that $S_j \to S$ a.s.\ as $j\to\infty$.
+
+We next show that $S_n$ converges in distribution implies convergence in probability. Suppose that $\P_{S_n} \convd \P$ for some $\P$. From \cref{wk9:lem:convd_implies_uniform_tightness}, $(\P_{S_n})_{n\geq1}$ is uniformly tight. Therefore from \cref{wk11:lem:XYut}, $(\P_{S_n-S_k})_{1\leq k\leq n}$ is uniformly tight. We proceed by contradiction. Suppose $\exists\ \epsilon>0$ and $(n(l))$, $(m(l))$ with $n(l)\leq m(l)$ $\forall l$ such that
+\begin{align}\label{PYge}
+\P(|S_{m(l)}-S_{n(l)}|>\epsilon) \geq \epsilon.
+\end{align}
+Let $Y_l=S_{m(l)}-S_{n(l)}$, then since $(\P_{Y_l})$ is uniformly tight, from Helly's Selection Theorem (\cref{wk9:thm:Helly}), $\exists\ (l(r))$ such that $\P_{Y_{l(r)}} \convd$ some distribution $\bbQ$. Since $S_{m(l(r))}=S_{n(l(r))}+Y_{l(r)}$ and $S_{n(l)}$, $Y_{l(r)}$ are independent, we have
+\begin{align*}
+\P_{S_{m(l(r))}} = \P_{S_{n(l(r))}}*\P_{Y_{l(r)}}.
+\end{align*}
+Taking $r\to\infty$, we then have $\P = \P*\bbQ$ from \cref{wk10:ex:P*Q}. From \cref{wk11:lem:Q0}, $\bbQ(\{0\})=1$, which implies that $\P(|Y_{l(r)}|>\epsilon) <\epsilon$ for $r$ sufficiently large. This contradicts \cref{PYge} and the proof is complete.
+\end{proof}
+
+\section{Poisson Convergence}
+
+Let $X_{n,m}$, $n,m\geq 1$ be independent Bernoulli r.v.s with $\P(X_{n,m}=1)=p_{n,m}$. If $p_{n,m} \to 0$ sufficiently fast as $n\to\infty$, then
+\begin{align*}
+\sum_{m=1}^n \var X_{n,m} = \sum_{m=1}^n p_{n,m}(1-p_{n,m}) \to 0.
+\end{align*}
+This violates Lindeberg's CLT \cref{Lindeberg_condition1}, therefore we cannot apply the CLT here. However, we can still obtain a convergence in distribution result.
+
+\begin{Theorem}\label{wk11:thm:Poisson convergence}
+Suppose 
+\begin{enumerate}[(i)]
+	\item $\sum_{m=1}^n p_{n,m} \to \lambda \in (0,\infty)$ as $n\to\infty$, and
+	\item $\max_{1\leq m\leq n} p_{n,m} \to 0$ as $n\to\infty$,
+\end{enumerate}
+then $S_n = \sum_{m=1}^n X_{n,m} \convd \Po{\lambda}$, where $\Po{\lambda}(k)= \dfrac{\lambda^k}{k!} e^{-\lambda}$ for $k\in\bbZ_{\geq0}$ is the Poisson distribution.
+\end{Theorem} 
+As in the proof of Lindeberg's CLT, the proof of this result proceeds via Levy's continuity theorem (\cref{wk10:thm:Levy's Continuity Theorem}). We need a preliminary lemma.
+
+\begin{Lemma}\label{wk11:lem:prodbound}
+If the complex numbers $z_i, w_i$, $i=1,\ldots,n$, are such that $|z_i|, |w_i| \leq \theta$, then
+\begin{align*}
+\abs*{\prod_{i=1}^n z_i - \prod_{i=1}^n w_i} \leq \theta^{n-1} \sum_{i=1}^n |z_i-w_i|.
+\end{align*}
+\end{Lemma}
+\begin{proof}
+We prove by induction on $n$. The result obviously holds for $n=1$. Suppose it is true for $n-1$. Then,
+\begin{align*}
+& \abs*{\prod_{i=1}^n z_i - \prod_{i=1}^n w_i} \\
+& \leq \abs*{\prod_{i=1}^{n-1} z_i \cdot z_n - \prod_{i=1}^{n-1} w_i \cdot z_n} + \abs*{\prod_{i=1}^{n-1} w_i \cdot z_n - \prod_{i=1}^{n-1} w_i \cdot w_n} \\
+& \leq \theta \abs*{\prod_{i=1}^{n-1} z_i - \prod_{i=1}^{n-1} w_i} + \theta^{n-1} \abs*{z_n - w_n} \\
+& \leq \theta^{n-1} \sum_{i=1}^{n-1} |z_i-w_i| + \theta^{n-1} \abs*{z_n - w_n} \\
+& = \theta^{n-1} \sum_{i=1}^n |z_i-w_i|.
+\end{align*}
+\end{proof}
+
+\begin{proof}[Proof of \cref{wk11:lem:prodbound}]
+The characteristic function of $\Po{\lambda}$ is $\exp(\lambda(e^{\iu t}-1))$ while that for $S_n$ is 
+\begin{align*}
+\E e^{\iu t S_n} = \prod_{m=1}^n \parens*{1 + p_{n,m}\parens*{e^{\iu t} - 1}}.
+\end{align*}
+We have
+\begin{align*}
+\abs*{\exp(p_{n,m}\parens*{e^{\iu t} - 1})} &= \exp(p_{n,m}\Re(e^{\iu t} - 1)) \\
+&= \exp(p_{n,m}(\cos t - 1)) \leq 1,
+\intertext{and also}
+\abs*{1 + p_{n,m}(e^{\iu t} - 1)} &= \abs*{1 + p_{n,m}(\cos t - 1) + \iu\sin t} \leq 1,
+\end{align*}
+which together with \cref{wk11:lem:prodbound} yield
+\begin{align*}
+&\abs*{\prod_{m=1}^n \parens*{1 + p_{n,m}\parens*{e^{\iu t} - 1}} - \exp\parens*{\sum_{m=1}^n p_{n,m}(e^{\iu t}-1)}} \\
+&\leq \sum_{m=1}^n \abs*{\exp\parens*{p_{n,m}\parens*{e^{\iu t} - 1}} - \parens*{1 + p_{n,m}\parens*{e^{\iu t} - 1}}} \\
+&\leq \ofrac{2}\sum_{m=1}^n p_{n,m}^2 \abs*{e^{\iu t} - 1}^2 \\
+&\leq 2 \max_{1\leq m\leq n} p_{n,m} \sum_{m=1}^n p_{n,m} \to 0 \text{ as $n\to\infty$}.
+\end{align*}
+Since $\exp\parens*{\sum_{m=1}^n p_{n,m}(e^{\iu t}-1)} \to \exp(\lambda(e^{\iu t}-1))$ as $n\to\infty$, the result follows from Levy's continuity theorem (\cref{wk10:thm:Levy's Continuity Theorem}).
+\end{proof}
+
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}

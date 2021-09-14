@@ -1,0 +1,295 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{3_ProbabilitySpaces}
+\externaldocument{4_Random_Variables}
+\externaldocument{5_Convergence_and_Independence}
+\externaldocument{6_Borel_Cantelli_Lemmas}
+\externaldocument{12_Conditional_Expectations}
+\externaldocument{13_Optional_Stopping}
+
+
+\begin{document}
+
+\handout{14}{Submartingales}
+
+
+\section{Submartingales}
+
+\begin{Definition}
+Consider a probability space $(\Omega, \scF, \P)$ and a filtration $\scF_0 \subset \scF_1 \subset \ldots \subset \scF$. Suppose $X_n \in \scF_n$ and $\E|X_n|<\infty$. If for all $m\geq n$, $\E[X_m \given \scF_n] \geq X_n$, then we say that $(X_n,\scF_n)_{n\geq0}$ is a \emph{submartingale}. If $\E[X_m \given \scF_n] \leq X_n$, $(X_n,\scF_n)_{n\geq0}$ is called a \emph{supermartingale}.
+\end{Definition}
+
+The same proof as in \cref{wk12:MTT} shows that the martingale transform w.r.t.\ a predictable sequence $(A_n)$, which is bounded and non-negative, of a submartingale or supermartingale remains as a submartingale or supermartingale, respectively. 
+
+\begin{Theorem}[MTT] \label{wk14:MTT}
+If $(A_n)$ is predictable w.r.t.\ $(\scF_n)$, non-negative and bounded, and $(X_n,\scF_n)_{n\geq0}$ is a submartingale (supermartingale), then $(\widetilde{X}_n, \scF_n)_{n\geq0}$ is a submartingale (supermartingale).
+\end{Theorem}
+
+\begin{Example}
+In a casino game, let $X_n$ be the amount of money you win at time $n$ if you had bet one dollar at each time, starting with $X_0=0$. Recall that a predictable sequence $(A_n)$ is a gambling strategy so that the winnings at time $n$ is 
+\begin{align*}
+\widetilde{X}_n = \sum_{k=1}^n A_k(X_k-X_{k-1}).
+\end{align*}
+Suppose that $M_n = X_n - X_{n-1} \in \set{-1,1}$ has distribution $\Bern{p}$. Your friend claims that a ``sure-win'' strategy is to choose $A_1=1$ and for $n\geq2$, 
+\begin{align*}
+A_n = \left\{
+\begin{array}{ll}
+2A_{n-1} &\ \text{if $M_{n-1}=-1$},\\
+1 &\ \text{if $M_{n-1}=1$}.
+\end{array} \right.
+\end{align*}
+Assuming that $p>0$, $\{M_n=1 \io\}$ has probability one. Once $M_n=1$, the above strategy recoups all your previous losses with a winning of $-1-2 - \ldots - 2^{n-1} + 2^n = 1$. Therefore, this strategy seems to suggest you can always beat the house. But if $M_n$ is a supermartingale (i.e., $\E[M_m \given \scF_n] \leq M_n$ for $m\geq n$ and this is usually true has the house incorporates some advantages), then $\widetilde{M}_n$ is also a supermartingale. This means \emph{no strategy} can beat the house, in an expectation sense. Many gamblers have gone bankrupt using the above strategy! 
+\end{Example}
+
+\begin{Lemma}\label{wk14:fnM}
+Suppose $f : \Real \mapsto \Real$ is convex, $(X_n,\scF_n)_{n\geq0}$ is an adaptation with $\E|f(X_n)| <\infty$ for all $n\geq0$. Then if either
+\begin{enumerate}[i)]
+	\item $(X_n,\scF_n)_{n\geq0}$ is a martingale; or
+	\item $(X_n,\scF_n)_{n\geq0}$ is a submartingale and $f$ is increasing,
+\end{enumerate}
+then $(f(X_n),\scF_n)_{n\geq0}$ is a submartingale.
+\end{Lemma}
+\begin{proof}
+To prove i), from Jensen's inequality, for $n\leq m$, we have $f(X_n) = f(\E[X_m \given \scF_n]) \leq \E[f(X_m) \given \scF_n]$. The proof of ii) is similar.
+\end{proof}
+
+\begin{Theorem}\label{wk14:Doob's decomposition}
+A submartingale $(X_n,\scF_n)_{n\geq0}$ can be decomposed a.s.\ uniquely as $X_n = Y_n + Z_n$, where $(Y_n,\scF_n)_{n\geq0}$ is a martingale and $(Z_n)_{n\geq0}$ is predictable with $Z_0=0$ and $Z_n\leq Z_{n+1}$ a.s.
+\end{Theorem}
+\begin{proof}
+We first construct a decomposition as follows: Let $Z_0=0$, 
+\begin{align*}
+Z_n=\sum_{k=1}^n \E[X_k-X_{k-1} \given \scF_{k-1}]
+\end{align*}
+ and $Y_n=X_n-Z_n$. By our construction, $Z_n \in \scF_{n-1}$ is predictable and since 
+\begin{align*}
+\E[X_k-X_{k-1} \given \scF_{k-1}] = \E[X_k \given \scF_{k-1}] - X_{k-1} \geq 0,
+\end{align*}
+we have $Z_n \leq Z_{n+1}$ a.s. Furthermore, $Z_n - Z_{n-1} = \E[X_n \given \scF_{n-1}] - X_{n-1}$ and we obtain
+\begin{align*}
+\E[Y_n \given \scF_{n-1}] = \E[X_n - Z_n \given \scF_{n-1}] = \E[X_n \given \scF_{n-1}] - Z_n = X_{n-1} - Z_{n-1}= Y_{n-1}, 
+\end{align*}
+showing that $Y_n$ is a martingale.
+
+To show uniqueness, we proceed by induction. The requirement that $Z_0=0$ implies that $Y_0=X_0$ uniquely. Suppose the decomposition is unique a.s.\ up to $X_{n-1}$. Then for any decomposition $X_n = Y_n + Z_n$ meeting the criteria,
+\begin{align*}
+Z_n = \E[Z_n \given \scF_{n-1}] = \E[X_n - Y_n \given \scF_{n-1}] = \E[X_n \given \scF_{n-1}] - Y_{n-1}, 
+\end{align*}
+because $Y_n$ is a martingale. This implies that $Z_n$ is unique a.s., and hence so is $Y_n = X_n - Z_n$. The proof is now complete.
+\end{proof}
+
+\section{Doob's Inequalities}
+
+\begin{Theorem}[Doob's maximal inequality]\label{wk14:Doob's maximal inequaltiy}
+Suppose $(X_n,\scF_n)_{n\geq0}$ is a non-negative submartingale. Let $X_n^* = \max_{0\leq k \leq n} X_k$. Then for all $\lambda \geq 0$, 
+\begin{align}
+\lambda \P(X_n^* \geq \lambda) \leq \E X_n\indicator{X_n^*\geq\lambda} \leq \E X_n.
+\end{align}
+\end{Theorem}
+\begin{proof}
+Let $\tau = \inf\set{k \given X_k\geq\lambda}$ be a stopping time. Then $\set{X_n^* \geq\lambda} = \set{\tau\leq n}$ and
+\begin{align}\label{tauX}
+\lambda \indicator{\tau\leq n} \leq X_\tau \indicator{\tau \leq n} = \sum_{k=0}^n X_k\indicator{\tau=k}.
+\end{align}
+Since $X_k \leq \E[X_n \given \scF_k]$ $\forall k \leq n$ and $\set{\tau=k}\in\scF_k$, $\E X_k\indicator{\tau=k} \leq \E X_n\indicator{\tau=k}$ for all $k \leq n$. Taking expectations in \cref{tauX}, we obtain
+\begin{align*}
+\lambda \P(\tau\leq n) 
+&\leq \E\sum_{k=0}^n X_k\indicator{\tau=k} \\
+&\leq \E\sum_{k=0}^n X_n\indicator{\tau=k} \\
+&= \E X_n\indicator{\tau\leq n} \\
+&= \E X_n \indicator{X_n^*\geq\lambda}\\
+&\leq \E X_n.
+\end{align*}
+\end{proof}
+
+\begin{Corollary}
+For $\lambda>0$ and $p\geq 1$,
+\begin{align*}
+\P(X_n^* \geq\lambda) \leq \ofrac{\lambda^p} \E X_n^p.
+\end{align*}
+\end{Corollary}
+\begin{proof}
+From \cref{wk14:fnM}, $(X_n^p)$ is a non-negative submartingale. We then apply \cref{wk14:Doob's maximal inequaltiy}.
+\end{proof}
+
+\begin{Example}
+Suppose $X_i$, $i\geq1$ are independent with $\E X_i=0$. From \cref{ex:wk12_mex_1}, $S_n$ is a martingale. Doob's maximal inequality (or its corollary) recovers Kolmogorov's maximal equality:
+\begin{align*}
+\P(\max_{1\leq k\leq n} |S_k| \geq \lambda) \leq \ofrac{\lambda^2} \E S_n^2.
+\end{align*}
+\end{Example}
+
+Let $p\geq 1$. A r.v. $X \in L^p$ if $\norm{X}_p = \braces*{\E |X|^p}^{1/p} <\infty$. H\"older's inequalty says that for $1\leq p <\infty$, $\odfrac{p} + \odfrac{q} =1$ (i.e., $q=\dfrac{p}{p-1}$), then for any r.v.s $X, Y$, 
+\begin{align*}
+\norm{XY}_1 \leq \norm{X}_p\norm{Y}_q.
+\end{align*}
+
+\begin{Lemma}\label{wk14:normXY}
+Suppose $X, Y\geq 0$, $\E Y^p < \infty$ for $p>1$ and for all $\lambda\geq 0$, we have
+\begin{align*}
+\lambda\P(X\geq\lambda) \leq \E Y\indicator{X\geq\lambda}.
+\end{align*}
+Then, 
+\begin{align}\label{normXY}
+\norm{X}_p \leq \frac{p}{p-1} \norm{Y}_p.
+\end{align}
+\end{Lemma}
+\begin{proof}
+Let $X_n = X\wedge n$. We use the fact that
+\begin{align*}
+z^p = p \int_0^z x^{p-1} \ud x = p \int_0^\infty x^{p-1}\indicator{z\geq x}\ud x
+\end{align*}
+to obtain
+\begin{align*}
+\E X_n^p 
+&= \E[ p\int_0^\infty x^{p-1}\indicator{X_n\geq x} \ud x] \\
+&\eqa{\text{Fubini}} p \int_0^\infty x^{p-1} \P(X_n\geq x) \ud x \\
+&\leq p \int_0^\infty x^{p-2} \E[Y\indicator{X\geq x}] \ud x\ \text{  since $\set{X_n\geq x}\subset\set{X\geq x}$} \\
+&\eqa{\text{Fubini}} p \E[Y \int_0^\infty x^{p-2}\indicator{X\geq x} \ud x] \\
+&= \frac{p}{p-1} \E[YX^{p-1}] \\
+&\lea{\text{H\"older}} \frac{p}{p-1} \norm{Y}_p \norm{X}_p^{p-1}. 
+\end{align*}
+Therefore, from Fatou's lemma,
+\begin{align*}
+\norm{X}_p^p \leq \liminf_{n\to\infty} \E X_n^p \leq \frac{p}{p-1} \norm{Y}_p \norm{X}_p^{p-1},
+\end{align*}
+and we obtain \cref{normXY} (the case $\norm{X}_p=0$ is trivial).
+\end{proof}
+
+\begin{Theorem}[Doob's $L^p$ inequality]\label{wk14:DoobLp}
+If $(X_n,\scF_n)$ is a non-negative submartingale, then for all $p>1$, 
+\begin{align}
+\norm{X_n^*}_p \leq \frac{p}{p-1} \norm{X_n}_p.
+\end{align}
+\end{Theorem}
+\begin{proof}
+We apply \cref{wk14:normXY} with $X=X_n^*$ and $Y=X_n$, together with Doob's maximal inequality (\cref{wk14:Doob's maximal inequaltiy}).
+\end{proof}
+
+\cref{wk14:Doob's maximal inequaltiy,wk14:DoobLp} require $(X_n,\scF_n)$ to be non-negative. For a general submartingale $(X_n,\scF_n)$, we can apply these results to $(X_n^+, \scF_n)$ since this is a non-negative submartingale from \cref{wk14:fnM}.
+
+\cref{wk14:DoobLp} holds only for $p>1$. Indeed, there is no corresponding result for $p=1$ as shown in the following example.
+
+\begin{Example}
+Consider the random walk in \cref{wk13:ex:rw} with $S_0=0$. Take $B=1$ and $\tau=\inf\set{n\given S_n=-1}$. Let $X_n = S_{n\wedge \tau}$. Then using a result in \cref{wk13:ex:rw} in the second equality below, we have
+\begin{align*}
+& \E[\max_{m\geq0} X_m] = \sum_{A=1}^\infty \P(\max_{m\geq0} X_m \geq A) = \sum_{A=1}^\infty \ofrac{A+1}=\infty.
+\end{align*}
+The MCT then implies that $\E[\max_{0\leq m \leq n} X_m] \to \infty$ as $n\to\infty$.
+\end{Example}
+
+\section{Uniform Integrability}
+
+\begin{Definition}
+A collection of r.v.s $(X_n)_{n\in N}$ is uniformly integrable if
+\begin{align}
+\sup_{n\in N} \E |X_n|\indicator{|X_n|>K} \to 0, 
+\end{align}
+as $K\to\infty$.
+\end{Definition}
+If $(X_n)_{n\in N}$ is uniformly integrable, then for $K$ sufficiently large, we have $\sup_{n\in N} \E |X_n|\indicator{|X_n|>K}\leq 1$ and $\sup_n \E|X_n| \leq K+1 <\infty$ is uniformly bounded. Clearly, the converse is false.
+
+\begin{Example}
+If $|X_n|\leq Y$, $\forall n\in N$, and $\E Y <\infty$, then 
+\begin{align*}
+\E|X_n|\indicator{|X_n|>K} \leq \E Y\indicator{Y > K} \to 0,
+\end{align*}
+as $K\to\infty$ from DCT. Therefore $(X_n)_{n\in N}$ is uniformly integrable.
+\end{Example}
+
+\begin{Lemma}\label{wk14:ABound}
+If $X \in L^1$, then $\forall\epsilon>0$, $\exists\delta>0$ such that if $\P(A)\leq\delta$, then $\E|X|\indicatore{A} \leq \epsilon$.
+\end{Lemma}
+\begin{proof}
+If $\P(A)\leq\delta$, we have for all $K>0$,
+\begin{align*}
+\E|X|\indicatore{A} \leq K\P(A) + \E|X|\indicator{|X|>K} \leq K\delta + \E|X|\indicator{|X|>K}.
+\end{align*}
+Choose $K$ sufficiently large so that $\E|X|\indicator{|X|>K}\leq \dfrac{\epsilon}{2}$ and set $\delta=\dfrac{\epsilon}{2K}$. Then from above, we have $\E|X|\indicatore{A} \leq \epsilon$.
+\end{proof}
+
+\begin{Proposition}
+Let $X \in L^1(\Omega,\scF,\P)$. Then $\set*{\E[X]{\scF'} \given \text{$\scF'$ is a $\sigma$-algebra $\subset \scF$}}$ is uniformly integrable. 
+\end{Proposition}
+\begin{proof}
+Fix $\epsilon>0$ and choose $\delta>0$ as in \cref{wk14:ABound}. Pick $K$ large so that $\E|X|/K \leq \delta$. Let $Y=\E[X]{\scF'}$. From Jensen's inequality, $|Y| \leq \E[|X|]{\scF'}$, therefore we have
+\begin{align*}
+\E[|Y|\indicator{|Y|>K}] 
+&\leq \E[ \E[|X|]{\scF'} \indicator{\E[|X|]{\scF'} > K}] \\
+&= \E|X|\indicator{\E[|X|]{\scF'} > K}\quad \text{since $\set{\E[|X|]{\scF'} > K} \in \scF'$} \\
+&\leq \epsilon,
+\end{align*}
+where the last inequalty follows from \cref{wk14:ABound} as $\P(\E[|X|]{\scF'} > K) \leq \E|X|/K \leq \delta$.
+\end{proof}
+
+\begin{Proposition}
+Suppose $\varphi : \Real\mapsto\Real_+$ is such that $\lim_{x\to\infty} \dfrac{\varphi(x)}{x} = \infty$. (Examples include $\varphi(x)=x^p$, for $p>1$ and $\varphi(x)=x\log^{+}x$.) If $\E\varphi(|X_n|) \leq C <\infty$, then $(X_n)_{n\in N}$ is uniformly integrable.
+\end{Proposition}
+\begin{proof}
+Let $\epsilon_K = \sup\set{x/\varphi(x)\given x\geq K}$. Note that $\epsilon_K\to 0$ as $K\to\infty$ because for any $\epsilon>0$, $\exists K$ sufficiently large so that $x/\varphi(x) \leq \epsilon$ for all $x>K$. Then we have
+\begin{align*}
+\E|X_n|\indicator{|X_n|>K} \leq \epsilon_{K} \E[\varphi(|X_n|)\indicator{|X_n|>K}] \leq C\epsilon_K \to 0,
+\end{align*}
+as $K\to\infty$.
+\end{proof}
+
+\begin{Lemma}\label{wk14:L1_ui}
+Suppose $\E|X_n|<\infty$ for all $n\in N$ and $\E|X|<\infty$, then the following are equivalent:
+\begin{enumerate}[(i)]
+	\item\label{wk14:L1_ui:L1} $X_n \to X$ in $L^1$, i.e., $\E|X_n-X| \to 0$ as $n\to\infty$.
+	\item\label{wk14:L1_ui:ui} $(X_n)_{n\in N}$ is uniformly integrable and $X_n \convp X$.
+	\item\label{wk14:L1_ui:p} $X_n \convp X$ and $\E|X_n| \to \E|X|$.
+\end{enumerate}
+\end{Lemma}
+\begin{proof}
+We show $\ref{wk14:L1_ui:ui} \implies \ref{wk14:L1_ui:L1} \implies \ref{wk14:L1_ui:p} \implies \ref{wk14:L1_ui:ui}$.
+
+$\ref{wk14:L1_ui:ui} \implies \ref{wk14:L1_ui:L1}$: $\forall\epsilon > 0$, $K>0$, we have
+\begin{align*}
+\E|X_n - X| 
+&\leq \epsilon + \E|X_n-X|\indicator{|X_n-X|>\epsilon}\\
+&\leq \epsilon + \E|X_n|\indicator{|X_n-X|>\epsilon} + \E|X|\indicator{|X_n-X|>\epsilon} \\
+&\leq \epsilon + 2K\P(|X_n-X|>\epsilon) + \E|X_n|\indicator{|X_n|>K} + \E|X|\indicator{|X|>K}
+\intertext{and}
+\limsup_{n\to\infty} \E|X_n - X| &\leq \epsilon + \sup_n \E|X_n|\indicator{|X_n|>K} + \E|X|\indicator{|X|>K}.
+\end{align*}
+Taking $\epsilon \to 0$ and $K\to\infty$ completes the proof.
+
+$\ref{wk14:L1_ui:L1} \implies \ref{wk14:L1_ui:p}$: From Markov's inequality, for any $\epsilon>0$, we obtain $\P(|X_n-X|>\epsilon) \leq \odfrac{\epsilon} \E|X_n-X| \to 0$ as $n\to\infty$. We also have
+\begin{align*}
+\abs*{\E|X_n| - \E|X|} \leq \E\abs*{|X_n| - |X|} \leq \E|X_n-X| \to 0,
+\end{align*}
+as $n\to\infty$.
+
+$\ref{wk14:L1_ui:p} \implies \ref{wk14:L1_ui:ui}$: For any $\epsilon>0$, $\exists n_0$ such that $\forall n\geq n_0$, $\E|X_n| \leq \E|X|+\epsilon/2$. Let 
+\begin{align*}
+\phi_K(x) = \left\{
+	\begin{array}{ll}
+		x, & \text{ for $x\in[0,K-1]$}, \\
+		0, & \text{ for $x> K$}, \\
+		\text{linear}, & \text{ for $x\in[K-1,K]$}. 
+	\end{array}
+\right.
+\end{align*}
+Then from the DCT, for $K$ sufficiently large,
+\begin{align*}
+\E|X| - \E\phi_K(|X|) \leq \epsilon.
+\end{align*}
+Since $\phi_K$ is continuous, the DCT also yields $\E\phi_K(|X_n|) \to \E\phi_K(|X|)$ as $n\to\infty$. Therefore, since $x \geq \phi_K(x) + x\indicator{x>K}$ for all $x\geq0$, we have
+\begin{align*}
+\E|X_n|\indicator{|X_n|>K} 
+&\leq \E|X_n| - \E\phi_K(|X_n|)\\
+&\leq \E|X| - \E\phi_K(|X|) + \epsilon\\
+&\leq 2\epsilon,
+\end{align*}
+for all $n$ and $K$ sufficiently large and the proof is complete.
+\end{proof}
+
+
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}
+
+

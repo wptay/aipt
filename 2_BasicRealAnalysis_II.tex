@@ -1,0 +1,304 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{1_BasicRealAnalysis_I}
+
+
+\begin{document}
+
+\handout{2}{Basics of Real Analysis - II}
+
+Let $(\calX, d)$ be a metric space. 
+
+\section{Open and Closed Sets}
+\begin{Definition}
+The open ball of radius $\epsilon > 0$ is defined by
+\begin{align*}
+B(x,\epsilon)=\set*{y \in \calX \given d(x,y)<\epsilon}.
+\end{align*}
+\end{Definition}
+
+\begin{Definition}
+A set $U$ is open if $\forall x \subset U$, $\exists \epsilon >0$ such that $B(x,\epsilon)\subset U$. A set $F$ is closed if $F^c = \calX\backslash F$ is open.
+\end{Definition}
+
+A set can be both open and closed, e.g., $\calX, \emptyset$. 
+
+\begin{Example}\label{ex:discrete_X}
+Let $\calX=\set{x_1, x_2, \ldots}$ be a discrete space. Consider the discrete metric
+\begin{align*}
+d(x,y)=\left\{
+\begin{array}{ll}
+0,&\ \text{if $x=y$}, \\
+1,&\ \text{if $x\neq y$}.  
+\end{array}\right.
+\end{align*}
+For any $A \subset \calX$ and $\epsilon\in(0,1)$, $B(a,\epsilon)=\{a\} \subset A$. Therefore $A$ is open. This also proves that $A$ is closed as $A^c$ is open. 
+\end{Example}
+
+If $U_i$, $i\geq1$ are open, then $\bigcup_{i=1}^\infty U_i$ is open, $\bigcap_{i=1}^n U_i$ is open but $\bigcap_{i=1}^\infty U_i$ may not be open.
+
+\begin{Example}
+Suppose that $U_i=(\frac{1}{2}-\frac{1}{i},\frac{1}{2}+\frac{1}{i})$, then $U_i$ is open while $\bigcap_{i=1}^\infty U_i=\{1/2\}$ is closed.
+\end{Example}
+
+If $F_i$ is closed, then $\bigcup_{i=1}^\infty F_i$ is closed and $\bigcap_{i=1}^\infty F_i$ is closed.
+
+\begin{Definition}
+$x$ is a limit point of $A$ if $\forall \epsilon >0$, $\exists y \in B(x,\epsilon) \cap A$, and $y\neq x$.
+\end{Definition}
+Therefore, $x$ is a limit point of $A$ if $\exists y_1,y_2,\ldots \in A$, $y_i\ne x$ for all $i\geq1$, s.t. $y_i \to x$.
+
+\begin{Lemma}\label{lem:closed}
+$A$ is closed if and only if all limit points of $A$ are in $A$.
+\end{Lemma}
+\begin{proof}
+Suppose that $A$ is closed, so that $A^c$ is open. Suppose there exists a limit point $x$ of $A$ s.t.\ $x \in A^c$. Then $\exists \epsilon >0$, s.t.\ $B(x,\epsilon) \subset A^c$, which is a contradiction to $x$ being a limit point of $A$.
+
+Suppose that all limit points of $A$ belongs to $A$. Consider $x\in A^c$. There exists $\epsilon>0$ s.t.\ $B(x,\epsilon)\subset A^c$ because otherwise there exists $(y_i)\subset A$ s.t.\ $y_i\to x$, which means that $x$ is a limit point of $A$ leading to a contradiction. This shows that $A^c$ is open and hence $A$ is closed.
+\end{proof}
+
+\section{Compact Spaces}
+
+\begin{Definition}
+$\calX$ is sequentially compact if every sequence in $\calX$ has a convergent subsequence in $\calX$.
+\end{Definition}
+
+\begin{Definition}
+$\calX$ is totally bounded if $\forall \epsilon>0$, there exists a finite collection $\{ B(x_i,\epsilon) : i=1,2,\ldots,N_{\epsilon}\}$ such that  
+\begin{align*}
+\calX \subset \bigcup_{i=1}^{N_{\epsilon}}B(x_i,\epsilon).
+\end{align*}
+\end{Definition}
+
+Note that if a set $\calX$ is totally bounded, then it is bounded. The converse is not true: consider the discrete space in \cref{ex:discrete_X}, it is bounded but not totally bounded if it is infinite.
+
+\begin{Theorem}\label{wk1:thm:compact}
+For a metric space $(\calX, d)$, the following are equivalent:
+\begin{enumerate}[(i)]
+\item\label{it:seq_compact} $\calX$ is sequentially compact.
+\item\label{it:complete_totbdd} $\calX$ is complete and totally bounded.
+\item\label{it:compact} Every open cover of $\calX$ has a finite subcover. We say that $\calX$ is compact.
+\end{enumerate}
+\end{Theorem}
+\begin{proof}\
+\begin{enumerate}[1)]
+\item \ref{it:seq_compact} $\Leftrightarrow$ \ref{it:complete_totbdd}:\\
+We first show that \ref{it:seq_compact} $\Rightarrow$ \ref{it:complete_totbdd}. Since $\calX$ is sequentially compact, every Cauchy sequence in $\calX$ has a convergent subsequence. From \cref{lem:Cauchy_sub}, the Cauchy sequence also converges in $\calX$, so $\calX$ is complete. Suppose that $\calX$ is not totally bounded. Then $\exists \epsilon >0$ so that $\calX$ cannot be covered by a finite collection of open balls. Choose any $x_1\in\calX$. Then $\exists x_2\notin B(x_1,\epsilon)$. Similarly, $\exists x_3\notin B(x_1,\epsilon)\cup B(x_2,\epsilon)$, and so on. The sequence $(x_n)$ does not contain any convergent subsequence since $d(x_i,x_j)\geq\epsilon$ for any $i\ne j$. This is a contraction to \ref{it:seq_compact}.
+
+We next show that \ref{it:complete_totbdd} $\Rightarrow$ \ref{it:seq_compact}. Since $\calX$ is totally bounded, for each $m\geq 1$, there exists a finite cover $\{B(x_{m,k}, 1/m): k=1,\ldots,M_m\}$ of $\calX$. Consider any infinite sequence $(y_n)$ in $\calX$. We assume that $y_n$ are distinct because if there are infinitely many $y_n$ that are the same, then there is a trivial convergent subsequence. Then there is a $B(x_{1,k_1},1)$ that contains a subsequence $(y_{1,n})$ of $(y_n)$. Similarly, there is a $B(x_{2,k_2},1/2)$ that contains a further subsequence $(y_{2,n})$ of $(y_{1,n})$, and so on. Consider the ``diagonal'' subsequence $(y_{m,m})_{m=1}^\infty$. This sequence is Cauchy and since $\calX$ is complete, it converges.
+
+
+\item \ref{it:seq_compact} $\Leftrightarrow$ \ref{it:compact}:\\
+We show \ref{it:compact} $\Rightarrow$ \ref{it:seq_compact}. To do that, we first prove the following facts:
+\begin{enumerate}
+	\item Any compact $A \subset \calX$ is closed. In particular, if $\calX$ is compact, then it is closed.\\
+	Let $x\in A^c$ and $U_n = \{y : d(y,x) > 1/n\}$ for $n\geq 1$. Every $y\in\calX$ with $y\ne x$ has $d(y,x)>0$ so $y$ belongs to some $U_n$. Therefore, $\{U_n : n\geq 1\}$ covers $A$ and there must be a finite subcover. Let $N$ to be the largest index in the subcover, i.e., every $y\in A$ lies in some $U_n$ where $n\leq N$. Then $B(x,1/N) \subset A^c$ and $A$ is closed.
+	\item If $\calX$ is compact and $A\subset\calX$ is closed, then $A$ is compact.\\
+	Let $\{U_n\}$ be an open cover of $A$. Then $\{U_n\}\cup\{ A^c\}$ is an open cover of $\calX$. There is a finite subcover, say, $\{U_1,\ldots,U_N,A^c\}$ of $\calX$. Then $\{U_1,\ldots,U_N\}$ is a finite open cover of $A$.
+\end{enumerate}
+Suppose $\calX$ is compact. Assume there is a sequence $(x_n)$ that has no convergent subsequences. In particular, this sequence has infinitely distinct points $y_1, y_2, \ldots$. Since there is no convergent subsequence, there is some open ball $B_k$ containing each $y_k$ and no other $y_i$. The set $A=\{y_1,y_2,\ldots\}$ is closed as it has no limit points, so it is compact. But $\{B_k\}$ is an open cover of $A$ and has no finite subcover, a contradiction. Therefore $(x_n)$ has a convergent subsequence whose limit lies in $\calX$ as $\calX$ is closed.
+
+We now show \ref{it:seq_compact} $\Rightarrow$ \ref{it:compact}. Suppose that $\calX$ is sequentially compact. Let $\{G_\alpha\subset \calX : \alpha \in I\}$ be an open cover of $\calX$. We claim that there exists $\epsilon > 0 $ such that every ball $B(x,\epsilon)$ is contained in some $G_\alpha$. Suppose not. Then for each positive integer $n$, $\exists y_n\in\calX$ such that $B(y_n,1/n)$ is not contained in any $G_\alpha$. By hypothesis, there exists a subsequence $y_{n_i} \to y \in\calX$. Since $\{G_\alpha\subset \calX : \alpha \in I\}$ is an open cover of $\calX$, there exists $G_{\alpha_0} \ni y$ and $\epsilon>0$ such that $B(y,\epsilon) \subset G_{\alpha_0}$. Choose $n_i$ sufficiently large so that $d(y_{n_i},y) < \epsilon/2$ and $1/n_i<\epsilon/2$. Then $B(y_{n_i},1/n_i)\subset G_{\alpha_0}$, a contradiction.
+
+Since $\calX$ is sequentially compact, it is totally bounded, so there exists a finite collection of balls of radius $\epsilon$ s.t. $\{B(x_i,\epsilon):i=1,2,\ldots,N\}$ covers $\calX$. Choose $\alpha_i \in I$ s.t. $B(x_i,\epsilon)\subset G_{\alpha_i}$. Then $\{G_{\alpha_i}:i=1,2,\ldots,N\}$ is a finite subcover of $\calX$, which means $\calX$ is compact.
+\end{enumerate}
+
+
+
+\end{proof}
+
+\begin{Theorem}[Heine-Borel]\label{Theorem:Heine-Borel} 
+$A \subset \Real^k$ is compact iff $A$ is closed and bounded.
+\end{Theorem}
+
+\begin{proof} 
+Since the following proof can be repeated in every dimension, it suffices to prove only for $A \subset \Real$.
+
+We first prove sufficiency. Suppose $A$ is closed and bounded and $(x_n)\subset A$. Then $x_n$ is bounded since $A$ is bounded. By \cref{lem:bdd_conv}, there exists convergent $(x_{n_i})$ such that $x_{n_i}\to x\in\Real$. Since $A$ is closed, $x \in A$. Therefore, $A$ is compact.
+
+Next, suppose that $A$ is compact. Then from \cref{wk1:thm:compact}, $A$ is complete and totally bounded, hence closed and bounded in $\Real$.
+
+%We next show necessity. Suppose that $A$ is compact, and hence sequentially compact. For $x_{n}\to x$, $\exists (x_{n_i})$, such that $x_{n_i}\to x'\in A$. By \cref{wk1:subseq}, $x_{n}\to x'$ and $x'=x$ from \cref{wk1:unique}. So $A$ is closed. If $A$ is not bounded, then $\exists a_0 \in A$ and $(a_n) \subset A$ with $d(a_n,a_0) > d(a_{n-1},a_0)+1$ for $n\geq1$. This sequence cannot have a convergent subsequence since for $m>n$, we have $d(a_n,a_m) \geq d(a_m,a_0)-d(a_n,a_0) > 1$, which is a contradiction to the fact that $A$ is compact. Therefore, $A$ is bounded.
+\end{proof}
+
+
+\section{Continuity}
+
+\begin{Definition}
+A function $f: (\calX, d_{\calX}) \mapsto (\calY, d_{\calY})$ is (pointwise) continuous at $x \in \calX$ if $\forall \epsilon>0$, $\exists \delta_x>0$ s.t.\ $d_{\calY}(f(x),f(z))< \epsilon$, whenever $d_{\calX}(x,z)<\delta_x$. 
+\end{Definition}
+
+Note that the definition is equivalent to saying that $\forall \epsilon>0$, $\exists \delta_x>0$ s.t. $B(x,\delta_x) \subset f^{-1}(B(f(x),\epsilon))$. 
+
+\begin{Lemma}
+$f: (\calX, d_X) \mapsto (\calY, d_Y)$ is continuous iff $f^{-1}(U)$ is open in $\calX$ for every open $U \subset \calY$.
+\end{Lemma}
+\begin{proof}
+Suppose $f$ is continuous and $U$ is open in $\calY$. For each $y\in U$, there exists an open ball $B(y,r) \subset U$. Since $f$ is continuous, for each $x \in f^{-1}(\set{y})$, $\exists \delta_x>0$ s.t. $B(x,\delta_x) \subset f^{-1}(B(y,r)) \subset f^{-1}(U)$. Therefore, $f^{-1}(U) = \bigcup_{x\in f^{-1}(U)} B(x,\delta_x)$ is open. 
+
+To prove the other direction, we have for every $x\in\calX$ and $\epsilon>0$, $f^{-1}(B(f(x),\epsilon))$ is open and contains $x$, so it contains an open ball around $x$. Thus, $f$ is continuous at $x$. 
+\end{proof}
+
+\begin{Lemma}
+If $f$ is continuous and $B\in \calX$ is compact, then $f(B)\triangleq\{f(x): x \in B\}$ is compact.
+\end{Lemma}
+\begin{proof}
+Consider $y_n= f(x_n)$. $\exists (x_{n_i})$ s.t. $x_{ni}\to x \in B$. From the continuity of $f$, $y_{n_i}=f(x_{n_i}) \to f(x) \in f(B)$. 
+\end{proof}
+
+From \cref{Theorem:Heine-Borel}, $f(B)$ is closed and bounded. Therefore, $\sup_{x\in B} f(x)$ and $\inf_{x\in B} f(x)$ are both achieved on $B$.
+
+\begin{Definition}
+$f$ is uniformly continuous if $\forall \epsilon>0$, $\exists \delta>0$ s.t. $d_{\calY}(f(x),f(z))<\epsilon$, $\forall d_{\calX}(x,z)<\delta$.
+\end{Definition}
+
+\begin{Example}\
+\begin{enumerate}[(a)]
+	\item If $|f(x)-f(y)| < L d(x,y)$ for some positive constant $L$ and all $x,y \in \calX$, we say that $f$ is Lipschitz continuous. It is clear that $f$ is uniformly continuous on $\calX$. 
+	\item If $f : \Real\mapsto\Real$ is differentiable with $\sup |f'| <\infty$, where $f'$ is the derivative of $f$, then $f$ is uniformly continuous from the mean value theorem.
+\end{enumerate}
+\end{Example}
+
+
+\begin{Lemma}
+Suppose that $f$: $K \mapsto \calY$, where $K \subset \calX$ is compact. If $f$ is continuous, then $f$ is uniformly continuous.
+\end{Lemma}
+\begin{proof}
+Fix $\epsilon>0$. For each $x \in \calX$, $\exists \delta_x>0$, s.t. $d_{\calY}(f(x),f(y))< \epsilon/2$ whenever $d_{\calX}(x,y)<\delta_x$. We have $\{B(x,\delta_x/2) : x\in K\}$ is an open cover of $K$. Since $K$ is compact, exists a finite subcover $\{B(x_i,\delta_{x_i}/2): 1\leq i \leq n\}$. Let $\delta= \min\{\delta_{x_i},\cdots, \delta_{x_n}\}>0$. 
+
+For each $x \in K$, $\exists x_i$, s.t.\ $d_{\calX}(x,x_i)<\delta_{x_i}/2$. Then for all $y$ s.t.\ $d_{\calX}(x,y)<\delta/2$, we have 
+\begin{align*}
+d_{\calX}(y,x_i) &\leq d_{\calX}(x,y)+d_{\calX}(x,x_i)<\delta_{x_i}.
+\end{align*}
+Therefore, we obtain
+\begin{align*}
+d_{\calY}(f(x),f(y))&\leq d_{\calY}(f(x),f(x_i))+d_{\calY}(f(x_i),f(y)) \leq \epsilon,
+\end{align*}
+which shows that $f$ is uniformly continuous.
+\end{proof}
+
+Note that in the above proof, $y$ need not be in $K$. We obtain a slightly stronger result here.
+
+\begin{Corollary}\label{wk2:f_K_compact}
+Suppose $f:\calX\mapsto\calY$ is continuous, and $K\subset\calX$ is compact. Then $\forall \epsilon>0$, $\exists \delta>0$ such that $d_{\calY}(f(x),f(y))< \epsilon$ whenever $x \in K$, $y \in \calX$ and  $d_{\calX}(x,y)< \delta$.
+\end{Corollary}
+
+\section{Riemann Integral}
+
+We consider a function $f:[a,b]\mapsto\Real$ in this section. A partition $P=(x_0,\ldots,x_N)$ is defined by $x_0=a<x_1<x_2<\cdots<x_N=b$. We say that $Q$ is a refinement of $P$ if $P\subset Q$. Let $\calP$ be the collection of all partitions. For $P\in\calP$, define
+\begin{align*}
+U(f,P)&=\sum_{i=1}^N\sup_{[x_{i-1},x_i]}\mathllap{f}\cdot(x_i-x_{i-1}), \\
+L(f,P)&=\sum_{i=1}^N\inf_{[x_{i-1},x_i]}\mathllap{f}\cdot(x_i-x_{i-1}). 
+\end{align*}
+
+\begin{Lemma}
+$L(f,P)\leq U(f,Q)$, $\forall P,Q \in \calP$
+\end{Lemma}
+\begin{proof}
+\begin{align*}
+L(f,P)&\leq L(f,P\cup Q)\quad \text{since $\inf_{I_1} f \leq \inf_{I_2} f$ if $I_1 \supset I_2$}\\
+&\leq U(f,P\cup Q)\\
+&\leq U(f,Q)\quad \text{since $\sup_{I_1} f \geq \sup_{I_2} f$ if $I_1 \supset I_2$}.
+\end{align*}
+\end{proof}
+
+From the above lemma, we have
+\begin{align}\label{L_U}
+\sup_{P\in\calP}{L(f,P)}\leq\inf_{P\in\calP}{U(f,P)}
+\end{align}
+
+\begin{Definition}
+$f:[a,b]\mapsto \Real$ is Riemann integrable if equality in \cref{L_U} holds, i.e.,
+\begin{align*}
+\forall \epsilon >0,\ \exists P \in \calP\ \st\ U(f,P)-L(f,P)<\epsilon.
+\end{align*}
+\end{Definition}
+
+\begin{Example}
+The following function is not Riemann integrable as $L(f,P)=0$ and $U(f,P)=1$ for all $P\in\calP$:
+\begin{align*}
+f(x)=\left\{
+ \begin{array}{ll}
+ 1,&\ \text{if $x\in\bbQ\cap[0,1]$}, \\
+ 0,&\ \text{otherwise}.  
+ \end{array}
+\right.
+\end{align*}
+\end{Example}
+
+\begin{Definition}
+A set $A \subset \Real$ has Lebesgue measure zero if $\forall\epsilon> 0$, there exists open intervals $(\alpha_1,\beta_1),(\alpha_2,\beta_2),\ldots$ s.t. 
+\begin{align*}
+A \subset \bigcup_{i=1}^{\infty}(\alpha_i,\beta_i)\ \text{and}\ \sum_{i=1}^{\infty}(\alpha_i-\beta_i)<\epsilon.
+\end{align*}
+\end{Definition}
+
+If a countable sequence of sets $A_1,A_2,\ldots$ each of which has Lebesgue measure zero, then the union $\bigcup^{\infty}_{i=1}{A_i}$ has Lebesgue measure zero. To see this, let $\epsilon>0$ and $A_j$ be covered by $\bigcup_i{(\alpha_{ij},\beta_{ij})}$ with $\sum_i(\alpha_{ij}-\beta_{ij})<\epsilon/2^j$.
+
+\begin{Theorem}[Henri Lebesgue]\label{thm:RiemannIntegrable}
+Suppose $f:[a,b]\mapsto \Real$ is bounded. Then $f$ is Riemann integrable iff $\exists A \subset [a,b]$ of Lebesgue measure zero s.t. $f$ is continuous on $[a,b]\backslash A$.\footnote{$f$ is also said to be continuous almost everywhere on $[a,b]$.}
+\end{Theorem}
+\begin{proof}
+We first show that if $f$ is Riemann integrable, then its set of discontinuities has Lebesgue measure zero. Observe that $y \in (a,b)$ is a point of discontinuity of $f$ iff $\exists j \in \mathbb{Z}_{+}$ s.t.\ $\sup_{I}{f}-\inf_{I}{f}\geq 1/j$ for all open intervals $I \subset (a,b)$ containing $y$. Let 
+\begin{align*}
+S_j=\set*{y\in(a,b) \given \sup_I{f}-\inf_I{f}\geq \frac{1}{j}\ \forall\ \text{open intervals $I\subset(a,b)$ with $y\in I$}}.
+\end{align*}
+Then, the set of discontinuities of $f$ in $(a,b)$ is $\bigcup^{\infty}_{j=1}{S_j}$. For $\epsilon >0$, since $f$ is Riemann integrable, there exists some partition $P=(x_0,\ldots,x_N)$ s.t.
+\begin{align}\label{wk2:U-L}
+U(f,P)-L(f,P)=\sum_{i=1}^N (\sup_{[x_{i-1},x_i]}\mathllap{f}-\inf_{[x_{i-1},x_i]}\mathllap{f})\cdot(x_i-x_{i-1}) < \frac{\epsilon}{j}.
+\end{align}
+Let $B=\{i:(x_{i-1},x_i)\cap S_j\neq\emptyset\}$. Then from \cref{wk2:U-L}, we have
+\begin{align}\label{wk2:U-L1}
+\sum_{B}{(\sup_{[x_{i-1},x_i]}\mathllap{f}-\inf_{[x_{i-1},x_i]}\mathllap{f})\cdot(x_i-x_{i-1})}+\sum_{B^c}{(\sup_{[x_{i-1},x_i]}\mathllap{f}-\inf_{[x_{i-1},x_i]}\mathllap{f})\cdot(x_i-x_{i-1})}<\frac{\epsilon}{j}
+\end{align}
+Since 
+\begin{align*}
+\sum_{B^c}{(\sup_{[x_{i-1},x_i]}\mathllap{f}-\inf_{[x_{i-1},x_i]}\mathllap{f})\cdot(x_i-x_{i-1})}\geq 0
+\end{align*}
+and
+\begin{align*}
+\sum_{B}{(\sup_{[x_{i-1},x_i]}\mathllap{f}-\inf_{[x_{i-1},x_i]}\mathllap{f})\cdot(x_i-x_{i-1})}\geq \frac{1}{j}\sum_{i\in B}{(x_i-x_{i-1})},
+\end{align*}
+we obtain from \cref{wk2:U-L1},
+\begin{align*}
+\sum_{i\in B}{(x_i-x_{i-1})}<\epsilon.
+\end{align*}
+We have
+\begin{align*}
+S_j\subset \bigcup_{i\in B}(x_{i-1},x_i)\bigcup\{x_0,x_1,\cdots,x_N\},
+\end{align*}
+therefore $S_j$ has Lebesgue measure zero.
+
+We next prove the converse. Fix an $\epsilon>0$. Assume that we have $A$ with Lebesgue measure zero, which means that there is a cover $\bigcup_{j=1}^{\infty}{(\alpha_j,\beta_j)} \supset A$ s.t.\ $\sum_{j=1}^{\infty}(\beta_j-\alpha_j)<\epsilon$.  Let $K=[a,b]\backslash\bigcup_{j\geq 1}{(\alpha_j,\beta_j)}$, which is closed and bounded and therefore compact by \cref{Theorem:Heine-Borel}. Since $f$ is continuous, from \cref{wk2:f_K_compact}, $\exists \delta>0$, s.t.\ $|f(x)-f(y)|<\epsilon$ whenever $x \in K$, $y\in[a,b]$ and $|x-y|<\delta$. 
+
+We choose a partition $P$ with $a=x_0<x_1<x_2<\cdots<x_N=b$ s.t.\ $\max_{1\leq i \leq N}(x_i-x_{i-1})<\delta$. If $[x_{i-1},x_i]\cap K=\emptyset$, then $[x_{i-1},x_i]\subset \bigcup_{j}{(\alpha_j,\beta_j)}$ and
+\begin{align*}
+\sum_{i:[x_{i-1},x_i]\cap K=\emptyset}{\parens{\sup_{[x_{i-1},x_i]}\mathllap{f}-\inf_{[x_{i-1},x_i]}\mathllap{f}}\cdot(x_i-x_{i-1})}&\leq (\sup_{[a,b]}{f}-\inf_{[a,b]}{f})\cdot \sum_{j}{(\beta_j-\alpha_j)} < M\epsilon,
+\end{align*}
+where $M=\sup_{[a,b]}{f}-\inf_{[a,b]}{f} < \infty$. Suppose $[x_{i-1},x_i]\cap K\ne\emptyset$. Then for any $y, z \in [x_{i-1},x_i]$ and $y_i\in [x_{i-1},x_i]\cap K$, we have 
+\begin{align*}
+|f(y)-f(z)|&\leq|f(y)-f(y_i)|+|f(y_i)-f(z)|\\
+&<\epsilon+\epsilon\\
+&=2\epsilon,
+\end{align*}
+where the last inequality follows because $|y-y_i|,\ |z-y_i| < \delta$. Therefore,
+\begin{align*}
+\sum_{i: [x_{i-1},x_i]\cap K\ne\emptyset} (\sup_{[x_{i-1},x_i]}\mathllap{f}-\inf_{[x_{i-1},x_i]}\mathllap{f})\cdot(x_i-x_{i-1}) \leq 2\epsilon (b-a).
+\end{align*}
+We finally obtain
+\begin{align*}
+U(f,P)-L(f,P)\leq M\epsilon + 2\epsilon(b-a)= (M+2(b-a))\epsilon, 
+\end{align*}
+and the proof is complete.
+\end{proof}
+
+From \cref{thm:RiemannIntegrable}, we see that only a very limited class of functions $f$ is Riemann integrable. This is not sufficient to model many practical applications. Therefore, Henri Lebesgue, a French mathematician in the 17th century, embarked on a program to introduce a much more versatile integral known as the Lebesgue integral. We will introduce this in the coming week as part of the theory of probability. 
+
+%\bibliography{mybib}
+%\bibliographystyle{alpha}
+
+
+
+
+\end{document}

@@ -1,0 +1,57 @@
+
+\topmargin 0pt
+\advance \topmargin by -\headheight
+\advance \topmargin by -\headsep
+\textheight 8.9in
+\oddsidemargin 0pt
+\evensidemargin \oddsidemargin
+\marginparwidth 0.5in
+\textwidth 6.5in
+
+\parindent 0in
+\parskip 1.5ex
+%\renewcommand{\baselinestretch}{1.25}
+
+\usepackage{xr-hyper}
+\def\renewtheorem{}
+\input{preamble.tex}
+\def\UrlFont{\tt}
+
+
+\newcounter{week}
+
+%Theorem declarations
+\newtheorem{Theorem}{Theorem}[week]
+\newtheorem{Corollary}{Corollary}[week]
+\newtheorem{Proposition}{Proposition}[week]
+\newtheorem{Lemma}{Lemma}[week]
+\newtheorem{Definition}{Definition}[week]
+\newtheorem{Assumption}{Assumption}[week]
+
+%\theoremstyle{definition}
+\newtheorem{Example}{Example}[week]
+\newtheorem{Remark}{Remark}[week]
+\newtheorem{Exercise}{Exercise}[week]
+
+
+\newcommand{\handout}[2]{
+	\setcounter{week}{#1}
+  \noindent
+  \begin{center}
+  \framebox{
+    \vbox{
+      \hbox to 6in {\bf An Analytical Introduction to Probability Theory \hfill}
+      \vspace{5mm}
+      \hbox to 6in { {\Large \hfill #1.~#2  \hfill} }
+      \vspace{5mm}
+      \hbox to 6in { {\em DASN, NTU \hfill \small{\url{https://personal.ntu.edu.sg/wptay/}}}}
+    }
+  }
+  \end{center}
+	\renewcommand{\thesection}{{#1}.\arabic{section}}
+  \vspace*{4mm}
+}
+
+\newcommand{\calBR}{\calB(\Real)}
+\newcommand{\io}{\ \mathrm{i.o.}}
+\newcommand{\fo}{\ \mathrm{f.o.}}

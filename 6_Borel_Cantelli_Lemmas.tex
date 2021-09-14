@@ -1,0 +1,309 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{3_ProbabilitySpaces}
+\externaldocument{4_Random_Variables}
+
+
+\begin{document}
+
+\handout{6}{Borel-Cantelli Lemmas}
+
+\section{Introduction}
+Let $A_1, A_2, \ldots \in \calA$ be an infinite sequence of events. Let $N(\omega) = \sum_{i=1}^{\infty} \indicatore{A_i}(\omega)$. The set of sample points $\omega\in\Omega$ that belong to events in $\{A_1,A_2,\ldots\}$ infinitely often (i.o.) is given by 
+\begin{align*} 
+\big\{A_n \io\big\} \triangleq \big\{\omega: N(\omega) &= \infty\big\} = \bigcap_{n \geq 1} \bigcup_{m \geq n} A_m \triangleq \limsup_{n \to \infty} A_n.
+\end{align*}
+Note that $\indicator{A_n\io} = \limsup_{n\to\infty}\indicatore{A_n}$.
+
+The set of sample points that belong finitely often (f.o.) to the events in the sequence is 
+\begin{align*} 
+\big\{A_n \ \text{f.o.}\big\} \triangleq \big\{\omega: N(\omega) &< \infty\big\} = \bigcup_{n \geq 1} \bigcap_{m \geq n} A_m^c \triangleq \liminf_{n \to \infty} A_n^c.
+\end{align*}
+Similarly, $\indicator{A_n\fo} = \liminf_{n\to\infty}\indicatore{A_n^c}$.
+
+Notice that $\big\{A_n \io\big\}$ and $\big\{A_n \ \text{f.o.}\big\}$ are complements of each other. Thus, $\P(A_n \io) + \P(A_n \ \text{f.o.}) = 1$.
+
+As an example, suppose $X_n(\omega) \to 0$ for all $\omega\in\Omega$, then 
+\begin{align*}
+\exists n_0(\omega),\ \st X_n(\omega) \leq 1, \forall n \geq n_0(\omega).
+\end{align*}
+Therefore $\omega\in\{X_n \geq 1\}$ cannot be infinitely often (i.o.).
+
+\section{Borel-Cantelli Lemmas}
+\begin{Lemma}[Borel-Cantelli Lemmas] \label{wk6:lemma:borel_cantelli}\
+\begin{enumerate}[(i)]
+\item If $\sum_{n \geq 1} \P(A_n) < \infty$, then $\P(A_n \io)= 0$.
+\item If $A_1, A_2, \ldots$ are independent, and $\sum_{n \geq 1} \P(A_n) = \infty$, then $\P(A_n \io) = 1$.
+\end{enumerate}
+\end{Lemma}
+%
+\begin{proof}\
+\begin{enumerate}[(i)]
+\item
+Let $B_n = \bigcup_{m \geq n}A_m$, then $B_{n+1} \subset B_n$. We have
+\begin{align*}
+\P(A_n \io) 
+= \P(\bigcap_{n \geq 1} B_n) 
+= \lim_{n \to \infty} \P(B_n) 
+\leq \lim_{n \to \infty} \sum_{m \geq n} \P(A_m),										
+\end{align*}
+where the second equality and last inequality follow from \cref{wk3:lem:increasing_seq} and \cref{wk3:lem:union_bound}, respectively. Since $\sum_{n \geq 1} \P(A_n) < \infty$, we have $\lim_{n \to \infty} \sum_{m \geq n} \P(A_m) = 0$.
+
+\item
+Let $C_n = \bigcap_{m \geq n} A_m^c$. From independence, we have
+\begin{align*}
+\P(C_n) 
+= \prod_{m \geq n} \P(A_m^c)
+&= \prod_{m \geq n} \left(1 - \P(A_m)\right) \\
+&\leq \prod_{m \geq n} e^{-\P(A_m)} \ \left(\text{using }  1 - p \leq e^{-p}\right)	\\
+&= \exp\left(-\sum_{m \geq n} \P(A_m)\right) = 0.	
+\end{align*}
+Therefore, we obtain
+\begin{align*}
+\P(A_n\ \text{f.o.}) = \P(\bigcup_{n \geq 1}C_n) \leq \sum_{n \geq 1} \P(C_n) = 0 \implies \P(A_n\io) = 1.
+\end{align*}
+\end{enumerate}
+\end{proof}
+
+We can strengthen the second Borel-Cantelli Lemma as follows.
+\begin{Lemma}\label{wk3:lem:BC-pairwise}
+If $A_1, A_2, \ldots$ are pairwise independent, and $\sum_{n \geq 1} \P(A_n) = \infty$, then $\P(A_n \io) = 1$.
+\end{Lemma}
+\begin{proof}
+Let $N_n = \sum_{k=1}^{n} \indicatore{A_k}$. We have
+\begin{align}
+\E N_n 
+&= \sum_{k=1}^n \P(A_k), \nn
+\var(N_n) 
+&= \sum_{k=1}^n\P(A_k)\left(1-\P(A_k)\right) \nn
+&\leq \E N_n.\label{varNn}
+\end{align}
+Furthermore, we have
+\begin{align*}
+\P(N_n \leq \frac{1}{2}\E N_n) 
+&\leq \P(|N_n - \E N_n| \geq \frac{1}{2} \E N_n) \\
+&\leq \frac{4}{\left(\E N_n\right)^2} \var(N_n) \quad \text{from Chebyshev's inequality} \\
+&\leq \frac{4}{\E N_n}.
+\end{align*}
+Since $N_n \leq N =\sum_{k\geq1} \indicatore{A_k}$, we obtain
+\begin{align*}
+\P(N \leq \frac{1}{2}\E N_n) 
+\leq \P(N_n \leq \frac{1}{2}\E N_n)
+\leq \frac{4}{\E N_n}.
+\end{align*}
+Moreover, we have
+\begin{align*}
+&\lim_{n \to \infty} \E N_n = \lim_{n \to \infty} \sum_{k=1}^n \P(A_k) = \infty, \\
+\implies
+&\lim_{n \to \infty} \P(N \leq \frac{1}{2}\E N_n) \leq \lim_{n \to \infty} \frac{4}{\E N_n} = 0.
+\end{align*}
+We claim that
+\begin{align*}
+&\indicatore{\{N \leq \frac{1}{2} \E N_n\}}(\omega) \to \indicatore{\{N <\infty\}}(\omega),
+\end{align*}
+since if $N(\omega)<\infty$, then for $n$ sufficiently large, $\indicatore{\{N \leq \frac{1}{2} \E N_n\}}(\omega)=1$, otherwise $\indicatore{\{N \leq \frac{1}{2} \E N_n\}}(\omega)=0$ for all $n\geq 1$. Therefore from DCT, we have
+\begin{align*}
+&\P(A_n \ \text{f.o}) = \P(N < \infty) = \lim_{n \to \infty} \P(N \leq \frac{1}{2} \E N_n) = 0, 
+\end{align*}
+and
+\begin{align*}
+&\P(A_n \ \text{i.o}) = 1.
+\end{align*}
+\end{proof}
+%
+\begin{Remark}
+The condition of pairwise independence in \cref{wk3:lem:BC-pairwise} can be strengthened to $\P(A_i \cap A_j) \leq \P(A_i)\P(A_j), \forall\ i \neq j$ since \cref{varNn} still holds under this condition.
+\end{Remark}
+
+In the following, we first prove a bound that will be useful in further generalizing the second Borel-Cantelli Lemma. 
+
+\begin{Lemma}[Second moment method]\label{wk6:lem:2ndmoment}
+For $0\leq\rho<1$ and $X \geq 0$ with $\E X < \infty$,
+\begin{align*}
+\P(X > \rho \E X) \geq (1-\rho)^2\frac{(\E X)^2}{\E X^2}.
+\end{align*}
+\end{Lemma}
+\begin{proof}
+Let $A = \{ X > \rho \E X\}$. We have
+\begin{align*}
+\E X = \E X\indicatore{A} + \E X\indicatore{A^c} &\leq \E X\indicatore{A} + \rho \E X,\\
+(1-\rho)\E X \leq \E X\indicatore{A}.
+\end{align*}
+From the Cauchy-Schwarz inequality,
+\begin{align*}
+(1-\rho)^2(\E X)^2 \leq \left(\E X\indicatore{A}\right)^2 \leq \E X^2 \P(A),
+\end{align*}
+and the result follows.
+\end{proof}
+
+\begin{Lemma}[Kochen-Stone]
+If $\sum_{n \geq 1} \P(A_n) = \infty$, then
+\begin{align*}
+\P(A_n \io) \geq \limsup_{n \to \infty} \frac{\left(\sum_{k=1}^n\P(A_k)\right)^2}{\sum_{i, j=1}^n \P(A_i \cap A_j)}.
+\end{align*}
+\end{Lemma}
+%
+\begin{proof}
+Let $N_n = \sum_{k=1}^{n} \indicatore{A_k}$. We have
+\begin{align*}
+\E N_n 
+&= \sum_{i=1}^n \P(A_i), \\
+\E N_n^2 
+&= \sum_{i,j=1}^n P(A_i \cap A_j).
+\end{align*}
+Let $0 < \rho < 1$. Because $\lim_{n \to \infty} \E N_n = \lim_{n \to \infty} \sum_{i=1}^n \P(A_i) = \infty$, we have $\{A_n \fo\} \subset \{N_n \leq \rho\E N_n,\ \forall n\geq n_0,\ \text{for some } n_0\geq 1\}$. Therefore, $\{A_n \io\} \supset \{N_n > \rho\E N_n \io\}$ and 
+\begin{align*}
+\P(A_n \io)
+&\geq \P(N_n > \rho \E N_n \io) \\
+&\geq \limsup_{n \to \infty}  \P(N_n > \rho \E N_n) \ \text{(from Fatou's Lemma)} \\
+&\geq \limsup_{n \to \infty} (1-\rho)^2 \frac{(\E N_n)^2}{\E N_n^2} \ \text{(from \cref{wk6:lem:2ndmoment})}.
+\end{align*}
+Taking $\rho \to 0$, we obtain
+\begin{align*}
+\P(A_n \io) \geq \limsup_{n \to \infty} \frac{\left(\sum_{k=1}^n\P(A_k)\right)^2}{\sum_{i, j=1}^n \P(A_i \cap A_j)}.
+\end{align*}
+\end{proof}
+%
+\begin{Lemma} \label{wk6:lemma:sum_P_finite_convto_0}
+For $X_1, X_2, \ldots,\ \st \sum_{n \geq 1} \P(|X_n| \geq \epsilon) < \infty, \forall\ \epsilon > 0$, we have 
+\begin{align*}
+X_n \to 0 \text{ a.s. as } n \to \infty.
+\end{align*}
+%
+\begin{proof}
+Let
+\begin{align*}
+F 
+&= \set*{\omega\given \limsup_{n \to \infty}|X_n| > 0} \\
+&= \bigcup_{m \geq 1} \set*{\omega\given \limsup_{n \to \infty}|X_n| > \frac{1}{m}}.
+\end{align*}
+Let $A_n = \{\omega: |X_n| > \frac{1}{m}\}$. We have $\sum_{n \geq 1} \P(A_n) < \infty$. From the first Borel-Cantelli Lemma, we have
+\begin{align*}
+\P(A_n \io) = 0.
+\end{align*}
+Then, $\P(\limsup_{n \to \infty}|X_n| > \frac{1}{m}) \leq \P(A_n \io) =0$.
+\begin{align*}
+&\implies \P(F) = 0 \\
+&\implies \limsup_{n \to \infty}|X_n| = 0 \ \text{a.s.}
+\implies \lim_{n \to \infty}|X_n| = 0 \ \text{a.s.}.
+\end{align*}
+\end{proof}
+\end{Lemma}
+%
+\begin{Corollary} \label{wk6:cor:convp_implies_conv_as}
+If $X_n \convp X$, then $\exists$ subsequence $(n(k))_{k\geq1}$ such that $X_{n(k)} \to X$ a.s.
+\end{Corollary}
+\begin{proof}
+By the definition of convergence in probability, we can choose $(n(k))_{k\geq1}$ such that $\forall \epsilon > 0$, we have
+\begin{align*}
+\P(|X_{n(k)} - X| \geq \epsilon) \leq \frac{1}{2^k},\ \forall k \geq 1.
+\end{align*}
+Summing both sides over $k \geq 1$, we obtain
+\begin{align*}
+\sum_{k \geq 1} \P(|X_{n(k)} - X| \geq \epsilon) \leq 1.
+\end{align*}
+By \cref{wk6:lemma:sum_P_finite_convto_0}, we have $|X_{n(k)} - X| \to 0$ a.s.
+\end{proof}
+%
+\begin{Lemma}\label{wk6:lem:convp_subsubseq}
+$X_n \convp X$ iff for any subsequence $\left(n(k)\right)_{k \geq 1}$, $\exists$ subsubsequence $\left(n\left(k(r)\right)\right)_{r \geq 1}$, $\st X_{n \left(k(r)\right)} \to X$ a.s.
+\end{Lemma}
+\begin{proof}
+`$\Rightarrow$': It is obvious by \cref{wk6:cor:convp_implies_conv_as}. 
+
+'$\Leftarrow$': Suppose $X_n$ does not converge in probability to $X$. Then, $\exists \epsilon > 0$ and subsequence $\left(n(k)\right)_{k \geq 1}$, such that
+\begin{align*}
+\P(|X_{n(k)} -X| \geq \epsilon) \geq \epsilon,\ \forall k \geq 1.
+\end{align*}
+Consequently, $\forall \left(n\left(k(r)\right)\right)_{r \geq 1}$, $X_{n \left(k(r)\right)} \not\to X$ a.s., which contradicts the claim.
+\end{proof}
+Note that \cref{wk6:lem:convp_subsubseq} implies that the DCT holds with ``almostly surely convergence'' replaced by ``convergence in probability''.
+
+
+\section{SLLN with Finite 2nd Moments}
+\begin{Lemma}\label{wk6:lemma:SLLN_2nd_moments}
+Suppose $X_1, X_2, \ldots$ are pairwise independent, $\E X_i = 0$, $\E X_i^2 \leq M < \infty$, $\forall i \geq 1$. Let $S_n = \sum_{i=1}^n X_i$. Then $\frac{S_n}{n} \to 0$ a.s. as $n \to \infty$.
+\end{Lemma}
+\begin{proof}
+From \cref{wk6:lemma:sum_P_finite_convto_0}, it suffices to prove $\P(\abs*{\dfrac{S_n}{n}} > \epsilon \io) = 0$, $\forall \epsilon > 0$.
+By applying Chebyshev's inequality, we obtain
+\begin{align*}
+\P(\frac{|S_n|}{n} \geq \epsilon) \leq \frac{\E S_n^2}{\epsilon^2 n^2} \leq \frac{M}{\epsilon^2 n}.
+\end{align*}
+Unfortunately, $\sum_{n\geq1} 1/n = \infty$ so we cannot obtain the desired conclusion immediately using the Boral Cantelli Lemma. Instead, we use a subsequence ``trick'' here. Letting $n(k) = k^2$ and summing both sides of above equation over $n(k)$ where $k \geq 1$, we obtain
+\begin{align*}
+\sum_{k=1}^{\infty} \P(\frac{|S_{n(k)}|}{n(k)} \geq \epsilon) 
+\leq \frac{M}{\epsilon^2} \sum_{k=1}^{\infty} \frac{1}{k^2} < \infty.
+\end{align*}
+By applying \cref{wk6:lemma:borel_cantelli}, we obtain $\dfrac{|S_{n(k)}|}{n(k)} \to 0$ a.s. as $k \to \infty$.
+
+Let $\Delta_k = \max \big\{|S_n - S_{n(k)}|: n(k) < n < n(k+1)\big\}$. For $n(k) \leq n < n(k+1)$, we have
+\begin{align*}
+&\frac{|S_n|}{n} \leq \frac{|S_{n(k)}|}{n(k)} + \frac{\Delta_k}{n(k)}, \\
+\implies
+&\limsup_{n \to \infty}\frac{|S_n|}{n} \leq \limsup_{k \to \infty}\frac{|S_{n(k)}|}{n(k)} + \limsup_{k \to \infty}\frac{\Delta_k}{n(k)} = \limsup_{k \to \infty}\frac{\Delta_k}{n(k)}.
+\end{align*}
+The proof is complete if we show $\dfrac{\Delta_k}{n(k)} \to 0$ a.s. as $k \to \infty$. Let $B_j = \big\{\omega: |S_{n(k)+j} - S_{n(k)}| \geq \epsilon n(k)\big\}$, for $1 \leq j \leq 2k$. We have
+\begin{align*}
+\P(\Delta_k \geq \epsilon n(k)) 
+&= \P(\bigcup_{j=1}^{2k} B_j)\\
+&\leq \sum_{j=1}^{2k} \P(|S_{n(k)+j} - S_{n(k)}| \geq \epsilon n(k)) \\
+&\leq \sum_{j=1}^{2k} \frac{jM}{\epsilon^2 {n(k)}^2}
+= \frac{M}{\epsilon^2 k^3} (2k +1).
+\end{align*}
+Summing both sides over $k \geq 1$, we obtain
+\begin{align*}
+\sum_{k=1}^{\infty} \P(\frac{\Delta_k}{n(k)} \geq \epsilon)
+\leq \frac{M}{\epsilon^2} \sum_{k=1}^{\infty} \frac{2k +1}{k^3} < \infty.
+\end{align*}
+From \cref{wk6:lemma:sum_P_finite_convto_0}, we obtain $\dfrac{\Delta_k}{n(k)} \to 0$ a.s. as $k \to \infty$, and the proof is complete.
+\end{proof}
+%
+For $X \geq 0$, we have
+\begin{align*}
+\sum_{k=1}^{\infty} \indicatore{\{X \geq k\}} &\leq X \leq \sum_{k=0}^{\infty} \indicatore{\{X \geq k\}}.
+\end{align*}
+Therefore, for any $X$, we obtain
+\begin{align*}
+\sum_{k=1}^{\infty} \P(|X| \geq k) &\leq \E |X| \leq \sum_{k=0}^{\infty} \P(|X| \geq k),\\
+\sum_{k=1}^{\infty} \P(|X| \geq k) &\leq \infty \iff \E |X| < \infty.
+\end{align*}
+As a side note, if $X \in \bbZ_{+}$, we have the following equality:
+\begin{align*}
+X &= \sum_{k=1}^{\infty} \indicatore{\{X \geq k\}},\\
+\E X &= \sum_{k=1}^{\infty} \P(X \geq k).
+\end{align*}
+%
+\begin{Lemma}
+Suppose $X_1, X_2, \ldots$ are i.i.d. Then,
+\begin{align*}
+\lim_{n \to \infty} \frac{X_n}{n} = 0\ \as \iff \E |X_1| < \infty.
+\end{align*}
+\end{Lemma}
+\begin{proof}\
+
+`$\Rightarrow$':
+\begin{align*}
+\lim_{n \to \infty} \frac{X_n}{n} = 0\ \as \implies \P(\frac{|X_n|}{n} \geq 1 \io)=0.
+\end{align*}
+From the second Borel-Cantelli Lemma, we have
+\begin{align*}
+&\sum_{n \geq 1}\P(\frac{|X_n|}{n} \geq 1) < \infty \\
+&\sum_{n \geq 1}\P(|X_1| \geq n) < \infty \\
+&\E |X_1| < \infty.
+\end{align*}
+
+`$\Leftarrow$':
+\begin{align*}
+\E \left|\frac{X_1}{\epsilon}\right| < \infty
+\implies
+\sum_{n \geq 1}\P(|X_n| \geq n \epsilon) < \infty.
+\end{align*}
+The result then follows from \cref{wk6:lemma:sum_P_finite_convto_0}.
+\end{proof}
+
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}

@@ -1,0 +1,228 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{3_ProbabilitySpaces}
+\externaldocument{4_Random_Variables}
+\externaldocument{5_Convergence_and_Independence}
+\externaldocument{6_Borel_Cantelli_Lemmas}
+
+
+\begin{document}
+
+\handout{8}{Glivenko–Cantelli and 0-1 Laws}
+
+\section{Glivenko–Cantelli Theorem}
+
+Assume that $F(x)$ is a cumulative distribution function (cdf), i.e., 
+\begin{enumerate}[-]
+\item $F(x)$ is non-decreasing.
+\item $F(x)$ is right continuous.
+\item $F(x) \to 0$ as $x \to -\infty$ and $F(x) \to1$ as $x \to \infty$.
+\end{enumerate}
+A r.v.\ $X$ such that $\P(X\leq x) = F(x)$ is said to have cdf $F$. From Carath{\'e}odory's Extension Theorem (\cref{Caratheodory Theorem}), the cdf of $X$ uniquely determines the distribution $\P_X$ of $X$.
+
+Then even though $F(x)$ may not be a bijective function, we can always define a pseudo-inverse as
+\begin{align}\label{wk8:Finverse}
+F^{-1}(\omega)= \inf \{x: F(x)\geq \omega\}  
+\end{align}
+for $\omega \in [0,1]$. We have the following properties:
+\begin{enumerate}[(i)]
+\item If $y < F^{-1}(\omega)$, then $F(y)< \omega$.
+Otherwise, suppose $F(y) \geq \omega$. Then by the definition \cref{wk8:Finverse}, $F^{-1}(\omega)\leq y$, which is a contradiction.
+\item If $y > F^{-1}(\omega)$, then $F(y)\geq \omega$ because $F$ is non-decreasing. If $\omega$ is a continuity point of $F^{-1}$, then we have $F(y) > \omega$.
+\end{enumerate}
+
+\begin{Lemma} \label{wk8:lemma:set}
+For any $x$, we have
+\begin{align*}
+\{\omega: \omega \leq F(x)\}=\{\omega: F^{-1}(\omega)\leq x\}
+\end{align*}
+\end{Lemma}
+%
+\begin{proof}
+If $\omega \leq F(x)$, then by definition~\cref{wk8:Finverse}, we have $F^{-1}(\omega)\leq x$. On the other hand, if $F^{-1}(\omega) \leq x$, then since $F$ is non-decreasing, we have $\omega \leq F(y) \ \forall y > x$. Since $F(x)$ is right continuous, by letting $y \downarrow x$, we have $\omega \leq F(x)$.
+\end{proof}
+
+\begin{Lemma} \label{wk8:lemma:inverse_function_2}
+$F^{-1}(\omega)$, $\omega\in[0,1]$, is a random variable on $([0,1],\calB([0,1]),\lambda)$ with cdf $F$, where $\lambda$ is the Lebesgue measure.
+\end{Lemma}
+\begin{proof}
+From \cref{wk8:lemma:set}, we have $\lambda (F^{-1}(\omega)\leq x)= \lambda (\omega \leq F(x))=F(x)$.
+\end{proof}
+
+Suppose that $(X_i)$ are i.i.d.\ random variables with cdf $F$, then we define the empirical cdf for $n\geq1$ as
+\begin{align*}
+F_n(x)=\frac{1}{n}\sum_{i=1}^n \indicator{X_i\leq x}.
+\end{align*}
+The SLLN implies that for each $x$, $F_n(x)\to F(x)$ $\as$ as $n\to \infty$. 
+
+\begin{Theorem}[Glivenko-Cantelli Theorem]
+\begin{align*}
+\sup_{x}|F_n(x)-F(x)| \to 0\ \as\ \text{as}\ n \to \infty.
+\end{align*}
+\end{Theorem}
+\begin{proof}
+We reduce the proof to that for the probability space $([0,1],\calB[0,1],\lambda)$. Let $\Lambda$ to be the cdf for $\lambda$ and suppose $Y_i$ are i.i.d.\ $\sim \lambda$. We define 
+\begin{align*}
+\Lambda_n(F(x))=\frac{1}{n}\sum_{i=1}^n \indicator{Y_i\leq F(x)}.
+\end{align*}
+If $X_i= F^{-1}(Y_i)$, then from \cref{wk8:lemma:inverse_function_2}, $X_i$ are i.i.d.\ with cdf $F$. Therefore, $X_i \leq x$ iff $Y_i \leq F(x)$, and to prove the theorem, it suffices to show that 
+\begin{align*}
+\sup_{y} |\Lambda_n(y)-\Lambda(y)|\to 0\ \as
+\end{align*}
+Fix $\epsilon >0$, choose $m$ s.t.\ $\dfrac{1}{m} \leq \dfrac{\epsilon}{2}$. Consider the set 
+\begin{align*}
+E=\set*{\frac{k}{m}\given k=0,1,\ldots,m}.
+\end{align*}
+From SLLN, $\Lambda _n (y) \to \Lambda(y)$ for each $y\in E$. Since $E$ is finite, $\exists N$ s.t.\ $\forall n \geq N$, $|\Lambda_n (y)-\Lambda (y)| \leq \frac{\epsilon}{2} \ \forall y \in E$. For $x \in [0,1]$, we can always find $u,v$ s.t.\ $u\leq x <v$, $u,v \in E$, $v-u=\frac{1}{m}$.
+Since $\Lambda (y)=y$, we have
+\begin{align*}
+\Lambda_n (x)\geq \Lambda_n (u) \geq u-\frac{\epsilon}{2} \geq x-\frac{1}{m} -\frac{\epsilon}{2} \geq x-\epsilon,\\
+\Lambda_n (x)\leq \Lambda_n (v) \leq v+\frac{\epsilon}{2} \leq x+\frac{1}{m} +\frac{\epsilon}{2} \leq x+\epsilon,
+\end{align*}
+so that
+\begin{align*}
+|\Lambda_n(x)-\Lambda(x)|\leq \epsilon.
+\end{align*}
+The theorem is now proved.
+\end{proof}
+
+\section{Kolmogorov's 0-1 Law}
+
+Suppose that $(X_i)_{i\geq 1} $ are independent random variables. Consider the $\sigma$-algebra $\sigma(X_n,X_{n+1},\ldots)$, which is the smallest $\sigma$-algebra w.r.t.\ which all $X_m$, $m\geq n$, are measurable: 
+\begin{align*}
+\sigma(X_n,X_{n+1},\ldots) = \sigma\parens*{\bigcup_{m\geq n} \sigma(X_m)}.
+\end{align*}
+Note that the intersection of these $\sigma$-algebras is also a $\sigma$-algebra, 
+\begin{align*}
+\calT=\bigcap_{n\geq 1}\sigma(X_n,X_{n+1},\ldots),
+\end{align*}
+and we call this the tail $\sigma$-algebra. The tail $\sigma$-algebra contains all events that are not affected by changes in a finite number of random variables $X_i$.
+
+Let $S_n= \sum_{i=1}^n X_i$. Then $\{\omega: \lim_{n \to \infty} S_n \text{ exists}\}\in\calT$. Furthermore, since for any $m\in\Nat$, 
+\begin{align*}
+\limsup_{n\to\infty} \frac{S_n}{n}(\omega) = \limsup_{m \leq n\to\infty} \frac{S(m,n)}{n},
+\end{align*}
+where $S(m,n) = S_n - S_{m-1}$, we have $\{\limsup_{n\to\infty} \frac{S_n}{n}\leq a\}\in\calT$ for any $a\in\Real$. (To be specific, note that $S(m,n)$ is measurable w.r.t.\ $\sigma(X_m, X_{m+1},\ldots)$ for every $n \geq m$. Therefore, $\limsup_{n\to\infty}S(m,n)/n$ is measurable w.r.t.\ $\sigma(X_m, X_{m+1},\ldots)$ (cf.\ \cref{lem:wk4:infX_rv}). This is true for all $m\geq1$.)
+
+On the other hand, consider the event $\{\limsup_{n\to\infty} S_n\geq a\}$ where $X_i$ is not 0 a.s. It does not belong to $\calT$ since it is in $\sigma(X_1,X_2,\ldots)$ but not in $\sigma(X_2,X_3,\ldots)$.
+
+\begin{Lemma}[Grouping Lemma]\label{wk8:lemma:Grouping Lemma}
+Suppose that a set of $\sigma$-algebras $\{\calA_t: t\in T\}$ indexed by the countable index set $T$ are independent (i.e., any finite subset of $\sigma$-algebras $\calA_{i_1},\calA_{i_2},\ldots,\calA_{i_n}$ are independent). Then for any finite partition $T= \bigcup_{i=1}^{n} T_i$ where $T_i \cap T_j = \emptyset \ \forall i\neq j$, the $\sigma$-algebras $\calF_i=\sigma(\bigcup_{t\in T_i}\calA_t)$, $i=1,\ldots,n$ are independent. 
+\end{Lemma}
+\begin{proof}
+Let 
+\begin{align*}
+\calC_i =\set*{\bigcap_{t \in F} A_t\given \text{ $F$ is finite subset of } T_i,\ A_t \in \calA_t}.
+\end{align*}
+We note that $\calC_i $ is a $\pi$-system. For any finite $F_i \subset T_i$, $A_{t_i} \in \calA_{t_i}$ where $t_i\in F_i$, we have
+\begin{align*}
+\P (\bigcap_{i=1}^n \bigcap_{t_i\in F_i} A_{t_i})= \prod_{i=1}^n \P(\bigcap_{t_i\in F_i} A_{t_i}),
+\end{align*}
+thus $\calC_1,\calC_2,\ldots ,\calC_n$ are independent. From \cref{wk5:lem:pi-independent}, $\sigma(\calC_i)$, $i=1,\ldots,n$ are independent. For each $t \in T_i$, we have $\calA_t \subset \calC_i$, hence $\calF_i \subset \sigma(\calC_i)$, which implies that $\calF_i$, $i=1,\ldots,n$ are independent.
+\end{proof}
+
+\begin{Theorem} [Kolmogorov’s 0-1 law]
+Suppose that $(X_i)_{i\geq1}$ are independent. Let $\calT$ be the tail $\sigma$-algebra. If $A \in\calT$, then $\P(A)=0$ or $1$.
+\end{Theorem}
+\begin{proof}
+We first show that if $A \in \sigma(X_1,X_2,\ldots)$ and  $B\in\calT$, then $\P(A\cap B) = \P(A) \P(B)$.
+For any $k\geq1$, since $\calT \subset \sigma(X_{k+1},X_{k+2},\ldots)$, by \cref{wk8:lemma:Grouping Lemma}, $\sigma(X_1,\ldots,X_k)$ and $\calT$ are independent. It then follows that $\bigcup_{k\geq1}\sigma(X_1,\ldots,X_k)$ and $\calT$ are independent. Since they are both $\pi$-systems, by \cref{wk5:lem:pi-independent}, we have 
+\begin{align*}
+\sigma(X_1,X_2,\ldots)=\sigma\parens*{\bigcup_{k\geq1}\sigma(X_1,\ldots,X_k)} \independent \calT. 
+\end{align*}
+Since $A\in \calT \subset \sigma(X_1,X_2,\ldots)$, we obtain that $A$ is independent of itself and
+\begin{align*}
+\P(A)&=\P(A\cap A)\\
+&=\P (A)\P (A)\\
+&=\P (A) ^2,
+\end{align*}
+and the theorem follows.
+\end{proof}
+
+\begin{Example}
+The event $\{S_n = \sum_{i=1}^n X_i \text{ converges } \}\in \calT$. From the Kolmogorov’s 0-1 law, $S_n$ converges with probability $0$ or $1$. Intuitively, this means that if $S_n$ converges in probability, it should also converge a.s. We will show this result rigorously in a future session.
+\end{Example}
+
+\section{Hewitt-Savage 0-1 Law}
+
+We now suppose that $(X_i) _{i \geq 1 }$ are i.i.d. A finite permutation $\pi : \set{1,2,\ldots} \mapsto \set{1,2,\ldots}$ is such that $\pi(i)\neq i$ for finitely many $i$. If $B$ is such that $(X_i)_{i\geq1}\in B \implies (X_{\pi(i)})_{i\geq1}\in B$ for all finite permutations $\pi$, then we say $B$ is invariant w.r.t.\ finite permutations. Let 
+\begin{align*}
+\mathscr{E}=\set*{\set*{(X_i) _{i \geq 1 }\in B}\given B \text{ is invariant}}.
+\end{align*}
+Then $\mathscr{E}$ is called the exchangeable $\sigma$-algebra. (Exercise: check that $\scE$ is a $\sigma$-algebra.)
+
+$\mathscr{E}$ consists of events that are not affected when we permute a finite number of random variables $X_i$. Clearly, $\calT \subset \mathscr{E}$. On the other hand, $\{\limsup_{n\to\infty} S_n\geq a\}\notin \calT$ but $\{\limsup_{n\to\infty} S_n\geq a\}\in \mathscr{E}$ so $\mathscr{E}$ is strictly larger than $\calT$.
+
+\begin{Theorem} [Hewitt-Savage 0-1 Law]
+Assume $(X_i)_{i\geq 1}$ are i.i.d. If $A \in \mathscr{E}$, then $\P(A)=0$ or $1$.
+\end{Theorem}
+
+To prove this, we first introduce a lemma. Let $A\triangle B= (A\backslash B)\cup (B\backslash A)$. We have 
+\begin{align*}
+|\P(A)-\P(B)|= \left|\int \indicatore{A} \ud\P -\int \indicatore{B} \ud\P\right|\leq \int |\indicatore{A}(\omega)-\indicatore{B}(\omega)| \ud \P =\P(A\triangle B).
+\end{align*}
+
+\begin{Lemma}[Approximation Lemma]\label{wk8:lemma:Approximation Lemma}
+If $\calA$ is a algebra and $B \in \sigma(\calA)$, then $\exists\ B_n \in \calA$ such that $\P(B\triangle B_n)\to 0$ as $n \to 0$. 
+\end{Lemma}
+\begin{proof}
+Let $\calD=\{B\in \sigma(\calA): \P(B\triangle B_n)\to 0 \text{ as }  n \to 0 \}$. Since that this is a $\lambda$-system and $\calA \subset \calD$, from the $\pi-\lambda$ theorem, we have $\sigma(\calA) \subset \calD$. 
+\end{proof}
+
+\begin{proof}[Proof of Hewitt-Savage 0-1 Law]
+Let $X=(X_i)_{i\geq 1}$. We have $A=\{X\in B\}$ for a $B$ that is invariant w.r.t.\ finite permutations. The $\sigma$-algebra $\sigma(X_1,X_2,\ldots)$ is generated by the algebra
+\begin{align*}
+\calA = \set*{\set*{(X_i)_{i\in F}\in C} \given F \text{ is finite},\ C\in \calB(\Real^{|F|})}.
+\end{align*}
+From \cref{wk8:lemma:Approximation Lemma}, for any $\epsilon>0$, $\exists A_n \in \sigma(X_1,\ldots,X_n)$ such that $\P(A\triangle A_n)\leq \epsilon$ for all $n$ sufficiently large since $\scE \subset \sigma(X_1,X_2,\ldots)$. We can write $A_n=\{ (X_1,\ldots, X_n)\in B_n\}$ for some $B_n\in \calB (\Real ^n)$. Now define $A_n'=\{(X_{n+1},\ldots, X_{2n})\in B_n\}\in \sigma( X_{n+1},\ldots,X_{2n})$. From independence, we have $\P(A_n\cap A_n')=\P(A_n)\P(A_n')$.  
+
+Let $\pi(X) = (X_{n+1},\ldots,X_{2n},X_{1},\ldots,X_{n},X_{2n+1},\ldots)$. We have 
+\begin{align*}
+\P(A_n'\triangle A)
+&=\P(\set*{(X_{n+1},\ldots,X_{2n})\in B_n}\triangle \set*{X\in B})\\
+&=\P(\set*{(X_{n+1},\ldots,X_{2n})\in B_n}\triangle \set*{\pi(X)\in \pi(B)})\\
+&=\P(\set*{(X_{n+1},\ldots,X_{2n})\in B_n}\triangle \set*{\pi(X)\in B})\ \because \pi(B)=\set{\pi(x)\given x\in B}=B\\
+&=\P(\set*{(X_{1},\ldots,X_{n})\in B_n}\triangle \set*{X\in B})\ \because X_i \text{ are i.i.d.}\\
+&=\P(A_n \triangle A) \leq \epsilon.
+\end{align*}
+Therefore,
+\begin{align*}
+\P((A_n'\cap A_n)\triangle A) &\leq \P((A_n\triangle A) \cup (A_n'\triangle A))\\
+&\leq \P(A_n\triangle A) +\P (A_n'\triangle A)\\
+&\leq 2\epsilon,
+\end{align*}
+and since $|\P(A)-\P(A_n\cap A_n')|\leq \P((A_n'\cap A_n)\triangle A)$, we have $|\P(A)-\P(A_n\cap A_n')|\to 0$ as $n \to \infty$. Similarly, we have $|\P(A)-\P(A_n)|\to 0$ and $|\P(A)-\P(A_n')|\to 0$ so that $\P(A_n\cap A_n')=\P(A_n)\P(A_n') \to \P(A)^2$. Therefore, we have $\P(A)=\P(A)^2$.
+\end{proof}
+
+
+\section{Discussions}
+
+Suppose $(X_i)_{i\geq 1 }$ are i.i.d., $\E X_1 =0$, and $\E X_1^2=1$. Take $0<b_n\to \infty$, then $\frac{S_n}{b_n} \to 0$ a.s.\ if $\sum_{n\geq 1} \frac{1}{b_n^2}<\infty$. For example, if we choose $b_n=\sqrt{n\log n}$, then $\frac{S_n}{\sqrt{n\log n}}\to 0 $ a.s., i.e., $S_n$ grows slower than $\sqrt{n\log n}$. 
+
+On the other hand, consider $X_i \sim N(0,1)$, then $\frac{S_n}{\sqrt n}\sim N(0,1)$. For any $r\in\Real$, we have
+\begin{align*}
+\P(\limsup_{n\to \infty} \frac{S_n}{\sqrt n}\geq r) &= \lim_{m\to \infty} \P(\bigcup_{n\geq m} \set*{\frac{S_n}{\sqrt n}\geq r}) \geq \lim_{m\to \infty} \P(\frac{S_m}{\sqrt m}\geq r)>0.
+\end{align*}
+Since $\{\limsup_{n\to \infty} \frac{S_n}{\sqrt n}\geq r\}$ is a tail event, by Kolmogorov’s 0-1 law, we then have 
+\begin{align*}
+\P(\limsup_{n\to \infty} \frac{S_n}{\sqrt n}\geq r) = 1,
+\end{align*}
+which implies that $\limsup_{n\to \infty} \frac{S_n}{\sqrt n}=\infty$ a.s., i.e., $S_n$ grows faster than $\sqrt{n}$. 
+
+The exact rate of growth of $S_n$ is given by the following theorem.
+
+\begin{Theorem} [Law of Iterated Logarithm]
+Suppose $(X_i)_{i\geq 1 }$ are i.i.d., $\E X_1 =0$, and $\E X_1^2=1$. Let $S_n = \sum_{i=1}^n X_i$. We have
+\begin{align*}
+\limsup_{n \to \infty} \frac{S_n}{\sqrt{2n \log \log n}}=1\ \as
+\end{align*}
+\end{Theorem}
+
+The proof of this theorem is left as a research exercise. 
+
+
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}

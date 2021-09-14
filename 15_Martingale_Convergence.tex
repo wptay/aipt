@@ -1,0 +1,257 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{3_ProbabilitySpaces}
+\externaldocument{4_Random_Variables}
+\externaldocument{5_Convergence_and_Independence}
+\externaldocument{6_Borel_Cantelli_Lemmas}
+\externaldocument{7_StrongLaw_of_LargeNumbers}
+\externaldocument{8_Glivenko-Cantelli_and_0-1_Laws}
+\externaldocument{12_Conditional_Expectations}
+\externaldocument{13_Optional_Stopping}
+\externaldocument{14_Submartingales}
+
+
+\begin{document}
+
+\handout{15}{Martingale Convergence}
+
+
+\section{Right-Closable Martingale}
+
+We can generalize our index set to any totally ordered set $(N, \leq)$ (if $n,m\in N$, then $n \leq m$ or $m \leq n$). We say that $(\scF_n)_{n\in N}$ is a filtration if $\scF_n \subset \scF_m$ for all $n \leq m$ in $N$. 
+
+\begin{Definition}
+A submartingale $(X_n,\scF_n)_{n\in N}$ is \emph{right-closable} if $X_n \leq \E[X \given \scF_n]$ for all $n\in N$, for some $X \in L^1$. (For a martingale, the inequality is replaced with equality.)
+
+If there exists $n_0\in N$ such that $n\leq n_0$ for all $n\in N$, then $X_n \leq \E[X_{n_0} \given \scF_n]$ for all $n\in N$, and we say that the submartingale is \emph{right-closed}.
+\end{Definition}
+Note that a right-closable submartingale or martingale can always be made right-closed by simply adding an upper bound $n_0$ to $N$ and defining $X_{n_0} = X$.
+
+\begin{Example}[Reverse martingale]\label{wk15:reverse_martingale}
+Suppose $X_k$, $k\geq1$ are i.i.d. Let $S_n = \sum_{k=1}^n X_k$. Take $N$ to be the set of negative integers and for $n\geq1$, let
+\begin{align*}
+\scF_{-n} = \sigma(S_n, X_{n+1}, X_{n+2}, \ldots).
+\end{align*}
+Since $\scF_{-(n+1)} \subset \scF_{-n}$, $(\scF_{-n})_{-n\in N}$ is a filtration. By symmetry, we have for all $k=1,\ldots,n$,
+\begin{align*}
+\E[X_k \given \scF_{-n}] = \E[X_1 \given \scF_{-n}].
+\end{align*}
+Therefore,
+\begin{align*}
+S_n = \E[S_n \given \scF_{-n}] = \sum_{k=1}^n \E[X_k \given \scF_{-n}] = n \E[X_1 \given \scF_{-n}].
+\end{align*}
+Let $Z_{-n}= \dfrac{S_n}{n} = \E[X_1 \given \scF_{-n}]$. Then $(Z_{-n}, \scF_{-n})_{-n\in N}$ is a right-closed martingale.
+\end{Example}
+
+\begin{Lemma}\label{wk15:lem:right-closable}
+\begin{enumerate}[(i)]
+	\item If $(X_n,\scF_n)_{n\in N}$ is a right-closable martingale, then $(X_n)_{n\in N}$ is uniformly integrable.
+	\item If $(X_n,\scF_n)_{n\in N}$ is a right-closable submartingale, then $(X_n \vee a)_{n\in N}$ is uniformly integrable for all $a\in\Real$.
+\end{enumerate}
+\end{Lemma}
+\begin{proof}
+\begin{enumerate}[(i)]
+	\item Since the martingale is right-closable, $\exists X\in L^1$ such that $X_n = \E[X \given \scF_n]$ for all $n\in N$. We have $|X_n| \leq \E[|X| \given \scF_n]$ and $\E|X_n| \leq \E|X| <\infty$. Then,
+	\begin{align*}
+	\E |X_n|\indicator{|X_n|>K} 
+	&\leq  \E[ {\E[|X| \given \scF_n]}\indicator{|X_n|>K} ]\\
+	&= \E |X|\indicator{|X_n|>K} \quad\because \set{|X_n|>K}\in \scF_n \\
+	&\leq M \P(|X_n|>K) + \E |X|\indicator{|X|>M} \quad\forall M >0 \\
+	&\lea{\text{Markov}} 	\frac{M}{K} \E|X_n| + \E |X|\indicator{|X|>M} 
+	\intertext{and}
+	\limsup_{K\to\infty} \E |X_n|\indicator{|X_n|>K} 
+	&\leq \E |X|\indicator{|X|>M} \xrightarrow{M\to\infty} 0.
+	\end{align*}
+	
+	\item Since the submartingale is right-closable, $\exists X\in L^1$ such that $X_n \leq \E[X \given \scF_n]$ for all $n\in N$. We have
+	\begin{align}
+	& \E[X_n\indicator{X_n >K}] \leq \E[X\indicator{X_n>K}]\label{ineq1}\\
+	& \E[X_n \vee a] \leq E[X \vee a] \quad\text{from Jensen's inequality}. \label{ineq2}
+	\end{align}
+	Take $K >|a|$. Then $|X_n\vee a| >K$ iff $X_n\vee a = X_n >K$. Therefore,
+	\begin{align*}
+		\E[(X_n\vee a)\indicator{|X_n\vee a|>K}] 
+		&= \E[X_n\indicator{X_n>K}]\\
+		&\lea{\cref{ineq1}} \E[X\indicator{X_n>K}] \\
+		&\leq M\P(X_n>K) + \E[X\indicator{X>M}] \quad\forall M>0\\
+		&\lea{\text{Markov}} 	\frac{M}{K} \E X_n^{+} + \E |X|\indicator{|X|>M} \\
+		&\leq \frac{M}{K} \E X^{+} + \E |X|\indicator{|X|>M} \quad\text{from letting $a=0$ in \cref{ineq2}}.
+	\end{align*}
+	Taking $K\to\infty$ and then $M\to\infty$, we obtain the desired result. 
+\end{enumerate}
+\end{proof}
+
+\section{Doob's Upcrossing Inequality}
+
+Consider a submartingale $(X_n,\scF_n)_{n\geq0}$. Let $a<b$. The first times that $X_n$ crosses $a$ downwards and then $b$ upwards are given by the stopping times
+\begin{align*}
+\tau_1 = \inf\set{n\geq 0 \given X_n \leq a},\ \tau_2 = \inf\set{n>\tau_1 \given X_n\geq b}.
+\end{align*}
+We repeat this process and define by induction, for $k\geq2$,
+\begin{align*}
+\tau_{2k-1} = \inf\set{n> \tau_{2k-2} \given X_n \leq a},\ \tau_{2k} = \inf\set{n>\tau_{2k-1} \given X_n\geq b}.
+\end{align*}
+Then 
+\begin{align*}
+U_n(a,b) = \sup\set{k \given \tau_{2k} \leq n}
+\end{align*}
+is the number of upward crossings of the interval $[a,b]$ up to time $n$.
+
+\begin{Theorem}[Doob's upcrossing inequality]\label{wk15:Doobupcrossing}
+If $(X_n,\scF_n)_{n\geq0}$ is a submartingale, then for any $a<b$,
+\begin{align*}
+(b-a) \E U_n(a,b) \leq \E(X_n-a)^+.
+\end{align*}
+\end{Theorem}
+\begin{proof}
+Let $Y_n=(X_n-a)^+$, which is a non-negative submartingale by \cref{wk14:fnM}. Then $U_n(a,b)$ is equal to the number of upcrossings of $[0,b-a]$ by $Y_0,\ldots,Y_n$. For $m\geq1$, let
+\begin{align*}
+A_m = \left\{
+\begin{array}{ll}
+1, &\ \text{if $\tau_{2k-1} < m \leq \tau_{2k}$ for some $k$},\\
+0, &\ \text{otherwise}.
+\end{array}
+\right.
+\end{align*}
+Since $\set{\tau_{2k-1} < m \leq \tau_{2k}} = \set{\tau_{2k-1} \leq m-1}\cap\set{\tau_{2k} \leq m-1}\setcomp \in \scF_{m-1}$, $(A_m)_{m\geq1}$ is predictable. Consider the martingale transform
+\begin{align}
+\tilde{Y}_n = Y_0 + \sum_{m=1}^n A_m(Y_m-Y_{m-1}) \geq (b-a) U_n(a,b),\label{upineq}
+\end{align}
+where the inequality follows because each upcrossing of $[0,b-a]$ by $(Y_n)$ results in a gain of at least $b-a$ on the left-hand side. We have
+\begin{align*}
+\E[A_m(Y_m-Y_{m-1}) \given \scF_{m-1}] 
+&= A_m \E[Y_m-Y_{m-1} \given \scF_{m-1}] \\
+&\leq \E[Y_m-Y_{m-1} \given \scF_{m-1}],
+\end{align*}
+where the inequality follows because $\E[Y_m \given \scF_{m-1}] \geq Y_{m-1}$. Therefore, $\E[A_m(Y_m-Y_{m-1})] \leq \E[Y_m - Y_{m-1}]$ and
+\begin{align*}
+\E\tilde{Y}_n - \E Y_0 &\leq \E Y_n - \E Y_0\\
+\E\tilde{Y}_n &\leq \E Y_n
+\intertext{and from \cref{upineq},}
+(b-a) \E U_n(a,b) &\leq \E Y_n.
+\end{align*}
+\end{proof}
+
+\section{Submartingale Convergence}
+
+\begin{Theorem}[Submartingale Convergence Theorem]\label{wk15:Submartingale_Convergence}
+Suppose $(X_n,\scF_n)_{-\infty<n<\infty}$ is a submartingale.
+\begin{enumerate}[(i)]
+	\item\label{wk15:-inftyconv} $X_{-\infty} = \lim_{n\to-\infty} X_n$ exists a.s.\ and $\E X_{-\infty}^+ < \infty$. Let $\scF_{-\infty}=\bigcap_n \scF_n$. Then $(X_n,\scF_n)_{-\infty\leq n<\infty}$ is a submartingale, i.e., $X_{-\infty} \leq \E[ X_m \given \scF_{-\infty}]$ for all $m>-\infty$. 
+	\item\label{wk15:inftyconv} If $\E X_n^+ \leq B <\infty$, then $X_\infty = \lim_{n\to\infty} X_n$ exists a.s.\ and $\E X_\infty^+ \leq B$. 
+	\item\label{wk15:ui} If $(X_n^+)_{-\infty<n<\infty}$ is uniformly integrable, then for $X_\infty=\lim_{n\to\infty} X_n$, we have $X_m \leq \E[ X_{\infty} \given \scF_m]$ for all $m < \infty$. Let $\scF_\infty = \sigma\parens*{\bigcup_n \scF_n}$. Then $(X_n,\scF_n)_{-\infty<n\leq\infty}$ is right-closed.
+\end{enumerate}
+\end{Theorem}
+\begin{proof}
+Note that $X_n$ converges as $n\to\pm\infty$ iff $\limsup X_n = \liminf X_n$,\footnote{In this proof, if the convergence is not specified, it is taken to mean either $n\to\infty$ or $n\to-\infty$.} i.e., $X_n$ diverges only on the event
+\begin{align*}
+\set*{\limsup X_n > \liminf X_n} = \bigcup_{\substack{a < b,\\ a,b\in\bbQ}} A_{ab},
+\end{align*}
+where
+\begin{align*}
+A_{ab} = \set*{\limsup X_n \geq b > a \geq \liminf X_n} \subset \set*{\lim U_n(a,b) = \infty}.
+\end{align*}
+Therefore to show that $\P(A_{ab})=0$, it suffices to show that $\E[\lim U_n(a,b)] < \infty$.
+
+\begin{enumerate}[(i)]
+	\item For each $n\geq1$, $U_n(a,b)$ is the number of upcrossings of the submartingale $Y_1=X_{-n}, Y_2=X_{-n+1}, \ldots, Y_n=X_{-1}$. From Doob's upcrossing inequality (\cref{wk15:Doobupcrossing}), we have
+	\begin{align*}
+	\E U_n(a,b) \leq \frac{\E(Y_n-a)^+}{b-a} = \frac{\E(X_{-1}-a)^+}{b-a} < \infty.
+	\end{align*}
+	The MCT then gives $\E\lim_{n\to\infty} U_n(a,b) = \lim_{n\to\infty} \E U_n(a,b) < \infty$. Therefore $X_{-\infty}=\lim_{n\to-\infty} X_n$ exists a.s. From Fatou's lemma, 
+	\begin{align*}
+	\E X_{-\infty}^+ \leq \liminf_{n\to\infty} \E X_{-n}^+ \leq \E X_{-1}^+ <\infty.
+	\end{align*}
+	Finally, to show that $(X_n,\scF_n)_{-\infty\leq n<\infty}$ is a submartingale, we note that $X_{-\infty}\in\scF_n$ for all $n$ (Exercise), which implies that $X_{-\infty}\in\scF_{-\infty}$. Furthermore, to show $X_{-\infty} \leq \E[ X_m \given \scF_{-\infty}]$ for all $m>-\infty$, it suffices to show that for all $A\in\scF_{-\infty}$, we have $\E X_{-\infty}\indicatore{A} \leq \E X_m\indicatore{A}$ (cf.\ \cref{wk12:conditional_rel}).
+	
+	Consider the submartingale $(X_n,\scF_n)_{-\infty\leq n\leq 0}$, which is right-closed. From \cref{wk15:lem:right-closable}, $(X_n\vee a,\scF_n)_{-\infty\leq n\leq 0}$ is uniformly integrable for all $a\in\Real$. Furthermore, $X_n\vee a \to X_{-\infty}\vee a$ a.s.\ as $n\to\infty$. From \cref{wk14:L1_ui}, $X_n\vee a \to X_{-\infty}\vee a$ in $L^1$, hence
+	\begin{align*}
+	\E (X_{-\infty}\vee a)\indicatore{A} = \lim_{n\to-\infty} \E (X_n\vee a)\indicatore{A} \leq \E(X_m\vee a)\indicatore{A},
+	\end{align*}
+	for all $m>-\infty$. The last inequality follows because $\E (X_n\vee a)\indicatore{A} \leq \E(X_m\vee a)\indicatore{A}$ for all $n\leq m$, which in turn is a consequence of the facts that $(X_n\vee a)$ is a submartingale and $A\in\scF_m$. Taking $a\to-\infty$, the MCT gives $\E X_{-\infty}\indicatore{A} \leq \E X_m\indicatore{A}$.
+	
+	\item From Doob's upcrossing inequality, 
+	\begin{align*}
+	\E U_n(a,b) \leq \frac{\E(X_n-a)^+}{b-a}  \leq \frac{|a|+\E X_n^+}{b-a} \leq \frac{|a|+B}{b-a} <\infty.
+	\end{align*}
+	The same argument as in the proof of \cref{wk15:-inftyconv} completes the proof of \cref{wk15:inftyconv}.
+	
+	\item We want to show that for all $m<\infty$ and $A\in\scF_m$, $\E X_m\indicatore{A} \leq \E X_\infty\indicatore{A}$. From \cref{wk14:fnM}, $(X_n\vee a, \scF_n)_{n<\infty}$ is a submartingale for all $a\in\Real$. For $K>0$ and $K>a$, $X_n\vee a > K$ iff $X_n\vee a = X_n^+ >K$. Therefore, since $(X_n^+)$ is uniformly integrable, so is $(X_n\vee a)_{n<\infty}$. As $X_n\vee a \to X_{\infty}\vee a$ a.s.\ as $n\to\infty$, \cref{wk14:L1_ui} again yields that $X_n\vee a \to X_{\infty}\vee a$ in $L^1$, and hence
+	\begin{align*}
+	\E (X_{\infty}\vee a)\indicatore{A} = \lim_{n\to\infty} \E (X_n\vee a)\indicatore{A} \geq \E(X_m\vee a)\indicatore{A},
+	\end{align*}
+	for all $m<\infty$. Taking $a\to-\infty$ and applying the MCT give the desired result. 
+\end{enumerate}
+\end{proof}
+
+\begin{Corollary}[Martingale Convergence Theorem]\label{wk15:Martingale_Convergence}
+Suppose $(X_n,\scF_n)_{n<\infty}$ is a martingale.
+\begin{enumerate}[(i)]
+	\item If $\sup_n \E|X_n| <\infty$ (equivalently, $\sup_n \E X_n^+ <\infty$ or $\sup_n \E X_n^- <\infty$), then $X_n\to X_\infty$ a.s.\ and $\E|X_\infty| < \infty$.
+	\item If $(X_n)_{n<\infty}$ is uniformly integrable, then $(X_n,\scF_n)_{n\leq\infty}$ is a right-closed martingale.
+\end{enumerate}
+\end{Corollary}
+\cref{wk15:Martingale_Convergence} follows from \cref{wk15:Submartingale_Convergence} by simply observing that $X_n$ and $-X_n$ are both submartingales. Furthermore, \cref{wk15:Martingale_Convergence} together with \cref{wk15:lem:right-closable} says that a martingale is right-closable iff it is uniformly integrable. 
+
+\begin{Example}\label{wk15:ex:rw}
+Consider the simple random walk $S_n$ in \cref{wk13:ex:rw} with stopping time $\tau$ when $S_n$ hits the boundaries $A$ or $-B$. Let $M_n=S_{n\wedge\tau}$, which is a bounded martingale. From the Martingale Convergence Theorem (\cref{wk15:Martingale_Convergence}), $M_n$ converges a.s. For $\omega\in\set{\tau=\infty}$, we have $|M_n(\omega)-M_{n+1}(\omega)| = |S_n(\omega)-S_{n+1}(\omega)|=1$, hence $M_n(\omega)$ does not converge. Therefore $\P(\tau=\infty)=0$ and $\P(\tau<\infty)=1$.
+\end{Example}
+
+\begin{Corollary}[Supermartingale Convergence Theorem]\label{wk15:Supermartingale_Convergence}
+Suppose $(X_n,\scF_n)_{n\geq0}$ is a supermartingale. If $\sup_n \E X_n^- <\infty$, then $X_n\to X_\infty$ a.s., and $\E X_\infty \leq \E X_0$.
+\end{Corollary}
+\begin{proof}
+$-X_n$ is submartingale with $\E(-X_n)^+ = \E X_n^-$.
+\end{proof}
+
+
+
+\begin{Theorem}[Levy's Convergence Theorem]\label{wk15:LevyConvergence}
+Given $\E|X|<\infty$ and a filtration $(\scF_n)_{n\geq0}$, let $\scF_\infty=\sigma\parens*{\bigcup_n \scF_n}$. Then $\E[X \given \scF_n] \to \E[X \given \scF_\infty]$ a.s.
+\end{Theorem}
+\begin{proof}
+From \cref{ex:wk12_mex_5}, $X_n = \E[X \given \scF_n]$ is a martingale and $\E|X_n| \leq \E|X| <\infty$. From \cref{wk15:Martingale_Convergence}, $X_\infty = \lim_{n\to\infty} X_n$ exists a.s. We next show that $X_\infty = \E[ X \given \scF_\infty]$. 
+
+Let $A\in \bigcup_n \scF_n$. Then there exists $m$ such that $A\in\scF_m$ and since $X_n$ is a martingale, we have $\E X_n\indicatore{A} = \E X_m\indicatore{A}$ for all $n\geq m$. As $(X_n,\scF_n)$ is right-closable, it is uniformly integrable, and \cref{wk14:L1_ui} gives
+\begin{align*}
+\E X_\infty\indicatore{A} 
+&= \lim_{n\to\infty} \E X_n\indicatore{A} \\
+&= \E X_m\indicatore{A} \\
+&= \E[ {\E[X \given \scF_m]}\indicatore{A}] \\
+&= \E X\indicatore{A}.
+\end{align*}
+Since $\bigcup_n \scF_n$ is an algebra (because $(\scF_n)$ is a filtration), the $\pi$-$\lambda$ theorem completes the proof.
+\end{proof}
+
+\begin{Example}[Improved SLLN]
+For a sequence of r.v.s $(X_n)_{n\geq1}$, let $\scF_n=\sigma(X_1,\ldots,X_n)$, $n\geq1$, be a filtration. Suppose that $\E[ X_n \given \scF_{n-1}]=0$ for all $n\geq1$. In particular, the r.v.s are not necessarily pairwise independent. Then for $n>m$, we have $\E X_nX_m = \E[ {\E[X_n X_m \given \scF_m]} ] = \E[ X_m {\E[X_n \given \scF_m]}] = 0$. Let $S_n=\sum_{k=1}^n X_k$.
+
+Suppose that $(b_n)_{n\geq1}$ is a sequence of positive constants increasing to $\infty$ and $\sum_{n=1}^\infty \dfrac{\E X_n^2}{b_n^2} <\infty$, then $\dfrac{S_n}{b_n} \to 0$ a.s. To see this, let $Y_n = \sum_{k=1}^n \dfrac{X_k}{b_n}$. It is easy to verify that this is a martingale. For $K>0$, we have
+\begin{align*}
+\E |Y_n|\indicator{|Y_n|>K} &\leq \ofrac{K} \E |Y_n|^2 = \ofrac{K} \sum_{k=1}^n \dfrac{\E X_k^2}{b_k^2}.
+\intertext{We then have}
+\sup_n \E |Y_n|\indicator{|Y_n|>K} &\leq \ofrac{K} \sum_{k=1}^\infty \dfrac{\E X_k^2}{b_k^2} \xrightarrow{K\to\infty} 0.
+\end{align*}
+Therefore, $(Y_n)$ is uniformly integrable. From the Martingale Convergence Theorem (\cref{wk15:Martingale_Convergence}), $Y_n$ converges a.s. The generalized Kronecker's lemma (\cref{wk7:Generalized_Kronecker}) then implies that $\dfrac{S_n}{b_n} \to 0$ a.s.
+\end{Example}
+
+\begin{Example}
+Continuing from \cref{wk15:reverse_martingale}, $(Z_{-n}, \scF_{-n})_{-n\leq 1}$ is a right-closed martingale. The Submartingale Convergence Theorem (\cref{wk15:Submartingale_Convergence}) says that $\lim_{n\to\infty} Z_{-n} = Z_{-\infty} \in \scF_{-\infty} = \bigcap_{n\geq1} \scF_{-n}$. Each event in $\scF_{-n}$ is invariant under finite permutations, therefore by the Hewitt-Savage 0-1 Law, it has probability 0 or 1. Hence, $Z_{-\infty}$ is a constant a.s. But $\E Z_{-n} = \E X_1$ for all $n\geq1$, so $Z_{-\infty} = \E X_1$ a.s., i.e., $\dfrac{S_n}{n} \to \E X_1$ a.s., which is Kolmogorov's SLLN.
+\end{Example}
+
+\begin{Example}[Levy's 0-1 Law]
+From \cref{wk15:LevyConvergence}, if $\scF_n \uparrow \scF_\infty$, then for any $A\in\scF_\infty$, we have $\E[\indicatore{A} \given \scF_n] \to \indicatore{A}$ a.s. The famous probabilist K. L. Chung once commented that this result ``is obvious or incredible''. 
+\begin{enumerate}
+	\item It is obvious: $\E[\indicatore{A} \given \scF_\infty] = \indicatore{A}$.
+	\item It is incredible: Consider $X_i$, $i\geq1$, independent with $\scF_n=\sigma(X_1,\ldots,X_n) \uparrow \scF_\infty$. An event $A \in \calT = \bigcap_{n\geq1} \sigma(X_n,X_{n+1},\ldots)$ the tail $\sigma$-algebra is independent of $\scF_n$ for all $n\geq1$ (recall the grouping lemma (\cref{wk8:lemma:Grouping Lemma})). Therefore, $\P(A) = \E[\indicatore{A} \given \scF_n] \xrightarrow{n\to\infty} \indicatore{A}\in\set{0,1}$ a.s.\ from Levy's 0-1 Law, which recovers Kolmogorov's 0-1 Law!
+\end{enumerate}
+
+\end{Example}
+
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}
+
+

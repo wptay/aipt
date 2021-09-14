@@ -1,0 +1,301 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+\externaldocument{1_BasicRealAnalysis_I}
+\externaldocument{3_ProbabilitySpaces}
+\externaldocument{4_Random_Variables}
+\externaldocument{5_Convergence_and_Independence}
+\externaldocument{6_Borel_Cantelli_Lemmas}
+\externaldocument{8_Glivenko-Cantelli_and_0-1_Laws}
+\externaldocument{9_Weak_Convergence}
+
+\begin{document}
+
+\handout{10}{Characteristic Functions}
+
+\section{Characteristic Functions}
+
+Given a random variable $X: \Omega \mapsto \Real$, the characteristic function of $X$ is $\varphi : \Real\mapsto\bbC$ given by
+\begin{align*}
+\varphi(t)&=\E [e^{itX}],\\
+&=\E[\cos (tX)]+\iu\E [\sin (tX)],
+\end{align*}
+where $\iu=\sqrt{-1}$. This characteristic function is always well defined as $\cos$ and $\sin$ are bounded and integrable, even if $\E X$ does not exist. If $X$ has pdf $f\in L^1(\Real)$, then $\varphi(t)=\int e^{itx} f(x) \ud x$, which is essentially the Fourier transform of $f$. 
+
+Some simple properties:
+\begin{align*}
+\varphi(0)	& =1,\\
+\varphi(-t)	& =\overline{\varphi(t)},\\
+|\varphi(t)|	& \leq 1,\\
+|\varphi(t+h)-\varphi(t)| 	& \leq \E|e^{ihX}-1|.
+\end{align*}
+Since $e^{ihX}-1$ does not depend on $t$, $\varphi$ is uniformly continuous in $\Real$. 
+
+\begin{Example}
+The characteristic function of the Gaussian distribution $N(\mu,\sigma^2)$ is
+\begin{align*}
+\varphi(t)=e^{i\mu t-\frac{\sigma^2t^2}{2}}.
+\end{align*}
+In particular, when $\mu=0,\sigma^2=1$,
+\begin{align*}
+\varphi(t)&=e^{-\frac{t^2}{2}}.
+\end{align*}
+\end{Example}
+
+\begin{Lemma}\label{wk10:Lemma1}
+If $\E|X|^r< \infty$ for integer $r\geq1$, then $\varphi(t)\in C^r(\Real)$ and $\varphi\tc{j}(t)=\E [(\iu X)^j e^{\iu tX}]$ for $j\leq r$.
+\end{Lemma}
+\begin{proof}
+We start with a simple fact. For $a\leq b$, we have
+\begin{align*}
+|e^{\iu a}-e^{\iu b}| 	
+& = \abs*{\int _a^b \iu e^{\iu t} \ud t}\\
+& \leq \int _a^b |\iu e^{\iu t}| \ud t\\
+& = |b-a|.
+\end{align*}
+The proof of \cref{wk10:Lemma1} is by induction on $r$. For $r=1$, we have $\abs*{\dfrac{e^{itX}-e^{isX}}{t-s}}\leq |X|$. Since $\E |X| < \infty$, from the DCT (\cref{Dominated Convergence Theorem}), we obtain 
+\begin{align*}
+\varphi'(t)	& =\lim_{s\to t}\E[\frac{e^{\iu tX}-e^{\iu sX}}{t-s}] = \E[\iu Xe^{\iu tX}]\in C(\Real),
+\end{align*}
+where the set inclusion follows from a further application of the DCT. Therefore, $\varphi \in C^1(\Real)$.
+
+Assume that the lemma holds for $r$. Then for $r+1$, by assumption, we have
+\begin{align*}
+&\varphi\tc{r}(t) = \E [(\iu X)^r e^{\iu tX}]\in C^r(\Real),\\
+&\abs*{\frac{(\iu X)^r e^{\iu tX}-(\iu X)^r e^{\iu sX}}{t-s}} \leq |X|^{r+1},
+\end{align*}
+and from the DCT, we have
+\begin{align*}
+\varphi\tc{r+1}(t)	& =\lim_{s\to t}\E[\frac{(\iu X)^r e^{\iu tX}-(\iu X)^r e^{\iu sX}}{t-s}] = \E[(\iu X)^{(r+1)}e^{\iu tX}]\in C(\Real),
+\end{align*}
+and the proof is complete.
+\end{proof}
+
+Suppose $X\independent Y$. We then have $\varphi_{X+Y}(t)=\varphi_X(t)\varphi_Y(t)$. We define 
+\begin{align*}
+\P_X *\P_Y(A)	& \triangleq \P_{X+Y}(A) \\
+& = \E[\indicator{X+Y\in A} (\omega)]\\
+& \eqa{\text{Fubini}} \int \int \indicator{x+y\in A} \ud \P_X(x) \ud \P_Y(y)\\
+& = \int \int \indicator{x\in A-y} \ud \P_X(x) \ud \P_Y(y)\\
+& = \int \P_X(A-y)\ud \P_Y(y),
+\end{align*}
+where $A-y = \set{a-y \given a\in A}$. If $X$ has pdf $p_X$, then
+\begin{align*}
+\P_X *\P_Y(A)	
+& = \int \int \indicator{x+y\in A} p_X(x) \ud x \ud \P_Y(y) \\
+& = \int\int \indicator{z\in A} p_X(z-y) \ud z \ud \P_Y(y) \\
+& = \int\int_A p_X(z-y) \ud z \ud \P_Y(y) \\
+& \eqa{\text{Fubini}} \int_A\int p_X(z-y) \ud \P_Y(y) \ud z,
+\end{align*}
+hence the pdf of $\P_X *\P_Y$ is $\int p_X(z-y) \ud \P_Y(y)$, i.e., $\P_X *\P_Y \ll$ Lebesgue measure.
+
+If $X$ and $Y$ have pdfs $p_X$ and $p_Y$ respectively, then the pdf of $\P_X *\P_Y$ is given by 
+\begin{align*}
+p_{X+Y}(z)	& = \int p_X(z-y)	p_Y(y) \ud y,
+\end{align*}
+which is the convolution of the pdfs $p_X$ and $p_Y$. 
+
+A special case is
+\begin{align*}
+\P^{\sigma}= \P * \calN (0,\sigma^2)\ll \text{Lebesgue measure}, 
+\end{align*}
+therefore, its pdf exists and it can be shown to be given by 
+\begin{align}\label{wk10:psigma}
+p^{\sigma}(x)=\frac{1}{2\pi}\int \varphi(t) e^{-\iu tx-\frac{\sigma^2}{2}t^2} \ud t,
+\end{align}
+where $\varphi$ is the characteristic function of $\P$.
+
+\begin{Lemma}[Uniqueness]\label{wk10:Lemma2}
+If $\varphi_X(t)=\varphi_Y(t)$, then $\P_X =\P_Y$.
+\end{Lemma}
+\begin{proof}
+Assume $\varphi_X(t)=\varphi_Y(t)$, then from \cref{wk10:psigma}, we have $\P_X^{\sigma}=\P_Y^{\sigma}$. We have
+\begin{align*}
+X(\omega)+\sigma Z(\omega)\xrightarrow{\sigma\to 0}X(\omega)\ \as,\\
+Y(\omega)+\sigma Z(\omega)\xrightarrow{\sigma\to 0}Y(\omega)\ \as,
+\end{align*}
+and \cref{wk9:lem:convpd} yields
+\begin{align*}
+\P^{\sigma}_{X}\convd \P_X,\
+\P^{\sigma}_{Y}\convd \P_Y.
+\end{align*}
+Therefore, $\P_X=\P_Y$.
+\end{proof}
+%
+\begin{Lemma}[Fourier Inversion]\label{wk10:Lemma3}
+Suppose that $\varphi(t)$ is the characteristic function of $\P$. If $\int |\varphi(t)| \ud t <\infty$, then $\P$ has pdf 
+\begin{align*}
+p(x)=\frac{1}{2\pi}\int \varphi(t) e^{-\iu tx} \ud t.
+\end{align*}
+\end{Lemma}
+\begin{proof}
+We note that
+\begin{align*}
+&\varphi(t) e^{-\iu tx-\frac{\sigma^2}{2}t^2} \xrightarrow{\sigma \to 0} \varphi(t)e^{-\iu tx}, \text{ and}\\
+&\abs*{\varphi(t) e^{-\iu tx-\frac{\sigma^2}{2}t^2}}	\leq |\varphi(t)|.\\
+\end{align*}
+By the DCT (\cref{Dominated Convergence Theorem}), we then have
+\begin{align*}
+p^{\sigma}(x)\xrightarrow{\sigma \to 0} p(x).
+\end{align*}
+Since $\P^{\sigma}\convd \P$ and $p^\sigma$ is the pdf of $\P^\sigma$, we have 
+\begin{align}\label{p1}
+\int g(x) p^{\sigma}(x)\ud x \xrightarrow{\sigma \to 0} \int g(x) \ud\P(x),\ \forall g \in C_b(\Real).
+\end{align}
+Now consider a $g\in C_c(\Real)$.\footnote{$C_c(\Real)$ is the set of continuous functions with compact support.} Since $|p^{\sigma}(x)| \leq  \frac{1}{2\pi} \int |\varphi(t)|\ud t < \infty $, from the DCT (\cref{Dominated Convergence Theorem}), we obtain
+\begin{align*}
+\int g(x) p^{\sigma}(x)\ud x 	&\xrightarrow{\sigma \to 0} \int g(x) p(x)\ud x.
+\end{align*}
+Together with \cref{p1}, we have $\int g(x) \ud\P(x) = \int g(x)p(x)\ud x$ and
+\begin{align*}
+\int_A \ud \P(x)=\int_A p(x) \ud x,
+\end{align*}
+for all compact sets $A$. From Ulam's Theorem (\cref{wk3:thm:Ulam}), $p(x)$ is the pdf of $\P$.
+\end{proof}
+
+We want to find out under what condition convergence of a sequence of characteristic functions $\varphi_n(t)$ implies weak convergence of the corresponding probability distributions $\P_n$. The following example shows that this implication is not always true.
+
+\begin{Example}\label{wk10:example1}
+The distribution $\calN(0,n)$ has characteristic function $\varphi_n(t)= e^{-\frac{n t^2}{2}}\xrightarrow{n\to \infty}0, \ \forall t \neq 0$ and $\varphi_n(0)=1,\ \forall n$. Therefore $\varphi_n(t)$ converges. But for all $x\in\Real$,
+\begin{align*}
+\P_n((-\infty,x))=\frac{1}{2}\parens*{1+\erf*{\frac{x}{\sqrt{2n}}}}\to \frac{1}{2},
+\end{align*} 
+when $n\to \infty$, which implies that this sequence of distributions does not converge weakly.
+\end{Example} 
+
+On the other hand, we have the following converse. 
+\begin{Lemma}\label{wk10:Lemma4}
+If $\P_n\convd \P$ then $ \varphi_n(t) \to \varphi(t),\ \forall t \in \Real$. 
+\end{Lemma}
+\begin{proof}
+Obvious because $\varphi_n(t)=\E[e^{\iu tX_n}]=\E [\cos t X_n]+\iu\E [\sin t X_n]$, $\cos(t\cdot)$ and $\sin(t\cdot)$ are bounded continuous functions, and $X_n \convd X$. 
+\end{proof}
+ 
+\begin{Lemma}\label{wk10:lem:uniformly_tight_and_varphi_conv_implies_convd}
+Suppose that $(\P_n)_{n\geq 1}$ is uniformly tight on $\Real$ and $\varphi_n(t)=\int e^{\iu tx} \ud \P_n(x) \xrightarrow{n \to \infty} \varphi(t)$. Then $\varphi(t)=\int e^{\iu tx}\ud \P(x)$ for some probability distribution $\P$ and $\P_n\convd\P$. 
+\end{Lemma}
+\begin{proof}
+From Helly's selection theorem (\cref{wk9:thm:Helly}), for every subsequence $N=(n(k))_{k\geq1}$, there exists a subsequence $(n(k(r)))_{r\geq1}$ such that $\P_{n(k(r))} \convd \P_N$ for some $\P_N$ as $r\to\infty$. Therefore, since $e^{\iu tx}$ is bounded and continuous, we have from \cref{wk9:def:weak convergence} that
+\begin{align*}
+\int e^{\iu tx} \ud \P_{n(k(r))}\to \int e^{\iu tx} \ud \P_N.
+\end{align*}
+From the lemma assumption, the L.H.S. converges to $\varphi(t)$, therefore $\int e^{\iu tx} \ud \P_N =\varphi(t)$. By \cref{wk10:Lemma2}, $\P_N = \P$ is the same for all choices of $N=(n(k))_{k\geq1}$. The result then follows from \cref{wk9:lemma:subseq_convd_implies_seq_convd}.
+\end{proof}
+
+\begin{Theorem}[Levy's Continuity Theorem]\label{wk10:thm:Levy's Continuity Theorem}
+Suppose $\P_n$ has characteristic function $\varphi_n(t)\to \varphi(t)$, and $\varphi(t)$ is continuous at $t=0$. Then there exists $\P$ s.t.\ $\varphi(t)$ is the characteristic function of $\P$ and $\P_n\convd \P$.
+\end{Theorem}
+\begin{proof}
+From \cref{wk10:lem:uniformly_tight_and_varphi_conv_implies_convd}, it suffices to show that $(\P_n)$ is uniformly tight. Since $\varphi(0) =\lim_{n\to \infty} \varphi_n(0)=1$, $\forall \epsilon >0,\ \exists \delta>0 \ s.t.\ |\varphi(t)-1|<\epsilon$ if $|t|\leq\delta$. Letting $\Re(\cdot)$ denote the real part, we then have
+\begin{align}
+& \lim_{n\to \infty} \frac{1}{\delta} \int _{0}^{\delta} (1-\Re(\varphi_n(t))) \ud t\nn
+& \overset{\text{DCT}}{=} \frac{1}{\delta} \int _{0}^{\delta} (1-\Re(\varphi(t))) \ud t\nn
+& \leq \frac{1}{\delta} \int _{0}^{\delta} |1-\varphi(t)| \ud t\nn
+& <\epsilon.\label{limRe}
+\end{align}
+For each $n\geq1$, we have
+\begin{align*}
+\frac{1}{\delta} \int _{0}^{\delta} (1-\Re (\varphi_n(t))) \ud t 	
+&=\frac{1}{\delta} \int _{0}^{\delta} \int_{\Real} (1-\cos(tx)) \ud \P_n(x) \ud t\\
+&\overset{\text{Fubini}}{=}  \frac{1}{\delta}  \int_{\Real} \int _{0}^{\delta} (1-\cos(tx)) \ud t \ud \P_n(x) \\
+& = \int _{\Real}\parens*{1-\frac{\sin (\delta x)}{\delta x}} \ud \P_n(x)\\
+& \geq \int_{|\delta x|\geq \pi}\parens*{1-\frac{\sin (\delta x)}{\delta x}} \ud \P_n(x)\\
+& \geq \frac{1}{2} \P{n}(\set*{x\given |x| \geq \frac{\pi}{\delta}}),
+\end{align*}
+since $\operatorname{sinc} y = \frac{\sin \pi y}{\pi y} \leq 1$ for $|y| \leq 1$ and $\leq 1/2$ for $|y| \geq 1$. From \cref{limRe}, for all $n$ sufficiently large, we have
+\begin{align*}
+& \P{n}(\set*{x\given |x| \geq \frac{\pi}{\delta}}) \leq 4 \epsilon.
+\end{align*}
+Therefore $(\P_n)$ is uniformly tight.
+\end{proof}
+
+An application of \cref{wk10:thm:Levy's Continuity Theorem} is to show that if $\P_n\convd\P,\ \Rat_n\convd\Rat$, then $\P_n \times \Rat_n \convd \P \times \Rat$. For $t=(t_1,t_2)$ and $x=(x_1,x_2)$, we have
+\begin{align*}
+& \int e^{\iu \ip{t}{x}} \ud \P_n \times \Rat_n(x) \\
+& \eqa{\text{Fubini}} \int e^{\iu t_1x_1} \ud \P_n(x_1) \int e^{\iu t_2x_2} \ud \Rat_n(x_2) \\
+& \to \int e^{\iu t_1x_1} \ud \P(x_1) \int e^{\iu t_2x_2} \ud \Rat(x_2) \text{ since $\P_n\convd\P,\ \Rat_n\convd\Rat$}\\
+& \eqa{\text{Fubini}} \int e^{\iu \ip{t}{x}} \ud \P \times \Rat(x), 
+\end{align*}
+which is the characteristic function of $\P \times \Rat$ and is thus continuous at 0. From \cref{wk10:thm:Levy's Continuity Theorem}, we then have
+\begin{align*}
+\P_n \times \Rat_n \convd \P \times \Rat.
+\end{align*}
+
+\begin{Exercise}\label{wk10:ex:P*Q}
+Show that if $\P_n\convd\P,\ \Rat_n\convd\Rat$, then $\P_n * \Rat_n \convd \P * \Rat$. (Hint: Let $g(x,y)=x+y$ and consider $\P_n\times\Rat_n \circ g^{-1}$.)
+\end{Exercise}
+
+\section{Central Limit Theorem for I.I.D. Sequences}\label{wk10:sec:CLT_IID}
+
+Suppose that $f:\Real \mapsto \Real$ is $k$-differentiable at $a \in \Real$. Then the Taylor series of $f$ evaluated at $a$ is given by 
+\begin{align*}
+f(x)=f(a)+f'(a)(x-a)+\frac{f''(a)}{2!}(x-a)^2+\cdots+\frac{f^{(k)}(a)}{k!}(x-a)^k+o(|x-a|^k).
+\end{align*}
+Furthermore, if $f^{(k+1)}$ exists and is continuous in an open interval $I$ containing $a$, then 
+\begin{align*}
+o(|x-a|^k) \leq \sup_I {\abs*{f^{(k+1)}}\frac{|x-a|^{k+1}}{(k+1)!}}.
+\end{align*}
+
+\begin{Theorem}[CLT for i.i.d. sequences]\label{wk10:thm:CLT_IID}
+Consider i.i.d.\ random variables $X_1,X_2,\ldots$, with $\E X_i= \mu$ and $\var X_i=\sigma^2<\infty$. Let $S_n= \sum_{i=1}^n X_i$. Then  
+\begin{align}\label{wk10:eq:CLT}
+\frac{S_n-n\mu}{\sqrt{n\sigma^2}} \convd \calN(0,1).
+\end{align}
+\end{Theorem}
+\begin{proof}
+Without loss of generality, we assume that $\mu=0,\sigma=1$. Let
+\begin{align*}
+\varphi_n(t)
+&=\E[\exp\parens*{\iu t\frac{S_n}{\sqrt n}}]	\\
+& = \prod_{j=1}^n \E[\exp\parens*{\iu t\frac{X_j}{\sqrt n}}]\\
+& =\parens*{\E e^{\iu t\frac{X_1}{\sqrt n}}}^n\\					
+& = \varphi_1\parens*{\frac t {\sqrt n}}^n.
+\end{align*}
+Since $\E X_1^2<\infty$ we have $\varphi_1(t) \in C^2(\Real)$ from \cref{wk10:Lemma1}, and its Taylor series is
+\begin{align*}
+\varphi_1(t)=\varphi_1(0)+\varphi_1'(0) t +\frac{\varphi''_1(0)}{2!}+o(t^2). 
+\end{align*}
+Since $\varphi_1(0)=1$, $\varphi'_1(0)= \E[\iu X_1 e^{i 0 X_1}]=\iu\E X_1=0$, $\varphi''_1(0)= \E[(\iu X_1)^2]=-1$, we obtain
+\begin{align*}
+\varphi_1(t)=1-\frac{t^2}{2}+o(t^2).
+\end{align*}
+Therefore,
+\begin{align*}
+\varphi_n(t)& = \varphi_1\parens*{\frac t {\sqrt n}}^n\\
+& = \parens*{1-\frac{t^2}{2n}+o(t^2/n)}^n \xrightarrow{n\to \infty} e^{-\frac{t^2}{2}}, 
+\end{align*}
+the characteristic function of $\calN(0,1)$. From \cref{wk10:thm:Levy's Continuity Theorem}, we then have
+\begin{align*}
+\frac{S_n}{\sqrt n} \convd \calN(0,1).
+\end{align*}
+\end{proof}
+
+\section{Stable Distributions}
+
+The above proof of the CLT does not give us much intuition of why the amazing result that is the CLT holds. Some intuition can be had from the following observation: If $X \sim \calN(\mu_1,\sigma_1^2)$ and $Y \sim \calN(\mu_2,\sigma_2^2)$ are independent, then $X+Y \sim \calN(\mu_1+\mu_2,\sigma_1^2+\sigma_2^2)$. By induction, if $X_i\sim\calN(0,1)$ for $i=1,\ldots,n$, we have $\frac{S_n}{\sqrt n} \sim \calN(0,1)$. Therefore, the normal distribution has a ``stability'' property. 
+
+In general, suppose $X \sim \P$ and $X_1,X_2,\ldots$ are i.i.d.\ copies of $X$. If 
+\begin{align*}
+X\overset{d}{=} \frac{\sum_{j=1}^k X_j-a_k}{b_k}
+\end{align*} 
+for some sequences of constants $(a_k)$ and $(b_k)$, then we say that $\P$ is a stable distribution or stable law.
+
+It turns out that all stable laws have characteristic functions given by
+\begin{align*}
+\varphi(t)= \exp\parens*{\iu tc-b|t|^{\alpha}(1+\iu\kappa\sgn(t)\omega_{\alpha}(t))},
+\end{align*}
+where $-1\leq\kappa\leq 1$, $0<\alpha\leq2$ and 
+\begin{align*}
+\omega_{\alpha}(t)=
+\begin{cases}
+\tan(\pi \alpha/2), &\ \text{if $\alpha \neq 1$},\\
+\frac{2}{\pi}\log |t|, &\ \text{if $\alpha =1$}.
+\end{cases}
+\end{align*}
+In particular, if $\alpha = 2$, $\varphi(t)=\exp(\iu tc-bt^2) \sim \calN(c,2b)$, and this is the only stable law with finite variance. Therefore, for \cref{wk10:eq:CLT} to converge in distribution, it \textbf{must} converge to the normal distribution. Of course, this does not explain why \cref{wk10:eq:CLT} must converge in distribution in the first place.
+
+%
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}

@@ -1,0 +1,243 @@
+\documentclass[12pt]{article}
+
+\input{prob_preamble.tex}
+
+
+\begin{document}
+
+\handout{1}{Basics of Real Analysis - I}
+
+\section{Introduction}
+This basic real analysis introduction covers topics in sequences, compact spaces and continuity. Recommended textbook is ``Principles of Mathematical Analysis'' by Walter Rudin. 
+
+\section{Sequences}
+Inner product space $\subset$ normed space $\subset$ metric space $\subset$ topological space. Working with metric spaces suffices for our purposes.
+
+\begin{Definition}
+A metric space is an ordered pair $\left(\calX, d\right)$ where $\calX$ is a set and $d$ is a metric on $\calX$, such that $\forall x, y, z \in \calX$, the following holds:
+\begin{enumerate}[1)]
+\item $d(x,y) \geq 0$, where equality holds iff $x=y$.
+\item $d(x,y)=d(y,x)$.
+\item Triangle inequality: $d(x,y) \leq d(x,z) + d(y,z)$.
+\end{enumerate}
+\end{Definition}
+
+\begin{Example} Examples of metric space:
+\begin{itemize} 
+\item $\left(\bbR, |x-y|\right)$ (normed space)
+\item $\left(\bbR^k, \norm{x-y}_p\right)$, where $p \geq 1$ (normed space)
+\item $\ell^p(\Real) = \set*{ x = (x_n)_{n\geq1} \given \norm{x}_p=\parens*{\sum_{n\geq1} |x_n|^p}^{1/p} < \infty}$ (normed space)
+\item $\parens{\calX, d}$, where $d(x,y)=0$ if $x=y$ and $d(x,y)=1$ otherwise.
+\end{itemize}
+\end{Example}
+
+We write $(x_n)$ or $(x_n)_{n\geq1}$ as shorthand for the sequence $x_1, x_2, \ldots$.
+
+\begin{Definition}
+For $(x_n) \subset \calX$, we say that $x_n \to x$ as $n\to\infty$ or $\lim_{n\to\infty} x_n=x$ if 
+\begin{align*}
+\forall \epsilon>0,\ \exists N\ \st d(x_n, x) < \epsilon,\ \forall n \geq N.
+\end{align*}
+\end{Definition}
+
+\begin{Definition}
+We say $x_n$ diverges to $\infty$ if there exists $x_0\in\calX$ and
+\begin{align*}
+\forall K\geq 0,\ \exists N\ \st d(x_n,x_0) \geq K,\ \forall n\geq N.
+\end{align*}
+\end{Definition}
+
+We define extended real numbers $\overline{\Real} = \bbR \cup \{-\infty, \infty\}.$ For $x \in \bbR$, we have:
+\begin{enumerate}[1)]
+\item $x + \infty = \infty$
+\item $x - \infty = -\infty$
+\item $x \cdot \pm\infty = \pm\infty, \forall x > 0$
+\item $0 \cdot \pm\infty = 0$ (by convention)
+\end{enumerate}
+
+The following lemmas are based on $(\Real, \abs{\cdot})$ but most can be generalized to $(\calX,d)$. 
+
+\begin{Lemma}\label{wk1:unique}
+If $(a_n)$ converges, then its limit is unique.
+\end{Lemma}
+
+\begin{proof}
+Supposing $a_n \to a$ and $a_n \to a^\prime$, we have
+\begin{align*}
+\forall \epsilon > 0,\ \exists N\ \st &|a_n - a| < \epsilon \text{ and } |a_n - a^\prime| < \epsilon,\ \forall n \geq N.
+\end{align*}
+By the triangle inequality, we obtain:
+\begin{align*}
+|a - a^\prime| \leq |a_n - a| + |a_n - a^\prime| < 2\epsilon.
+\end{align*}
+Since $\epsilon$ is arbitrary, $a = a^\prime$. 
+\end{proof}
+
+\begin{Lemma}\label{lem:conv_bdd}
+If $(a_n)$ converges, $|a_n| < \infty$.
+\end{Lemma}
+
+\begin{proof}
+Supposing $a_n \to a$, $\exists N$, $\st |a_n - a| < 1$, $\forall n \geq N$. Then we obtain
+\begin{align*}
+|a_n| &\leq |a| + 1, \forall\ n \geq N, \\
+\end{align*}
+and
+\begin{align*}
+|a_n| &\leq \max \{a_1, \ldots, a_{N-1}, |a|+1\} < \infty.
+\end{align*} 
+\end{proof}
+
+\begin{Lemma}\label{lem:inc_bdd}
+If $(a_n)$ is increasing (i.e., $a_{n+1} \geq a_n$ for all $n\geq1$) and is bounded above, then $(a_n)$ converges.
+\end{Lemma}
+\begin{proof}
+To prove the lemma, we need some definitions. We define $\sup{A}$ = least upper bound (LUB) of $A$ if $ A\neq \emptyset$ and $A \subset\Real$, i.e., 
+\begin{enumerate}[1)]
+\item $\forall a \in A$, $a \leq \sup{A}$.
+\item if $\gamma < \sup{A}$, $\exists a \in A$, $\st \gamma < a$. \label{item_supA}
+\end{enumerate}
+For the definition to be well-defined, we need the \rm{LUB/Completeness axiom}: $\sup{A}$ exists in $\Real$ for all $A\ne\emptyset$ bounded above. (Note that this axiom does not hold for $\bbQ$.) If $A$ is not bounded above, we set $\sup A = \infty$. From \cref{item_supA}, we obtain a useful property:
+\begin{align*}
+\forall \epsilon > 0,\ \exists a \in A,\ \st \sup{A} - \epsilon < a.
+\end{align*}
+The greatest lower bound of $A$ is written as $\inf A$.
+
+Returning to the proof of the lemma, let $a = \sup{a_n} < \infty$ since $(a_n)$ is bounded. We have 
+\begin{align*}
+&\forall \epsilon > 0,\ \exists N,\ \st a - \epsilon \leq a_N \leq a_n \leq a,\ \forall n \geq N. \\
+&\implies a_n \to a.
+\end{align*}
+\end{proof}
+Applying \cref{lem:inc_bdd} to the negative of a sequence, we also conclude that any decreasing sequence that is bounded below converges.
+
+\begin{Remark}\
+\begin{enumerate}
+	\item If $a_n\in \overline{\Real}_+$ and is increasing, then $\lim_{n\to\infty} a_n$ exists (maybe $\infty$).
+	\item If $a_n\in\Real_+$, then from \cref{lem:inc_bdd}, $\sum_{k=1}^\infty a_k \triangleq \lim_{n\to\infty} \sum_{k=1}^n a_k$ exists. 
+\end{enumerate}
+\end{Remark}
+
+\begin{Definition}
+A subsequence of $(a_n)$ is a sequence $(a_{n_i})$, where $n_1 < n_2 < \ldots$ is an increasing sequence of indices.
+\end{Definition}
+
+\begin{Lemma}\label{wk1:subseq}
+If $a_n \to a \iff a_{n_i} \to a$, for all subsequences $(a_{n_i})$.
+\end{Lemma}
+\begin{proof}
+The direction ``$\Leftarrow$'' is obvious. To prove the other direction, we have $\forall \epsilon > 0$, $\exists N$ $\st |a_n - a| < \epsilon,\ \forall n \geq N$. Therefore, $\forall n_i \geq N$, $|a_{n_i} - a| < \epsilon$.
+\end{proof}
+
+\begin{Lemma}\label{lem:mono_sub} 
+Every sequence $(a_n)$ in $\bbR$ has a monotone subsequence.
+\end{Lemma}
+\begin{proof}
+Suppose there are no increasing subsequences. Then, $\exists n_1$, $\st a_{n_1} \geq a_n$, $\forall n \geq n_1$. Similarly, $\exists n_2 > n_1$, $\st a_{n_2} \geq a_n$, $\forall n \geq n_2$, and so on. This constructs a decreasing subsequence $a_{n_1} \geq a_{n_2} \geq \ldots$. 
+\end{proof}
+
+\begin{Lemma}\label{lem:bdd_conv}
+Every bounded sequence in $\bbR$ contains a convergent subsequence.
+\end{Lemma}
+\begin{proof}
+From \cref{lem:mono_sub}, a bounded sequence has a monotone subsequence, which converges from \cref{lem:inc_bdd}.
+\end{proof}
+
+Let $S =$ set of subsequence limits of $(a_n) \subset \overline{\Real}$. We define $\limsup_{n \to \infty} {a_n}=\sup{S}$, and $\liminf_{n \to \infty}{a_n}=\inf{S}$. We have
+\begin{align*}
+\forall \epsilon > 0,\ \exists s \in S,\ \st \sup{S} - \epsilon/2 \leq s \leq \sup{S}.
+\end{align*}
+Let $a_{n_i} \to s$ (can you see why such a subsequence must exist?) so that
+\begin{align*}
+\forall \epsilon > 0,\ \exists N,\ \st |a_{n_i} - s| < \epsilon/2,\ \forall n_i > N.
+\end{align*}
+Therefore,
+\begin{align*}
+&|a_{n_i} - \sup{S}| \leq |a_{n_i} - s| + |s - \sup{S}| < \epsilon,
+\end{align*}
+which implies that $\sup{S} \in S$ and $\sup{S} = \max{S}$, i.e., $\limsup_{n\to\infty} a_n$ exists. Similarly, we have $\inf{S} = \min{S}$.
+
+\begin{Lemma}
+Suppose $s = \limsup_{n \to \infty}{a_n} > -\infty$. Then $\forall \epsilon > 0$, $\exists N$ $\st a_n \leq s + \epsilon$, $\forall n \geq N$.
+\end{Lemma}
+\begin{proof}
+If $s = \infty$, the lemma obviously holds. Suppose $s < \infty$. We prove by contradiction. Suppose $\exists \epsilon > 0$ and subsequence $(a_{n_i})$ $\st a_{n_i} > s + \epsilon$. Since $s < \infty$, $(a_{n_i})$ is bounded. Then from \cref{lem:bdd_conv}, $\exists \text{subsubsequence } (a_{n_i'})$, $\st a_{n_i'} \to a' \geq s + \epsilon > s$, a contradiction to the definition of $s$.
+\end{proof}
+
+
+\begin{Lemma}\label{wk1:limsup_infsup}
+$\displaystyle\limsup_{n \to \infty} a_n = \inf_{n\geq1} \sup_{m\geq n}{a_m}$ and $\displaystyle\liminf_{n \to \infty}a_n = \sup_{n\geq1} \inf_{m\geq n}{a_m}$.
+\end{Lemma}
+\begin{proof}
+If $\limsup_{n \to \infty} a_n = \pm \infty $, then the result clearly holds. Suppose $-\infty < \limsup_{n \to \infty} a_n = \sup S < \infty$, where $S$ is the set of subsequential limits.  
+
+For any $\epsilon > 0$, there exists a subsequence $(a_{n_i})$ $\st \sup{S} - \epsilon \leq a_{n_i}$. Then,
+\begin{align*}
+\sup{S} - \epsilon &\leq \sup_{m \geq n}{a_m},\ \forall n \geq n_1. 
+\intertext{Letting $n\to\infty$, we have}
+\sup{S} - \epsilon &\leq \lim_{n \to \infty}\sup_{m \geq n}{a_m} = \inf_{n\geq1} \sup_{m\geq n}{a_m},
+\end{align*}
+since $\sup_{m \geq n}{a_m}$ is a decreasing sequence in $n$. As $\epsilon$ is arbitrary, we have
+\begin{align*}
+\sup S \leq \inf_{n\geq1} \sup_{m\geq n}{a_m}.
+\end{align*}
+On the other hand, for each $n\geq 1$, $\exists a_{m_n} \geq \sup_{m \geq n}{a_m} - 1/n$. Then we have
+\begin{align*}
+\sup{S} \geq \lim_{n \to \infty} a_{m_n} \geq \inf_{n \geq 1} \sup_{m \geq n}{a_m}. 
+\end{align*}
+The other claim is proved similarly and the proof is now complete.
+\end{proof}
+
+
+\section{Cauchy Sequences}
+\begin{Definition}
+A sequence $(a_n)$ is a Cauchy sequence if $\forall \epsilon > 0$, $\exists N$ $\st d(a_n, a_m) < \epsilon$, $\forall n,m \geq N$.
+\end{Definition}
+
+\begin{Lemma}
+If $(a_n)$ converges, then it is Cauchy.
+\end{Lemma}
+\begin{proof}
+Suppose $a_n\to a$. Then $\forall \epsilon >0$, $\exists N\ \st d(a_n,a) < \epsilon/2\ \forall n\geq N$. Then $\forall n,m \geq N$, we have
+\begin{align*}
+d(a_n, a_m) \leq d(a_n,a) + d(a_m,a) < \epsilon.
+\end{align*}
+\end{proof}
+
+\begin{Definition}
+A metric space $(\calX, d)$ in which every Cauchy sequence converges in $\calX$ is complete.
+\end{Definition}
+
+Example of an incomplete space is $\Rat$, the set of rational numbers: for every irrational number, one can construct a sequence of rational numbers that converges to it.
+
+
+\begin{Theorem}\label{wk1:Rcomplete}
+$\Real^k$ is complete.
+\end{Theorem}
+\begin{proof}
+WLOG, we prove for $\Real$. We first show 2 lemmas.
+
+\begin{Lemma}\label{lem:Cauchy_bdd}
+A Cauchy sequence is bounded.
+\end{Lemma}
+\begin{proof}
+Similar to \cref{lem:conv_bdd}.
+\end{proof}
+
+\begin{Lemma}\label{lem:Cauchy_sub}
+If $(a_n)$ is Cauchy and there is a subsequence $a_{n_i} \to a$, then $a_n \to a$.
+\end{Lemma}
+\begin{proof}
+For any $\epsilon > 0$, $\exists N$ such that $\forall n, n_i \geq N$,
+\begin{align*}
+d(a_n, a) \leq d(a_n, a_{n_i}) + d(a_{n_i},a) \leq \epsilon.
+\end{align*}
+\end{proof}
+
+We now return to the proof of \cref{wk1:Rcomplete}. Let $(a_n)$ be a Cauchy sequence in $\Real$. Then $(a_n)$ is bounded from \cref{lem:Cauchy_bdd}. From \cref{lem:bdd_conv}, there exists a convergent subsequence. \Cref{lem:Cauchy_sub} then implies $(a_n)$ converges and the proof is complete.
+\end{proof}
+
+%\bibliography{mybib}
+\bibliographystyle{alpha}
+
+\end{document}
