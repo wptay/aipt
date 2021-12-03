@@ -56,7 +56,7 @@ Let $Z_{-n}= \dfrac{S_n}{n} = \E[X_1 \given \scF_{-n}]$. Then $(Z_{-n}, \scF_{-n
 	\begin{align*}
 	\E |X_n|\indicator{|X_n|>K} 
 	&\leq  \E[ {\E[|X| \given \scF_n]}\indicator{|X_n|>K} ]\\
-	&= \E |X|\indicator{|X_n|>K} \quad\because \set{|X_n|>K}\in \scF_n \\
+	&= \E |X|\indicator{|X_n|>K} \quad\because \set*{|X_n|>K}\in \scF_n \\
 	&\leq M \P(|X_n|>K) + \E |X|\indicator{|X|>M} \quad\forall M >0 \\
 	&\lea{\text{Markov}} 	\frac{M}{K} \E|X_n| + \E |X|\indicator{|X|>M} 
 	\intertext{and}

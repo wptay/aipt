@@ -35,10 +35,9 @@ Otherwise, suppose $F(y) \geq \omega$. Then by the definition \cref{wk8:Finverse
 \begin{Lemma} \label{wk8:lemma:set}
 For any $x$, we have
 \begin{align*}
-\{\omega: \omega \leq F(x)\}=\{\omega: F^{-1}(\omega)\leq x\}
+\set{\omega\given \omega \leq F(x)}=\set{\omega\given F^{-1}(\omega)\leq x}.
 \end{align*}
 \end{Lemma}
-%
 \begin{proof}
 If $\omega \leq F(x)$, then by definition~\cref{wk8:Finverse}, we have $F^{-1}(\omega)\leq x$. On the other hand, if $F^{-1}(\omega) \leq x$, then since $F$ is non-decreasing, we have $\omega \leq F(y) \ \forall y > x$. Since $F(x)$ is right continuous, by letting $y \downarrow x$, we have $\omega \leq F(x)$.
 \end{proof}
