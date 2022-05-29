@@ -17,24 +17,24 @@
 
 Given a random variable $X: \Omega \mapsto \Real$, the characteristic function of $X$ is $\varphi : \Real\mapsto\bbC$ given by
 \begin{align*}
-\varphi(t)&=\E [e^{itX}],\\
+\varphi(t)&=\E [e^{\iu tX}],\\
 &=\E[\cos (tX)]+\iu\E [\sin (tX)],
 \end{align*}
-where $\iu=\sqrt{-1}$. This characteristic function is always well defined as $\cos$ and $\sin$ are bounded and integrable, even if $\E X$ does not exist. If $X$ has pdf $f\in L^1(\Real)$, then $\varphi(t)=\int e^{itx} f(x) \ud x$, which is essentially the Fourier transform of $f$. 
+where $\iu=\sqrt{-1}$. This characteristic function is always well-defined as $\cos$ and $\sin$ are bounded and integrable, even if $\E X$ does not exist. If $X$ has pdf $f\in L^1(\Real)$, then $\varphi(t)=\int e^{itx} f(x) \ud x$, which is essentially the Fourier transform of $f$. 
 
 Some simple properties:
 \begin{align*}
 \varphi(0)	& =1,\\
 \varphi(-t)	& =\overline{\varphi(t)},\\
 |\varphi(t)|	& \leq 1,\\
-|\varphi(t+h)-\varphi(t)| 	& \leq \E|e^{ihX}-1|.
+|\varphi(t+h)-\varphi(t)| 	& \leq \E|e^{\iu hX}-1|.
 \end{align*}
-Since $e^{ihX}-1$ does not depend on $t$, $\varphi$ is uniformly continuous in $\Real$. 
+Since $e^{\iu hX}-1$ does not depend on $t$, $\varphi$ is uniformly continuous in $\Real$. 
 
 \begin{Example}
 The characteristic function of the Gaussian distribution $N(\mu,\sigma^2)$ is
 \begin{align*}
-\varphi(t)=e^{i\mu t-\frac{\sigma^2t^2}{2}}.
+\varphi(t)=e^{\iu \mu t-\frac{\sigma^2t^2}{2}}.
 \end{align*}
 In particular, when $\mu=0,\sigma^2=1$,
 \begin{align*}
@@ -97,7 +97,7 @@ which is the convolution of the pdfs $p_X$ and $p_Y$.
 
 A special case is
 \begin{align*}
-\P^{\sigma}= \P * \calN (0,\sigma^2)\ll \text{Lebesgue measure}, 
+\P^{\sigma}= {\P} * \calN (0,\sigma^2)\ll \text{Lebesgue measure}, 
 \end{align*}
 therefore, its pdf exists and it can be shown to be given by 
 \begin{align}\label{wk10:psigma}
@@ -200,11 +200,11 @@ For each $n\geq1$, we have
 &\overset{\text{Fubini}}{=}  \frac{1}{\delta}  \int_{\Real} \int _{0}^{\delta} (1-\cos(tx)) \ud t \ud \P_n(x) \\
 & = \int _{\Real}\parens*{1-\frac{\sin (\delta x)}{\delta x}} \ud \P_n(x)\\
 & \geq \int_{|\delta x|\geq \pi}\parens*{1-\frac{\sin (\delta x)}{\delta x}} \ud \P_n(x)\\
-& \geq \frac{1}{2} \P{n}(\set*{x\given |x| \geq \frac{\pi}{\delta}}),
+& \geq \frac{1}{2} \P_n(\set*{x\given |x| \geq \frac{\pi}{\delta}}),
 \end{align*}
 since $\operatorname{sinc} y = \frac{\sin \pi y}{\pi y} \leq 1$ for $|y| \leq 1$ and $\leq 1/2$ for $|y| \geq 1$. From \cref{limRe}, for all $n$ sufficiently large, we have
 \begin{align*}
-& \P{n}(\set*{x\given |x| \geq \frac{\pi}{\delta}}) \leq 4 \epsilon.
+& \P_n(\set*{x\given |x| \geq \frac{\pi}{\delta}}) \leq 4 \epsilon.
 \end{align*}
 Therefore $(\P_n)$ is uniformly tight.
 \end{proof}

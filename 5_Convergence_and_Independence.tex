@@ -40,7 +40,7 @@ where we have use the MCT in \cref{XAcMCT}. Therefore, $\E[X_n \indicatore{A}] =
 \begin{Definition}[Convergence in probability]
 If $\forall \epsilon >0$,  
 \begin{align*}
-\lim_ {n \to \infty} \P({|X_n - X| \geq \epsilon})=0, 
+\lim_ {n \to \infty} \P({|X_n - X| > \epsilon})=0, 
 \end{align*}
 we say that $X_n$ converges to $X$ in probability and write $X_n \convp X$.
 \end{Definition}
@@ -49,7 +49,7 @@ we say that $X_n$ converges to $X$ in probability and write $X_n \convp X$.
 If $X_n \to X$ a.s., then $X_n \convp X$.
 \end{Lemma}
 \begin{proof}
-Suppose $X_n \to X$ a.s., then $\indicator{|X_n-X|\geq \epsilon} \to 0$ a.s. From DCT (since probability measure is finite), we have $\P(|X_n-X|\geq \epsilon)\to 0$.
+Suppose $X_n \to X$ a.s., then $\indicator{|X_n-X|> \epsilon} \to 0$ a.s. From DCT (since probability measure is finite), we have $\P(|X_n-X|> \epsilon)\to 0$.
 \end{proof}
 
 The converse is not true and here is an example.
@@ -183,7 +183,7 @@ which is $\calA_1$-measurable from \cref{lem:wk4:infX_rv} since each $\mu_2((E_i
 \end{itemize}
 Therefore, $\calL$ is a $\lambda$-system containing the collection of rectangles, which is a $\pi$-system. From the $\pi$-$\lambda$ Theorem, we obtain $\calF \subset \calL$. We have now shown that Fubini's Theorem holds for $f=\indicatore{E}$, $E \in \calF$.
 
-From linearity of integrals, the theorem holds for all simple functions $f$.
+From the linearity of integrals, the theorem holds for all simple functions $f$.
 
 For $f \geq 0$, $\exists$ simple $f_i \uparrow f$. Applying MCT gives Fubini's theorem for non-negative $f$.
 
@@ -271,7 +271,7 @@ We say that the random variables $X_1,X_2,\ldots,X_n$ are independent if $\sigma
 \P (X_1\in B_1,X_2\in B_2,\ldots,X_n\in B_n)= \prod_{i=1}^n {\P(X_i \in B_i)}.
 \end{align*}
 
-Note that independence $\implies$ pairwise independence but the converse is false. Here are two counter examples to show that pairwise independence does not imply independence.
+Note that independence $\implies$ pairwise independence but the converse is false. Here are two counterexamples to show that pairwise independence does not imply independence.
 
 \begin{Example}\label{wk5:Independence1}
 \begin{figure}[!htb]
