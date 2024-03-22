@@ -1,10 +1,11 @@
-\documentclass[12pt]{article}
+\documentclass[../aipt.tex]{subfiles}
+\graphicspath{{\subfix{../Figures/}}}
 
-\input{prob_preamble.tex}
-\externaldocument{3_ProbabilitySpaces}
-\externaldocument{4_Random_Variables}
-\externaldocument{5_Convergence_and_Independence}
-\externaldocument{6_Borel_Cantelli_Lemmas}
+
+\externaldocument{03_ProbabilitySpaces}
+\externaldocument{04_Random_Variables}
+\externaldocument{05_Convergence_and_Independence}
+\externaldocument{06_Borel_Cantelli_Lemmas}
 
 
 \begin{document}
@@ -153,8 +154,8 @@ But $\E[\E[X_n]{\scF}\indicatore{A}]=\E[X_n\indicatore{A}] \xrightarrow{\text{MC
  
 \item The usual inequalities apply. We define $\P(A \given \scF) = \E[\indicatore{A} \given \scF]$.
 \begin{itemize}
-	\item Markov's inequality: For $a>0$, $\P(X>a \given \scF) \leq \odfrac{a}\E[X \given \scF]$.
-	\item Chebyshev's inequality: For $a>0$, $\P({|X|\geq a} \given \scF) \leq \odfrac{a^2}\E[X^2 \given \scF]$.
+	\item Markov's inequality: For $a>0$, $\P(X>a \given \scF) \leq \ofrac{a}\E[X \given \scF]$.
+	\item Chebyshev's inequality: For $a>0$, $\P({|X|\geq a} \given \scF) \leq \ofrac{a^2}\E[X^2 \given \scF]$.
 	\item Cauchy-Schwarz inequality: $\E[XY \given \scF]^2 \leq \E[X^2 \given \scF] \E[Y^2 \given \scF]$.
 	\item Jensen's inequality: Given a convex function $\phi$ with $\E|\phi(X)|<\infty$, we have 
 	\begin{align*}

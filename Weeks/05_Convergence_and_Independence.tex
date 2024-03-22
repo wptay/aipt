@@ -1,8 +1,9 @@
-\documentclass[12pt]{article}
+\documentclass[../aipt.tex]{subfiles}
+\graphicspath{{\subfix{../Figures/}}}
 
-\input{prob_preamble.tex}
-\externaldocument{3_ProbabilitySpaces}
-\externaldocument{4_Random_Variables}
+
+\externaldocument{03_ProbabilitySpaces}
+\externaldocument{04_Random_Variables}
 
 
 \begin{document}
@@ -127,7 +128,7 @@ Integrating w.r.t.\ $\mu_1$, we have
 \mu (A\times B) 
 %&= \mu_1(A) \mu_2(B)\\
 &=\int \lim_{n \to \infty}{\sum_{i=1}^n {\indicatore{A_i} (x)\mu_2 (B_i) \ud \mu_1}}\\
-&\stackrel{\text{MCT}}{=}\lim_{n \to \infty} \int {\sum_{i=1}^n {\indicatore{A_i} (x)\mu_2 (B_i) \ud \mu_1}}\\
+&\\stackrel{\text{MCT}}{=}\lim_{n \to \infty} \int {\sum_{i=1}^n {\indicatore{A_i} (x)\mu_2 (B_i) \ud \mu_1}}\\
 & =\lim_{n \to \infty}\sum_{i=1}^n{\int  \indicatore{A_i} (x)\mu_2 (B_i) \ud \mu_1}\\
 & =\sum_{i\geq 1}\mu_1(A_i)\mu_2 (B_i),
 \end{align*}

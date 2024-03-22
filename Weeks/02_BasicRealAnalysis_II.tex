@@ -1,7 +1,6 @@
-\documentclass[12pt]{article}
-
-\input{prob_preamble.tex}
-\externaldocument{1_BasicRealAnalysis_I}
+\documentclass[../aipt.tex]{subfiles}
+\graphicspath{{\subfix{../Figures/}}}
+\externaldocument{01_BasicRealAnalysis_I}
 
 
 \begin{document}
@@ -211,7 +210,7 @@ From the above lemma, we have
 \begin{Definition}
 $f:[a,b]\mapsto \Real$ is Riemann integrable if equality in \cref{L_U} holds, i.e.,
 \begin{align*}
-\forall \epsilon >0,\ \exists P \in \calP\ \st\ U(f,P)-L(f,P)<\epsilon.
+\forall \epsilon >0,\ \exists P \in \calP\ \ST\ U(f,P)-L(f,P)<\epsilon.
 \end{align*}
 \end{Definition}
 

@@ -1,6 +1,6 @@
-\documentclass[12pt]{article}
+\documentclass[../aipt.tex]{subfiles}
+\graphicspath{{\subfix{../Figures/}}}
 
-\input{prob_preamble.tex}
 
 
 \begin{document}
@@ -36,14 +36,14 @@ We write $(x_n)$ or $(x_n)_{n\geq1}$ as shorthand for the sequence $x_1, x_2, \l
 \begin{Definition}
 For $(x_n) \subset \calX$, we say that $x_n \to x$ as $n\to\infty$ or $\lim_{n\to\infty} x_n=x$ if 
 \begin{align*}
-\forall \epsilon>0,\ \exists N\ \st d(x_n, x) < \epsilon,\ \forall n \geq N.
+\forall \epsilon>0,\ \exists N\ \ST d(x_n, x) < \epsilon,\ \forall n \geq N.
 \end{align*}
 \end{Definition}
 
 \begin{Definition}
 We say $x_n$ diverges to $\infty$ if there exists $x_0\in\calX$ and
 \begin{align*}
-\forall K\geq 0,\ \exists N\ \st d(x_n,x_0) \geq K,\ \forall n\geq N.
+\forall K\geq 0,\ \exists N\ \ST d(x_n,x_0) \geq K,\ \forall n\geq N.
 \end{align*}
 \end{Definition}
 
@@ -64,7 +64,7 @@ If $(a_n)$ converges, then its limit is unique.
 \begin{proof}
 Supposing $a_n \to a$ and $a_n \to a^\prime$, we have
 \begin{align*}
-\forall \epsilon > 0,\ \exists N\ \st &|a_n - a| < \epsilon \text{ and } |a_n - a^\prime| < \epsilon,\ \forall n \geq N.
+\forall \epsilon > 0,\ \exists N\ \ST &|a_n - a| < \epsilon \text{ and } |a_n - a^\prime| < \epsilon,\ \forall n \geq N.
 \end{align*}
 By the triangle inequality, we obtain:
 \begin{align*}
@@ -78,7 +78,7 @@ If $(a_n)$ converges, $|a_n| < \infty$.
 \end{Lemma}
 
 \begin{proof}
-Supposing $a_n \to a$, $\exists N$, $\st |a_n - a| < 1$, $\forall n \geq N$. Then we obtain
+Supposing $a_n \to a$, $\exists N$, $\ST |a_n - a| < 1$, $\forall n \geq N$. Then we obtain
 \begin{align*}
 |a_n| &\leq |a| + 1, \forall\ n \geq N, \\
 \end{align*}
@@ -95,17 +95,17 @@ If $(a_n)$ is increasing (i.e., $a_{n+1} \geq a_n$ for all $n\geq1$) and is boun
 To prove the lemma, we need some definitions. We define $\sup{A}$ = least upper bound (LUB) of $A$ if $ A\neq \emptyset$ and $A \subset\Real$, i.e., 
 \begin{enumerate}[1)]
 \item $\forall a \in A$, $a \leq \sup{A}$.
-\item if $\gamma < \sup{A}$, $\exists a \in A$, $\st \gamma < a$. \label{item_supA}
+\item if $\gamma < \sup{A}$, $\exists a \in A$, $\ST \gamma < a$. \label{item_supA}
 \end{enumerate}
 For the definition to be well-defined, we need the \rm{LUB/Completeness axiom}: $\sup{A}$ exists in $\Real$ for all $A\ne\emptyset$ bounded above. (Note that this axiom does not hold for $\bbQ$.) If $A$ is not bounded above, we set $\sup A = \infty$. From \cref{item_supA}, we obtain a useful property:
 \begin{align*}
-\forall \epsilon > 0,\ \exists a \in A,\ \st \sup{A} - \epsilon < a.
+\forall \epsilon > 0,\ \exists a \in A,\ \ST \sup{A} - \epsilon < a.
 \end{align*}
 The greatest lower bound of $A$ is written as $\inf A$.
 
 Returning to the proof of the lemma, let $a = \sup{a_n} < \infty$ since $(a_n)$ is bounded. We have 
 \begin{align*}
-&\forall \epsilon > 0,\ \exists N,\ \st a - \epsilon \leq a_N \leq a_n \leq a,\ \forall n \geq N. \\
+&\forall \epsilon > 0,\ \exists N,\ \ST a - \epsilon \leq a_N \leq a_n \leq a,\ \forall n \geq N. \\
 &\implies a_n \to a.
 \end{align*}
 \end{proof}
@@ -126,14 +126,14 @@ A subsequence of $(a_n)$ is a sequence $(a_{n_i})$, where $n_1 < n_2 < \ldots$ i
 If $a_n \to a \iff a_{n_i} \to a$, for all subsequences $(a_{n_i})$.
 \end{Lemma}
 \begin{proof}
-The direction ``$\Leftarrow$'' is obvious. To prove the other direction, we have $\forall \epsilon > 0$, $\exists N$ $\st |a_n - a| < \epsilon,\ \forall n \geq N$. Therefore, $\forall n_i \geq N$, $|a_{n_i} - a| < \epsilon$.
+The direction ``$\Leftarrow$'' is obvious. To prove the other direction, we have $\forall \epsilon > 0$, $\exists N$ $\ST |a_n - a| < \epsilon,\ \forall n \geq N$. Therefore, $\forall n_i \geq N$, $|a_{n_i} - a| < \epsilon$.
 \end{proof}
 
 \begin{Lemma}\label{lem:mono_sub} 
 Every sequence $(a_n)$ in $\bbR$ has a monotone subsequence.
 \end{Lemma}
 \begin{proof}
-Suppose there are no increasing subsequences. Then, $\exists n_1$, $\st a_{n_1} \geq a_n$, $\forall n \geq n_1$. Similarly, $\exists n_2 > n_1$, $\st a_{n_2} \geq a_n$, $\forall n \geq n_2$, and so on. This constructs a decreasing subsequence $a_{n_1} \geq a_{n_2} \geq \ldots$. 
+Suppose there are no increasing subsequences. Then, $\exists n_1$, $\ST a_{n_1} \geq a_n$, $\forall n \geq n_1$. Similarly, $\exists n_2 > n_1$, $\ST a_{n_2} \geq a_n$, $\forall n \geq n_2$, and so on. This constructs a decreasing subsequence $a_{n_1} \geq a_{n_2} \geq \ldots$. 
 \end{proof}
 
 \begin{Lemma}\label{lem:bdd_conv}
@@ -145,11 +145,11 @@ From \cref{lem:mono_sub}, a bounded sequence has a monotone subsequence, which c
 
 Let $S =$ set of subsequence limits of $(a_n) \subset \overline{\Real}$. We define $\limsup_{n \to \infty} {a_n}=\sup{S}$, and $\liminf_{n \to \infty}{a_n}=\inf{S}$. We have
 \begin{align*}
-\forall \epsilon > 0,\ \exists s \in S,\ \st \sup{S} - \epsilon/2 \leq s \leq \sup{S}.
+\forall \epsilon > 0,\ \exists s \in S,\ \ST \sup{S} - \epsilon/2 \leq s \leq \sup{S}.
 \end{align*}
 Let $a_{n_i} \to s$ (can you see why such a subsequence must exist?) so that
 \begin{align*}
-\forall \epsilon > 0,\ \exists N,\ \st |a_{n_i} - s| < \epsilon/2,\ \forall n_i > N.
+\forall \epsilon > 0,\ \exists N,\ \ST |a_{n_i} - s| < \epsilon/2,\ \forall n_i > N.
 \end{align*}
 Therefore,
 \begin{align*}
@@ -158,10 +158,10 @@ Therefore,
 which implies that $\sup{S} \in S$ and $\sup{S} = \max{S}$, i.e., $\limsup_{n\to\infty} a_n$ exists. Similarly, we have $\inf{S} = \min{S}$.
 
 \begin{Lemma}
-Suppose $s = \limsup_{n \to \infty}{a_n} > -\infty$. Then $\forall \epsilon > 0$, $\exists N$ $\st a_n \leq s + \epsilon$, $\forall n \geq N$.
+Suppose $s = \limsup_{n \to \infty}{a_n} > -\infty$. Then $\forall \epsilon > 0$, $\exists N$ $\ST a_n \leq s + \epsilon$, $\forall n \geq N$.
 \end{Lemma}
 \begin{proof}
-If $s = \infty$, the lemma obviously holds. Suppose $s < \infty$. We prove by contradiction. Suppose $\exists \epsilon > 0$ and subsequence $(a_{n_i})$ $\st a_{n_i} > s + \epsilon$. Since $s < \infty$, $(a_{n_i})$ is bounded. Then from \cref{lem:bdd_conv}, $\exists \text{subsubsequence } (a_{n_i'})$, $\st a_{n_i'} \to a' \geq s + \epsilon > s$, a contradiction to the definition of $s$.
+If $s = \infty$, the lemma obviously holds. Suppose $s < \infty$. We prove by contradiction. Suppose $\exists \epsilon > 0$ and subsequence $(a_{n_i})$ $\ST a_{n_i} > s + \epsilon$. Since $s < \infty$, $(a_{n_i})$ is bounded. Then from \cref{lem:bdd_conv}, $\exists \text{subsubsequence } (a_{n_i'})$, $\ST a_{n_i'} \to a' \geq s + \epsilon > s$, a contradiction to the definition of $s$.
 \end{proof}
 
 
@@ -171,7 +171,7 @@ $\displaystyle\limsup_{n \to \infty} a_n = \inf_{n\geq1} \sup_{m\geq n}{a_m}$ an
 \begin{proof}
 If $\limsup_{n \to \infty} a_n = \pm \infty $, then the result clearly holds. Suppose $-\infty < \limsup_{n \to \infty} a_n = \sup S < \infty$, where $S$ is the set of subsequential limits.  
 
-For any $\epsilon > 0$, there exists a subsequence $(a_{n_i})$ $\st \sup{S} - \epsilon \leq a_{n_i}$. Then,
+For any $\epsilon > 0$, there exists a subsequence $(a_{n_i})$ $\ST \sup{S} - \epsilon \leq a_{n_i}$. Then,
 \begin{align*}
 \sup{S} - \epsilon &\leq \sup_{m \geq n}{a_m},\ \forall n \geq n_1. 
 \intertext{Letting $n\to\infty$, we have}
@@ -191,14 +191,14 @@ The other claim is proved similarly and the proof is now complete.
 
 \section{Cauchy Sequences}
 \begin{Definition}
-A sequence $(a_n)$ is a Cauchy sequence if $\forall \epsilon > 0$, $\exists N$ $\st d(a_n, a_m) < \epsilon$, $\forall n,m \geq N$.
+A sequence $(a_n)$ is a Cauchy sequence if $\forall \epsilon > 0$, $\exists N$ $\ST d(a_n, a_m) < \epsilon$, $\forall n,m \geq N$.
 \end{Definition}
 
 \begin{Lemma}
 If $(a_n)$ converges, then it is Cauchy.
 \end{Lemma}
 \begin{proof}
-Suppose $a_n\to a$. Then $\forall \epsilon >0$, $\exists N\ \st d(a_n,a) < \epsilon/2\ \forall n\geq N$. Then $\forall n,m \geq N$, we have
+Suppose $a_n\to a$. Then $\forall \epsilon >0$, $\exists N\ \ST d(a_n,a) < \epsilon/2\ \forall n\geq N$. Then $\forall n,m \geq N$, we have
 \begin{align*}
 d(a_n, a_m) \leq d(a_n,a) + d(a_m,a) < \epsilon.
 \end{align*}

@@ -1,12 +1,13 @@
-\documentclass[12pt]{article}
+\documentclass[../aipt.tex]{subfiles}
+\graphicspath{{\subfix{../Figures/}}}
 
-\input{prob_preamble.tex}
-\externaldocument{1_BasicRealAnalysis_I}
-\externaldocument{3_ProbabilitySpaces}
-\externaldocument{4_Random_Variables}
-\externaldocument{5_Convergence_and_Independence}
-\externaldocument{6_Borel_Cantelli_Lemmas}
-\externaldocument{8_Glivenko-Cantelli_and_0-1_Laws}
+
+\externaldocument{01_BasicRealAnalysis_I}
+\externaldocument{03_ProbabilitySpaces}
+\externaldocument{04_Random_Variables}
+\externaldocument{05_Convergence_and_Independence}
+\externaldocument{06_Borel_Cantelli_Lemmas}
+\externaldocument{08_Glivenko-Cantelli_and_0-1_Laws}
 
 
 \begin{document}
@@ -120,11 +121,11 @@ Similar proof steps as above hold if $C_b(\bbR)$ is replaced with $C_b^k(\bbR)$,
 a(x) &= \sup \{F(y) : y < x \}, \\
 b(x) &= \inf \{F(y) : y > x \}.
 \end{align*}
-Because the set of rational numbers $\bbQ$ is dense in $\bbR$, $\exists r_x \in (a(x), b(x)), \ \st r_x \in \bbQ$. Since the intervals $(a(x),b(x))$ are disjoint for all $x\in\Real\setminus\Phi$, the mapping $x \mapsto r_x$ is one-to-one. Therefore, $\Real\setminus\Phi$ is countable and the claim is proved. This implies that $\Phi$ is dense.
+Because the set of rational numbers $\bbQ$ is dense in $\bbR$, $\exists r_x \in (a(x), b(x)), \ \ST r_x \in \bbQ$. Since the intervals $(a(x),b(x))$ are disjoint for all $x\in\Real\setminus\Phi$, the mapping $x \mapsto r_x$ is one-to-one. Therefore, $\Real\setminus\Phi$ is countable and the claim is proved. This implies that $\Phi$ is dense.
 
 Note that $\P({\left(-a, a\right]^c}) = F(-a) + 1 - F(a)$. We then have $\forall \epsilon > 0$,
 \begin{align*}
-\exists \pm M(\epsilon)\in \Phi, \ \st\ \P({\left(-M(\epsilon), M(\epsilon)\right]^c}) \leq \epsilon.
+\exists \pm M(\epsilon)\in \Phi, \ \ST\ \P({\left(-M(\epsilon), M(\epsilon)\right]^c}) \leq \epsilon.
 \end{align*}
 Furthermore, we have
 \begin{align*}
@@ -184,7 +185,7 @@ Since $f \in C_b(\bbR) \implies f \circ g \in C_b(\bbR)$, the result follows.
 \end{proof}
 
 \begin{Lemma}
-If $\P_n \convd \P$, then $\exists$ r.v.s $Y_n \sim$ cdf $F_n$, $Y \sim$ cdf $F$, $\st\ Y_n \to Y$ a.s.
+If $\P_n \convd \P$, then $\exists$ r.v.s $Y_n \sim$ cdf $F_n$, $Y \sim$ cdf $F$, $\ST\ Y_n \to Y$ a.s.
 \end{Lemma}
 %
 \begin{proof}
@@ -201,7 +202,7 @@ For any continuity point $y$ of $F$ such that $y > F^{-1}(\omega)$, $F(y) > \ome
 \end{proof}
 %
 \begin{Lemma} \label{wk9:lemma:subseq_convd_implies_seq_convd}
-If for any subsequence $\left(n(k)\right)_{k \geq 1}$, \ $\exists$ subsubsequence $\left(n(k(r))\right)_{r \geq 1}\ \st\ \P_{n(k(r))} \convd \P$, then
+If for any subsequence $\left(n(k)\right)_{k \geq 1}$, \ $\exists$ subsubsequence $\left(n(k(r))\right)_{r \geq 1}\ \ST\ \P_{n(k(r))} \convd \P$, then
 \begin{align*}
 \P_n \convd \P.
 \end{align*}
@@ -218,7 +219,7 @@ for all $k\geq1$. Then, any subsequence of distributions indexed by $(n(k(r)))_{
 $X_n \convp X \implies X_n \convd X$.
 \end{Lemma}
 \begin{proof}
-From \cref{wk6:cor:convp_implies_conv_as}, for any sequence $\left(n(k)\right)_{k \geq 1}$, $\exists$ subsequence $\left(n(k(r))\right)_{r \geq 1}, \st\ X_{n(k(r))} \to X \ \text{a.s}$. Let $f \in C_b(\bbR)$. By DCT, we obtain
+From \cref{wk6:cor:convp_implies_conv_as}, for any sequence $\left(n(k)\right)_{k \geq 1}$, $\exists$ subsequence $\left(n(k(r))\right)_{r \geq 1}, \ST\ X_{n(k(r))} \to X \ \text{a.s}$. Let $f \in C_b(\bbR)$. By DCT, we obtain
 \begin{align*}
 &\lim_{r \to \infty} \E[f(X_{n(k(r))})] 
 = \E[\lim_{r \to \infty} f(X_{n(k(r))})] 
@@ -230,7 +231,7 @@ Therefore, $X_{n(k(r))} \convd X$. From \cref{wk9:lemma:subseq_convd_implies_seq
 
 In general, we can prove $\P_n \convd \P$ in two steps:
 \begin{enumerate}[(i)]
-\item Show that for all sequences $\left(n(k)\right)_{k \geq 1}$, \ $\exists \left(n(k(r))\right)_{r \geq 1}$, \ $\st\ \P_{n(k(r))}$ converges. This is done using the concept of uniform tightness, which we discuss below.
+\item Show that for all sequences $\left(n(k)\right)_{k \geq 1}$, \ $\exists \left(n(k(r))\right)_{r \geq 1}$, \ $\ST\ \P_{n(k(r))}$ converges. This is done using the concept of uniform tightness, which we discuss below.
 \item Show that all subsequential distribution limits above are the same $\P$. This is done through the use of characteristic functions, which we discuss next week.
 \end{enumerate}
 
@@ -251,13 +252,13 @@ If $(\P)_{n \geq 1}$ is uniformly tight, then $\exists \left(n(k)\right)_{k \geq
 \end{Theorem}
 
 \begin{Lemma}[Cantor's Diagonalization] \label{wk9:lemma:Cantor_diag}
-Suppose $A$ is a countable set, and $f_n:A \mapsto \bbR$. Then, $\exists \left(n(k)\right)_{k \geq 1}$, $\st\ f_{n(k)}(a)$ converges (or goes to $\pm \infty$), $\forall a \in A$.
+Suppose $A$ is a countable set, and $f_n:A \mapsto \bbR$. Then, $\exists \left(n(k)\right)_{k \geq 1}$, $\ST\ f_{n(k)}(a)$ converges (or goes to $\pm \infty$), $\forall a \in A$.
 \end{Lemma}
 \begin{proof}
 Let $A = \{a_1, a_2, \ldots\}$. From \cref{lem:mono_sub}, we have
 \begin{align*}
-& \exists \left(n_1(k)\right)_{k \geq 1}, \ \st\ f_{n_1(k)}(a_1)\ \text{converges}, \\
-& \exists \left(n_2(k)\right)_{k \geq 1} \subset \left(n_1(k)\right)_{k \geq 1}, \ \st\ f_{n_2(k)}(a_2)\ \text{converges}, \\
+& \exists \left(n_1(k)\right)_{k \geq 1}, \ \ST\ f_{n_1(k)}(a_1)\ \text{converges}, \\
+& \exists \left(n_2(k)\right)_{k \geq 1} \subset \left(n_1(k)\right)_{k \geq 1}, \ \ST\ f_{n_2(k)}(a_2)\ \text{converges}, \\
 & \ldots
 \end{align*}
 Therefore, for the diagonal sequence $\left(n_k(k)\right)_{k \geq 1}$, $f_{n_{k}(k)}(a_{l})$ converges $\forall l$.
@@ -266,7 +267,7 @@ Therefore, for the diagonal sequence $\left(n_k(k)\right)_{k \geq 1}$, $f_{n_{k}
 \begin{proof}[Proof of \cref{wk9:thm:Helly}]
 Since $\bbQ$ is a dense subset of $\bbR$ and countable, by \cref{wk9:lemma:Cantor_diag}, $\exists \left(n(k)\right)_{k \geq 1}$,
 \begin{align*}
-\st\ F_{n(k)}(q) \to F(q), \forall q \in \bbQ.
+\ST\ F_{n(k)}(q) \to F(q), \forall q \in \bbQ.
 \end{align*}
 Now we extend the definition of $F$ on $\bbQ$ to $\bbR$ by defining $F(x) = \inf \big\{F(q): x < q, q \in \bbQ\big\}$. We prove that $F(x)$ is a cdf.
 \begin{itemize}
@@ -282,7 +283,7 @@ Now we extend the definition of $F$ on $\bbQ$ to $\bbR$ by defining $F(x) = \inf
 where the second equality follows because $\inf\left\{F(q) : x_n < q \in \bbQ\right\}$ is a decreasing sequence for $x_n\downarrow x$. 
 \item Since $(\P_n)_{n \geq 1}$ is uniformly tight, $\forall \epsilon > 0, \ \exists [-M, M]$,
 \begin{align*}
-\st\ 1 - F_n(M) + F_n(-M) \leq \epsilon, \ \forall n.
+\ST\ 1 - F_n(M) + F_n(-M) \leq \epsilon, \ \forall n.
 \end{align*}
 Choose $r < -M < M < s$, $r, s \in \bbQ$. We have
 \begin{align*}
@@ -298,7 +299,7 @@ which implies
 \end{itemize}
 Therefore, $F(x)$ is a cdf.
 
-Let $x$ be a continuity point of $F$ and $a, b \in \bbQ, \ \st a < x < b$. We have
+Let $x$ be a continuity point of $F$ and $a, b \in \bbQ, \ \ST a < x < b$. We have
 \begin{align*}
 F(a) 
 = \lim_{k \to \infty} F_{n(k)}(a) 
@@ -322,7 +323,7 @@ If $\P_n \convd \P$, then $(\P_n)_{n \geq 1}$ is uniformly tight.
 \end{Lemma}
 %
 \begin{proof}
-Let $\epsilon > 0$. Choose $M > 0, \ \st\ \P({[-M, M]^c}) \leq \epsilon$.
+Let $\epsilon > 0$. Choose $M > 0, \ \ST\ \P({[-M, M]^c}) \leq \epsilon$.
 Let
 \begin{align*}
 f(x) = 
@@ -340,7 +341,7 @@ Note that $f \in C_b(\bbR)$. We have
 \leq \P(\left[ -M, M \right]^c) 
 \leq \epsilon.
 \end{align*}
-Therefore, $\exists n_0, \ \st \forall n \geq n_0, \P_n(\left[ -2M, 2M \right]^c) \leq 2\epsilon$.
+Therefore, $\exists n_0, \ \ST \forall n \geq n_0, \P_n(\left[ -2M, 2M \right]^c) \leq 2\epsilon$.
 For each $n < n_0$, we choose $M_n$ such that
 \begin{align*}
 \P_n(\left[ -M_n, M_n \right]^c) \leq 2\epsilon.

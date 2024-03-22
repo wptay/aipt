@@ -1,8 +1,8 @@
-\documentclass[12pt]{article}
+\documentclass[../aipt.tex]{subfiles}
+\graphicspath{{\subfix{../Figures/}}}
 
-\input{prob_preamble.tex}
-\externaldocument{3_ProbabilitySpaces}
-\externaldocument{4_Random_Variables}
+\externaldocument{03_ProbabilitySpaces}
+\externaldocument{04_Random_Variables}
 
 
 \begin{document}
@@ -26,7 +26,7 @@ Notice that $\big\{A_n \io\big\}$ and $\big\{A_n \ \text{f.o.}\big\}$ are comple
 
 As an example, suppose $X_n(\omega) \to 0$ for all $\omega\in\Omega$, then 
 \begin{align*}
-\exists n_0(\omega),\ \st X_n(\omega) \leq 1, \forall n \geq n_0(\omega).
+\exists n_0(\omega),\ \ST X_n(\omega) \leq 1, \forall n \geq n_0(\omega).
 \end{align*}
 Therefore $\omega\in\{X_n \geq 1\}$ cannot be infinitely often (i.o.).
 
@@ -166,7 +166,7 @@ Taking $\rho \to 0$, we obtain
 \end{proof}
 %
 \begin{Lemma} \label{wk6:lemma:sum_P_finite_convto_0}
-For $X_1, X_2, \ldots,\ \st \sum_{n \geq 1} \P(|X_n| \geq \epsilon) < \infty, \forall\ \epsilon > 0$, we have 
+For $X_1, X_2, \ldots,\ \ST \sum_{n \geq 1} \P(|X_n| \geq \epsilon) < \infty, \forall\ \epsilon > 0$, we have 
 \begin{align*}
 X_n \to 0 \text{ a.s. as } n \to \infty.
 \end{align*}
@@ -207,7 +207,7 @@ By \cref{wk6:lemma:sum_P_finite_convto_0}, we have $|X_{n(k)} - X| \to 0$ a.s.
 \end{proof}
 %
 \begin{Lemma}\label{wk6:lem:convp_subsubseq}
-$X_n \convp X$ iff for any subsequence $\left(n(k)\right)_{k \geq 1}$, $\exists$ subsubsequence $\left(n\left(k(r)\right)\right)_{r \geq 1}$, $\st X_{n \left(k(r)\right)} \to X$ a.s.
+$X_n \convp X$ iff for any subsequence $\left(n(k)\right)_{k \geq 1}$, $\exists$ subsubsequence $\left(n\left(k(r)\right)\right)_{r \geq 1}$, $\ST X_{n \left(k(r)\right)} \to X$ a.s.
 \end{Lemma}
 \begin{proof}
 `$\Rightarrow$': It is obvious by \cref{wk6:cor:convp_implies_conv_as}. 

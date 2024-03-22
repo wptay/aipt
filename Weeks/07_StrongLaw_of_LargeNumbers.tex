@@ -1,10 +1,11 @@
-\documentclass[12pt]{article}
+\documentclass[../aipt.tex]{subfiles}
+\graphicspath{{\subfix{../Figures/}}}
 
-\input{prob_preamble.tex}
-\externaldocument{3_ProbabilitySpaces}
-\externaldocument{4_Random_Variables}
-\externaldocument{5_Convergence_and_Independence}
-\externaldocument{6_Borel_Cantelli_Lemmas}
+
+\externaldocument{03_ProbabilitySpaces}
+\externaldocument{04_Random_Variables}
+\externaldocument{05_Convergence_and_Independence}
+\externaldocument{06_Borel_Cantelli_Lemmas}
 
 \begin{document}
 
@@ -240,7 +241,7 @@ Let $\hat{X}_k = X_k \indicatore{\{|X_k| \leq k\}}$. This is called \emph{moving
 &= \sum_{k \geq 1} \P(|X_1| > k) \\
 &\leq \E |X_1| < \infty.
 \end{align*} 
-From the first Borel-Cantelli lemma (\cref{wk6:lemma:borel_cantelli}), we obtain $\P(\hat{X}_k \neq X_k \ \text{i.o}) = 0$, which means that for a.s.\ all $\omega \in \Omega$, $\exists K(\omega)\ \st X_k(\omega) = \hat{X}_k(\omega), \forall k \geq K(\omega)$. Therefore, $\dfrac{1}{n} \sum_{k=1}^{n} X_k \to 0 \ \text{a.s.}$ if and only if $\dfrac{1}{n} \sum_{k=1}^{n} \hat{X}_k \to 0 \ \text{a.s.}$ In the rest of this section, we prove $\dfrac{1}{n} \sum_{k=1}^{n} \hat{X}_k \to 0 \ \text{a.s.}$.
+From the first Borel-Cantelli lemma (\cref{wk6:lemma:borel_cantelli}), we obtain $\P(\hat{X}_k \neq X_k \ \text{i.o}) = 0$, which means that for a.s.\ all $\omega \in \Omega$, $\exists K(\omega)\ \ST X_k(\omega) = \hat{X}_k(\omega), \forall k \geq K(\omega)$. Therefore, $\dfrac{1}{n} \sum_{k=1}^{n} X_k \to 0 \ \text{a.s.}$ if and only if $\dfrac{1}{n} \sum_{k=1}^{n} \hat{X}_k \to 0 \ \text{a.s.}$ In the rest of this section, we prove $\dfrac{1}{n} \sum_{k=1}^{n} \hat{X}_k \to 0 \ \text{a.s.}$.
 
 
 \begin{Lemma} \label{wk7:lemma:var_mean_ineq}

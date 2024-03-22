@@ -1,8 +1,9 @@
-\documentclass[12pt]{article}
+\documentclass[../aipt.tex]{subfiles}
+\graphicspath{{\subfix{../Figures/}}}
 
-\input{prob_preamble.tex}
-\externaldocument{1_BasicRealAnalysis_I}
-\externaldocument{3_ProbabilitySpaces}
+
+\externaldocument{01_BasicRealAnalysis_I}
+\externaldocument{03_ProbabilitySpaces}
 
 
 \begin{document}
@@ -255,7 +256,7 @@ Z_k &=\sum_{j=0}^{2^{2k}}{\frac{j}{2^k}\indicatore{B_{k,j}}}.
 \end{align*}
 We have $Z_k(\omega) \leq Z_{k+1}(\omega)$ and 
 \begin{align*}
-& 0 \leq X(\omega)-Z_k(\omega)\leq 2^{-k},\ \forall \omega\ \st X(\omega)\leq 2^{k}, \\
+& 0 \leq X(\omega)-Z_k(\omega)\leq 2^{-k},\ \forall \omega\ \ST X(\omega)\leq 2^{k}, \\
 & Z_k(\omega)=2^k, \ X(\omega) > 2^k.
 \end{align*}
 Therefore $Z_k(\omega)\uparrow X(\omega)$ as $k\to\infty$. We finally have all the tools to prove \cref{wk4:additivity_exp}.

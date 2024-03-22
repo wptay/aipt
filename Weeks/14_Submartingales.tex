@@ -1,10 +1,11 @@
-\documentclass[12pt]{article}
+\documentclass[../aipt.tex]{subfiles}
+\graphicspath{{\subfix{../Figures/}}}
 
-\input{prob_preamble.tex}
-\externaldocument{3_ProbabilitySpaces}
-\externaldocument{4_Random_Variables}
-\externaldocument{5_Convergence_and_Independence}
-\externaldocument{6_Borel_Cantelli_Lemmas}
+
+\externaldocument{03_ProbabilitySpaces}
+\externaldocument{04_Random_Variables}
+\externaldocument{05_Convergence_and_Independence}
+\externaldocument{06_Borel_Cantelli_Lemmas}
 \externaldocument{12_Conditional_Expectations}
 \externaldocument{13_Optional_Stopping}
 
@@ -120,7 +121,7 @@ Suppose $X_i$, $i\geq1$ are independent with $\E X_i=0$. From \cref{ex:wk12_mex_
 \end{align*}
 \end{Example}
 
-Let $p\geq 1$. A r.v. $X \in L^p$ if $\norm{X}_p = \braces*{\E |X|^p}^{1/p} <\infty$. H\"older's inequalty says that for $1\leq p <\infty$, $\odfrac{p} + \odfrac{q} =1$ (i.e., $q=\dfrac{p}{p-1}$), then for any r.v.s $X, Y$, 
+Let $p\geq 1$. A r.v. $X \in L^p$ if $\norm{X}_p = \braces*{\E |X|^p}^{1/p} <\infty$. H\"older's inequalty says that for $1\leq p <\infty$, $\ofrac{p} + \ofrac{q} =1$ (i.e., $q=\dfrac{p}{p-1}$), then for any r.v.s $X, Y$, 
 \begin{align*}
 \norm{XY}_1 \leq \norm{X}_p\norm{Y}_q.
 \end{align*}
@@ -256,7 +257,7 @@ $\ref{wk14:L1_ui:ui} \implies \ref{wk14:L1_ui:L1}$: $\forall\epsilon > 0$, $K>0$
 \end{align*}
 Taking $\epsilon \to 0$ and $K\to\infty$ completes the proof.
 
-$\ref{wk14:L1_ui:L1} \implies \ref{wk14:L1_ui:p}$: From Markov's inequality, for any $\epsilon>0$, we obtain $\P(|X_n-X|>\epsilon) \leq \odfrac{\epsilon} \E|X_n-X| \to 0$ as $n\to\infty$. We also have
+$\ref{wk14:L1_ui:L1} \implies \ref{wk14:L1_ui:p}$: From Markov's inequality, for any $\epsilon>0$, we obtain $\P(|X_n-X|>\epsilon) \leq \ofrac{\epsilon} \E|X_n-X| \to 0$ as $n\to\infty$. We also have
 \begin{align*}
 \abs*{\E|X_n| - \E|X|} \leq \E\abs*{|X_n| - |X|} \leq \E|X_n-X| \to 0,
 \end{align*}
